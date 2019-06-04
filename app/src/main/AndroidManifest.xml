@@ -34,10 +34,10 @@
             android:name=".ConfiguracaoActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ListaCaracOrganismoActivity"
+            android:name=".ListaCaracOrganActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ListaOrganismoActivity"
+            android:name=".ListaOrganActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ListaPontosActivity"

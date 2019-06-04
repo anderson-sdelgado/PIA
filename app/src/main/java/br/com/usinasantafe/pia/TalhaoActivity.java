@@ -2,7 +2,6 @@ package br.com.usinasantafe.pia;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -61,7 +60,7 @@ public class TalhaoActivity extends ActivityGeneric {
                         cabecAmostraTO.update();
                         cabecAmostraTO.commit();
 
-                        Intent it = new Intent(TalhaoActivity.this, ListaOrganismoActivity.class);
+                        Intent it = new Intent(TalhaoActivity.this, ListaOrganActivity.class);
                         startActivity(it);
                         finish();
 

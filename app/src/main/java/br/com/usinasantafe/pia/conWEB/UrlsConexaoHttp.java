@@ -12,7 +12,7 @@ public class UrlsConexaoHttp {
     public static String localUrl = "br.com.usinasantafe.pia.conWEB.UrlsConexaoHttp";
 
     public static String AmostraTO = urlPrincipal + "amostra.php";
-    public static String CaracOrganTO = urlPrincipal + "caracorg.php";
+    public static String CaracOrganTO = urlPrincipal + "caracorgan.php";
     public static String OrganTO = urlPrincipal + "organ.php";
     public static String ROrganCaracTO = urlPrincipal + "rorgancarac.php";
     public static String RCaracAmostraTO = urlPrincipal + "rcaracamostra.php";

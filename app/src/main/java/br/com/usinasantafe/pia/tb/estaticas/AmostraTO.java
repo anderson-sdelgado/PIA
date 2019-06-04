@@ -16,7 +16,7 @@ public class AmostraTO extends Entidade {
     @DatabaseField(id=true)
     private Long idAmostra;
     @DatabaseField
-    private Long idAmostraOrganismo;
+    private Long idAmostraOrgan;
     @DatabaseField
     private Long codAmostra;
     @DatabaseField
@@ -37,12 +37,12 @@ public class AmostraTO extends Entidade {
         this.idAmostra = idAmostra;
     }
 
-    public Long getIdAmostraOrganismo() {
-        return idAmostraOrganismo;
+    public Long getIdAmostraOrgan() {
+        return idAmostraOrgan;
     }
 
-    public void setIdAmostraOrganismo(Long idAmostraOrganismo) {
-        this.idAmostraOrganismo = idAmostraOrganismo;
+    public void setIdAmostraOrgan(Long idAmostraOrgan) {
+        this.idAmostraOrgan = idAmostraOrgan;
     }
 
     public Long getCodAmostra() {

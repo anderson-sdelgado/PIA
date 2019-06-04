@@ -13,7 +13,7 @@ import java.util.List;
 import br.com.usinasantafe.pia.tb.estaticas.OrganTO;
 import br.com.usinasantafe.pia.tb.variaveis.CabecAmostraTO;
 
-public class ListaOrganismoActivity extends ActivityGeneric {
+public class ListaOrganActivity extends ActivityGeneric {
 
     private ListView lista;
     private PIAContext piaContext;
@@ -22,11 +22,11 @@ public class ListaOrganismoActivity extends ActivityGeneric {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lista_organismo);
+        setContentView(R.layout.activity_lista_organ);
 
         piaContext = (PIAContext) getApplication();
 
-        Button buttonRetOrganismo = (Button) findViewById(R.id.buttonRetOrganismo);
+        Button buttonRetOrgan = (Button) findViewById(R.id.buttonRetOrgan);
 
         ArrayList<String> itens = new ArrayList<String>();
 
@@ -39,7 +39,7 @@ public class ListaOrganismoActivity extends ActivityGeneric {
         }
 
         AdapterList adapterList = new AdapterList(this, itens);
-        lista = (ListView) findViewById(R.id.listOrganismo);
+        lista = (ListView) findViewById(R.id.listOrgan);
         lista.setAdapter(adapterList);
 
         lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -58,7 +58,7 @@ public class ListaOrganismoActivity extends ActivityGeneric {
                 cabecAmostraTO.update();
                 cabecAmostraTO.commit();
 
-                Intent it = new Intent(ListaOrganismoActivity.this, ListaCaracOrganismoActivity.class);
+                Intent it = new Intent(ListaOrganActivity.this, ListaCaracOrganActivity.class);
                 startActivity(it);
                 finish();
 
@@ -68,12 +68,12 @@ public class ListaOrganismoActivity extends ActivityGeneric {
 
         });
 
-        buttonRetOrganismo.setOnClickListener(new View.OnClickListener() {
+        buttonRetOrgan.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                Intent it = new Intent(ListaOrganismoActivity.this, TalhaoActivity.class);
+                Intent it = new Intent(ListaOrganActivity.this, TalhaoActivity.class);
                 startActivity(it);
                 finish();
             }

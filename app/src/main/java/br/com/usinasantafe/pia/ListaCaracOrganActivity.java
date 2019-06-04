@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -21,22 +22,22 @@ import br.com.usinasantafe.pia.tb.estaticas.ROrganCaracTO;
 import br.com.usinasantafe.pia.tb.variaveis.CabecAmostraTO;
 import br.com.usinasantafe.pia.tb.variaveis.ItemAmostraTO;
 
-public class ListaCaracOrganismoActivity extends ActivityGeneric {
+public class ListaCaracOrganActivity extends ActivityGeneric {
 
     private ListView lista;
     private PIAContext piaContext;
-    private List lCaracOrg;
-    private List lroc;
+    private List caracOrganList;
+    private List rOrganCaracList;
     private CabecAmostraTO cabecAmostraTO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lista_carac_organismo);
+        setContentView(R.layout.activity_lista_carac_organ);
 
         piaContext = (PIAContext) getApplication();
 
-        Button buttonRetCaracOrganismo = (Button) findViewById(R.id.buttonRetCaracOrganismo);
+        Button buttonRetCaracOrgan = (Button) findViewById(R.id.buttonRetCaracOrgan);
 
         cabecAmostraTO = new CabecAmostraTO();
         List listCabecAmostra = cabecAmostraTO.get("statusAmostra", 1L);
@@ -44,26 +45,30 @@ public class ListaCaracOrganismoActivity extends ActivityGeneric {
 
         ArrayList<String> itens = new ArrayList<String>();
 
+        Log.i("PBM", "cabecAmostraTO.getIdOrgCabec() = " + cabecAmostraTO.getIdOrgCabec());
+
         ROrganCaracTO rOrganCaracTO = new ROrganCaracTO();
-        lroc = rOrganCaracTO.get("idOrganismo", cabecAmostraTO.getIdOrgCabec());
+        rOrganCaracList = rOrganCaracTO.get("idOrgan", cabecAmostraTO.getIdOrgCabec());
 
         ArrayList<Long> rLista = new ArrayList<Long>();
 
-        for (int i = 0; i < lroc.size(); i++) {
-            rOrganCaracTO = (ROrganCaracTO) lroc.get(i);
+        for (int i = 0; i < rOrganCaracList.size(); i++) {
+            rOrganCaracTO = (ROrganCaracTO) rOrganCaracList.get(i);
+            Log.i("PBM", "rOrganCaracTO.getIdCaracOrgan() = " + rOrganCaracTO.getIdCaracOrgan());
             rLista.add(rOrganCaracTO.getIdCaracOrgan());
         }
 
         CaracOrganTO caracOrganTO = new CaracOrganTO();
-        lCaracOrg = caracOrganTO.in("idCaracOrganismo", rLista);
+        caracOrganList = caracOrganTO.in("idCaracOrgan", rLista);
 
-        for (int i = 0; i < lCaracOrg.size(); i++) {
-            caracOrganTO = (CaracOrganTO) lCaracOrg.get(i);
+        for (int i = 0; i < caracOrganList.size(); i++) {
+            caracOrganTO = (CaracOrganTO) caracOrganList.get(i);
+            Log.i("PBM", "caracOrganTO.getDescrCaracOrgan() = " + caracOrganTO.getDescrCaracOrgan());
             itens.add(caracOrganTO.getDescrCaracOrgan());
         }
 
         AdapterList adapterList = new AdapterList(this, itens);
-        lista = (ListView) findViewById(R.id.listCaracOrganismo);
+        lista = (ListView) findViewById(R.id.listCaracOrgan);
         lista.setAdapter(adapterList);
 
         lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -73,7 +78,7 @@ public class ListaCaracOrganismoActivity extends ActivityGeneric {
                                     long id) {
                 // TODO Auto-generated method stub
 
-                CaracOrganTO caracOrganTO = (CaracOrganTO) lCaracOrg.get(position);
+                CaracOrganTO caracOrganTO = (CaracOrganTO) caracOrganList.get(position);
 
                 CabecAmostraTO cabecAmostraTO = new CabecAmostraTO();
                 List listCabecAmostra = cabecAmostraTO.get("statusAmostra", 1L);
@@ -87,17 +92,17 @@ public class ListaCaracOrganismoActivity extends ActivityGeneric {
                 ArrayList listaPesq = new ArrayList();
 
                 EspecificaPesquisa pesquisa = new EspecificaPesquisa();
-                pesquisa.setCampo("idOrganismo");
+                pesquisa.setCampo("idOrgan");
                 pesquisa.setValor(cabecAmostraTO.getIdOrgCabec());
                 listaPesq.add(pesquisa);
 
                 EspecificaPesquisa pesquisa2 = new EspecificaPesquisa();
-                pesquisa2.setCampo("idCaracOrganismo");
+                pesquisa2.setCampo("idCaracOrgan");
                 pesquisa2.setValor(caracOrganTO.getIdCaracOrgan());
                 listaPesq.add(pesquisa2);
 
                 ROrganCaracTO rOrganCaracTO = new ROrganCaracTO();
-                List lOrgCarac = rOrganCaracTO.getAndOrderBy(listaPesq, "idROrganismoCarac", true);
+                List lOrgCarac = rOrganCaracTO.getAndOrderBy(listaPesq, "idROrganCarac", true);
                 rOrganCaracTO = (ROrganCaracTO) lOrgCarac.get(0);
 
                 RCaracAmostraTO rCaracAmostraTO = new RCaracAmostraTO();
@@ -105,7 +110,7 @@ public class ListaCaracOrganismoActivity extends ActivityGeneric {
                 rCaracAmostraTO = (RCaracAmostraTO) lCaracAmostra.get(0);
 
                 AmostraTO amostraTO = new AmostraTO();
-                List lAmostra = amostraTO.getAndOrderBy("idAmostraOrganismo", rCaracAmostraTO.getIdAmostraOrgan(), "seqAmostra", true);
+                List lAmostra = amostraTO.getAndOrderBy("idAmostraOrgan", rCaracAmostraTO.getIdAmostraOrgan(), "seqAmostra", true);
 
                 ItemAmostraTO itemAmostraTODel = new ItemAmostraTO();
                 itemAmostraTODel.deleteAll();
@@ -137,31 +142,31 @@ public class ListaCaracOrganismoActivity extends ActivityGeneric {
 
                     if(verItemCabec){
 
-                        Intent it = new Intent(ListaCaracOrganismoActivity.this, QuestaoCabecActivity.class);
+                        Intent it = new Intent(ListaCaracOrganActivity.this, QuestaoCabecActivity.class);
                         startActivity(it);
                         finish();
 
-                        lCaracOrg.clear();
-                        lroc.clear();
+                        caracOrganList.clear();
+                        rOrganCaracList.clear();
 
                     }
                     else{
 
 
-                        ManipDadosEnvio.getInstance().envioDados( ListaCaracOrganismoActivity.this);
-                        Intent it = new Intent(ListaCaracOrganismoActivity.this, ListaPontosActivity.class);
+                        ManipDadosEnvio.getInstance().envioDados( ListaCaracOrganActivity.this);
+                        Intent it = new Intent(ListaCaracOrganActivity.this, ListaPontosActivity.class);
                         startActivity(it);
                         finish();
 
-                        lCaracOrg.clear();
-                        lroc.clear();
+                        caracOrganList.clear();
+                        rOrganCaracList.clear();
 
                     }
 
                 }
                 else{
 
-                    AlertDialog.Builder alerta = new AlertDialog.Builder(ListaCaracOrganismoActivity.this);
+                    AlertDialog.Builder alerta = new AlertDialog.Builder(ListaCaracOrganActivity.this);
                     alerta.setTitle("ATENCAO");
                     alerta.setMessage("ESSA CARACTERÍSTICA NÃO CONTÉM ITEM. POR FAVOR, VERIFIQUE SE CARACTERÍSTICA QUE DESEJA APONTAR.");
                     alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -179,12 +184,12 @@ public class ListaCaracOrganismoActivity extends ActivityGeneric {
 
         });
 
-        buttonRetCaracOrganismo.setOnClickListener(new View.OnClickListener() {
+        buttonRetCaracOrgan.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                Intent it = new Intent(ListaCaracOrganismoActivity.this, ListaOrganismoActivity.class);
+                Intent it = new Intent(ListaCaracOrganActivity.this, ListaOrganActivity.class);
                 startActivity(it);
                 finish();
             }

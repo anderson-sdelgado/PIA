@@ -68,7 +68,7 @@ public class QuestaoCabecActivity extends ActivityGeneric {
                     editTextPadrao.setText(editTextPadrao.getText().toString().substring(0, editTextPadrao.getText().toString().length() - 1));
                 }
                 else {
-                    Intent it = new Intent(QuestaoCabecActivity.this, ListaCaracOrganismoActivity.class);
+                    Intent it = new Intent(QuestaoCabecActivity.this, ListaCaracOrganActivity.class);
                     startActivity(it);
                     finish();
                 }
