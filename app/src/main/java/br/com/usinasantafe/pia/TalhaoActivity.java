@@ -80,11 +80,6 @@ public class TalhaoActivity extends ActivityGeneric {
                 if(editTextPadrao.getText().toString().length() > 0){
                     editTextPadrao.setText(editTextPadrao.getText().toString().substring(0, editTextPadrao.getText().toString().length() - 1));
                 }
-                else {
-                    Intent it = new Intent(TalhaoActivity.this, SecaoActivity.class);
-                    startActivity(it);
-                    finish();
-                }
 
             }
         });
@@ -92,6 +87,9 @@ public class TalhaoActivity extends ActivityGeneric {
     }
 
     public void onBackPressed()  {
+        Intent it = new Intent(TalhaoActivity.this, SecaoActivity.class);
+        startActivity(it);
+        finish();
     }
 
 }

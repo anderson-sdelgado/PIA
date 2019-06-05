@@ -66,12 +66,6 @@ public class AuditorActivity extends ActivityGeneric {
                 if(editTextPadrao.getText().toString().length() > 0){
                     editTextPadrao.setText(editTextPadrao.getText().toString().substring(0, editTextPadrao.getText().toString().length() - 1));
                 }
-                else {
-                    Intent it = new Intent(AuditorActivity.this, PrincipalActivity.class);
-                    startActivity(it);
-                    finish();
-                }
-
             }
 
         });
@@ -79,6 +73,9 @@ public class AuditorActivity extends ActivityGeneric {
     }
 
     public void onBackPressed()  {
+        Intent it = new Intent(AuditorActivity.this, PrincipalActivity.class);
+        startActivity(it);
+        finish();
     }
 
 

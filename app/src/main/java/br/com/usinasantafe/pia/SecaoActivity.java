@@ -65,11 +65,6 @@ public class SecaoActivity extends ActivityGeneric {
                 if(editTextPadrao.getText().toString().length() > 0){
                     editTextPadrao.setText(editTextPadrao.getText().toString().substring(0, editTextPadrao.getText().toString().length() - 1));
                 }
-                else {
-                    Intent it = new Intent(SecaoActivity.this, AuditorActivity.class);
-                    startActivity(it);
-                    finish();
-                }
 
             }
         });
@@ -77,6 +72,9 @@ public class SecaoActivity extends ActivityGeneric {
     }
 
     public void onBackPressed()  {
+        Intent it = new Intent(SecaoActivity.this, AuditorActivity.class);
+        startActivity(it);
+        finish();
     }
 
 }

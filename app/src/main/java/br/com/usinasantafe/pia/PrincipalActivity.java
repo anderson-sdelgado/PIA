@@ -17,8 +17,8 @@ import java.util.Calendar;
 import java.util.List;
 
 import br.com.usinasantafe.pia.bo.ManipDadosEnvio;
-import br.com.usinasantafe.pia.bo.ManipDadosReceb;
 import br.com.usinasantafe.pia.pst.EspecificaPesquisa;
+import br.com.usinasantafe.pia.tb.estaticas.AuditorTO;
 import br.com.usinasantafe.pia.tb.estaticas.OrganTO;
 import br.com.usinasantafe.pia.tb.variaveis.CabecAmostraTO;
 import br.com.usinasantafe.pia.tb.variaveis.ItemAmostraTO;
@@ -105,6 +105,7 @@ public class PrincipalActivity extends ActivityGeneric {
         ArrayList<String> itens = new ArrayList<String>();
 
         itens.add("APONTAMENTO");
+        itens.add("ENVIO DE DADOS");
         itens.add("CONFIGURAÇÃO");
         itens.add("SAIR");
 
@@ -118,76 +119,99 @@ public class PrincipalActivity extends ActivityGeneric {
             public void onItemClick(AdapterView<?> l, View v, int position,
                                     long id) {
                 // TODO Auto-generated method stub
-                if (position == 0) {
 
-                    CabecAmostraTO cabecAmostraTO = new CabecAmostraTO();
-                    List lCabec = cabecAmostraTO.get("statusAmostra", 1L);
+                TextView textView = (TextView) v.findViewById(R.id.textViewItemList);
+                String text = textView.getText().toString();
 
-                    if(lCabec.size() == 0){
+                if (text.equals("APONTAMENTO")) {
 
-                        Intent it = new Intent(PrincipalActivity.this, AuditorActivity.class);
-                        startActivity(it);
-                        finish();
+                    AuditorTO auditorTO = new AuditorTO();
+                    List auditorList = auditorTO.all();
 
-                    }
-                    else{
+                    if(auditorList.size() > 0) {
 
-                        ItemAmostraTO itemAmostraTO = new ItemAmostraTO();
-                        List itemList = itemAmostraTO.all();
+                        CabecAmostraTO cabecAmostraTO = new CabecAmostraTO();
+                        List cabecList = cabecAmostraTO.get("statusAmostra", 1L);
 
-                        if(itemList.size() > 0) {
-
-                            cabecAmostraTO = (CabecAmostraTO) lCabec.get(0);
-
-                            ArrayList listaPesq = new ArrayList();
-
-                            EspecificaPesquisa pesquisa = new EspecificaPesquisa();
-                            pesquisa.setCampo("idCabecRespItem");
-                            pesquisa.setValor(cabecAmostraTO.getIdCabec());
-                            listaPesq.add(pesquisa);
-
-                            EspecificaPesquisa pesquisa2 = new EspecificaPesquisa();
-                            pesquisa2.setCampo("pontoRespItem");
-                            pesquisa2.setValor(cabecAmostraTO.getUltPonto() + 1);
-                            listaPesq.add(pesquisa2);
-
-                            RespItemAmostraTO respItemAmostraTO = new RespItemAmostraTO();
-                            List respItemList = respItemAmostraTO.get(listaPesq);
-
-                            for (int i = 0; i < respItemList.size(); i++) {
-                                respItemAmostraTO = (RespItemAmostraTO) respItemList.get(i);
-                                respItemAmostraTO.delete();
-                                respItemAmostraTO.commit();
-                            }
-
-                            Intent it = new Intent(PrincipalActivity.this, ListaPontosActivity.class);
-                            startActivity(it);
-                            finish();
-
-                        }
-                        else{
-
-                            for(int i = 0; i < lCabec.size(); i++) {
-                                cabecAmostraTO = (CabecAmostraTO) lCabec.get(i);
-                                cabecAmostraTO.delete();
-                                cabecAmostraTO.commit();
-                            }
+                        if (cabecList.size() == 0) {
 
                             Intent it = new Intent(PrincipalActivity.this, AuditorActivity.class);
                             startActivity(it);
                             finish();
 
+                        } else {
+
+                            ItemAmostraTO itemAmostraTO = new ItemAmostraTO();
+                            List itemList = itemAmostraTO.all();
+
+                            if (itemList.size() > 0) {
+
+                                cabecAmostraTO = (CabecAmostraTO) cabecList.get(0);
+
+                                ArrayList listaPesq = new ArrayList();
+
+                                EspecificaPesquisa pesquisa = new EspecificaPesquisa();
+                                pesquisa.setCampo("idCabecRespItem");
+                                pesquisa.setValor(cabecAmostraTO.getIdCabec());
+                                listaPesq.add(pesquisa);
+
+                                EspecificaPesquisa pesquisa2 = new EspecificaPesquisa();
+                                pesquisa2.setCampo("pontoRespItem");
+                                pesquisa2.setValor(cabecAmostraTO.getUltPonto() + 1);
+                                listaPesq.add(pesquisa2);
+
+                                RespItemAmostraTO respItemAmostraTO = new RespItemAmostraTO();
+                                List respItemList = respItemAmostraTO.get(listaPesq);
+
+                                for (int i = 0; i < respItemList.size(); i++) {
+                                    respItemAmostraTO = (RespItemAmostraTO) respItemList.get(i);
+                                    respItemAmostraTO.delete();
+                                    respItemAmostraTO.commit();
+                                }
+
+                                respItemList.clear();
+
+                                Intent it = new Intent(PrincipalActivity.this, ListaPontosActivity.class);
+                                startActivity(it);
+                                finish();
+
+                            } else {
+
+                                for (int i = 0; i < cabecList.size(); i++) {
+                                    cabecAmostraTO = (CabecAmostraTO) cabecList.get(i);
+                                    cabecAmostraTO.delete();
+                                    cabecAmostraTO.commit();
+                                }
+
+                                Intent it = new Intent(PrincipalActivity.this, AuditorActivity.class);
+                                startActivity(it);
+                                finish();
+
+                            }
+
+                            itemList.clear();
+
                         }
+
+                        cabecList.clear();
 
                     }
 
-                } else if (position == 1) {
+                    auditorList.clear();
+
+                } else if (text.equals("ENVIO DE DADOS")) {
+
+                    Intent it = new Intent(PrincipalActivity.this, EnvioDadosActivity.class);
+                    startActivity(it);
+                    finish();
+
+                } else if (text.equals("CONFIGURAÇÃO")) {
 
                     Intent it = new Intent(PrincipalActivity.this, ConfiguracaoActivity.class);
                     startActivity(it);
                     finish();
 
-                } else if (position == 2) {
+                } else if (text.equals("SAIR")) {
 
                     Intent intent = new Intent(Intent.ACTION_MAIN);
                     intent.addCategory(Intent.CATEGORY_HOME);
@@ -211,7 +235,6 @@ public class PrincipalActivity extends ActivityGeneric {
 
         if(alarmeAtivo){
 
-            ManipDadosReceb.getInstance().tempo();
             Log.i("PIA", "NOVO ALARME");
 
             Intent intent = new Intent("EXECUTAR_ALARME");
@@ -234,17 +257,13 @@ public class PrincipalActivity extends ActivityGeneric {
 
         public void run() {
 
-            if(ManipDadosEnvio.getInstance().getStatusEnvio() == 1){
-                textViewProcesso.setTextColor(Color.YELLOW);
-                textViewProcesso.setText("Enviando Dados...");
-            }
-            else if(ManipDadosEnvio.getInstance().getStatusEnvio() == 2){
-                textViewProcesso.setTextColor(Color.RED);
-                textViewProcesso.setText("Existem Dados para serem Enviados");
-            }
-            else if(ManipDadosEnvio.getInstance().getStatusEnvio() == 3){
+            if(ManipDadosEnvio.getInstance().boletins().size() == 0){
                 textViewProcesso.setTextColor(Color.GREEN);
                 textViewProcesso.setText("Todos os Dados já foram Enviados");
+            }
+            else{
+                textViewProcesso.setTextColor(Color.RED);
+                textViewProcesso.setText("Existem Dados para serem Enviados");
             }
             customHandler.postDelayed(this, 10000);
         }

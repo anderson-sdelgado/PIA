@@ -24,24 +24,8 @@ public class UrlsConexaoHttp {
         // TODO Auto-generated constructor stub
     }
 
-    public String getsApontaAnalise() {
-        return urlPrincEnvio + "apontaanalise.php";
-    }
-
-    public String getsInsertAponta() {
-        return urlPrincEnvio + "insapont.php";
-    }
-
-    public String getsInsertBolAberto() {
-        return urlPrincEnvio + "insbolaberto.php";
-    }
-
-    public String getsInsertBolFechado() {
-        return urlPrincEnvio + "insbolfechado.php";
-    }
-
-    public String getsEditAponta() {
-        return urlPrincEnvio + "editapont.php";
+    public String getsInsertBoletim() {
+        return urlPrincEnvio + "inserirboletim.php";
     }
 
     public String urlVerifica(String classe) {

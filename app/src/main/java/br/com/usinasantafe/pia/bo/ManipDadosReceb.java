@@ -129,39 +129,6 @@ public class ManipDadosReceb {
 		}
         
 	}
-
-	public void atualizarBD() {
-
-		try {
-
-			this.tipoReceb = 2;
-			tabelaAtualizar = new ArrayList();
-			Class<?> retClasse = Class.forName(urlsConexaoHttp.localUrl);
-
-			for (Field field : retClasse.getDeclaredFields()) {
-				String campo = field.getName();
-				Log.i("ERRO", "Campo = " + campo);
-				if (campo.contains("TO")) {
-					tabelaAtualizar.add(campo);
-				}
-
-			}
-
-			classe = (String) tabelaAtualizar.get(contAtualizaBD);
-
-			String[] url = {classe};
-
-			contAtualizaBD++;
-
-			ConHttpGetBDGenerico conHttpGetBDGenerico = new ConHttpGetBDGenerico();
-			conHttpGetBDGenerico.execute(url);
-
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			Log.i("ERRO", "Erro Manip2 = " + e);
-		}
-
-	}
 	
 	public void atualizandoBD(){
 

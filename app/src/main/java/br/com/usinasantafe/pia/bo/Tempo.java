@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -96,11 +97,12 @@ public class Tempo {
 
         String dataCerta = "";
 
+        TimeZone tz = TimeZone.getDefault();
+        Date dataHora = new Date();
+        Date d = new Date();
         Calendar cal = Calendar.getInstance();
-
-        datahora = new Date();
-        
-        cal.setTime(datahora);
+        Long dt =  dataHora.getTime() - tz.getOffset(d.getTime());
+        cal.setTimeInMillis(dt);
 
         int mes = cal.get(Calendar.MONTH);
         int dia = cal.get(Calendar.DAY_OF_MONTH);
@@ -140,7 +142,7 @@ public class Tempo {
         else{
             minutosStr = String.valueOf(minutos);
         }
-        
+
         dataCerta = ""+diaStr+"/"+mesStr+"/"+ano+" "+horasStr+":"+minutosStr;
 
         return dataCerta;

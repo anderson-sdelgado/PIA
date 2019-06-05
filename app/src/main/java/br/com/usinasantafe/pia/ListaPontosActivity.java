@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -15,6 +14,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.usinasantafe.pia.bo.ConexaoWeb;
 import br.com.usinasantafe.pia.bo.ManipDadosEnvio;
 import br.com.usinasantafe.pia.pst.EspecificaPesquisa;
 import br.com.usinasantafe.pia.tb.estaticas.AuditorTO;
@@ -28,7 +28,7 @@ public class ListaPontosActivity extends ActivityGeneric {
 
     private ListView lista;
     private PIAContext piaContext;
-//    private ProgressDialog progressBar;
+    private ProgressDialog progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -216,10 +216,37 @@ public class ListaPontosActivity extends ActivityGeneric {
                     itemAmostraTO.deleteAll();
                     itemAmostraTO.commit();
 
-                    ManipDadosEnvio.getInstance().enviarBolFechados();
-                    Intent it = new Intent( ListaPontosActivity.this, PrincipalActivity.class);
-                    startActivity(it);
-                    finish();
+                    ConexaoWeb conexaoWeb = new ConexaoWeb();
+
+                    if (conexaoWeb.verificaConexao(ListaPontosActivity.this)) {
+
+                        progressBar = new ProgressDialog(ListaPontosActivity.this);
+                        progressBar.setCancelable(true);
+                        progressBar.setMessage("ENVIANDO DADOS...");
+                        progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                        progressBar.setProgress(0);
+                        progressBar.setMax(100);
+                        progressBar.show();
+
+                        ManipDadosEnvio.getInstance().envioBoletim(ListaPontosActivity.this, progressBar, PrincipalActivity.class);
+
+                    } else {
+
+                        AlertDialog.Builder alerta = new AlertDialog.Builder(ListaPontosActivity.this);
+                        alerta.setTitle("ATENÇÃO");
+                        alerta.setMessage("FALHA NA CONEXÃO DE DADOS. O CELULAR ESTA SEM SINAL. POR FAVOR, TENTE NOVAMENTE QUANDO O CELULAR ESTIVE COM SINAL.");
+                        alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent it = new Intent( ListaPontosActivity.this, PrincipalActivity.class);
+                                startActivity(it);
+                                finish();
+                            }
+                        });
+
+                        alerta.show();
+                    }
+
 
                 }
 

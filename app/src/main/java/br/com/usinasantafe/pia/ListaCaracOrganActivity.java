@@ -45,7 +45,6 @@ public class ListaCaracOrganActivity extends ActivityGeneric {
 
         ArrayList<String> itens = new ArrayList<String>();
 
-        Log.i("PBM", "cabecAmostraTO.getIdOrgCabec() = " + cabecAmostraTO.getIdOrgCabec());
 
         ROrganCaracTO rOrganCaracTO = new ROrganCaracTO();
         rOrganCaracList = rOrganCaracTO.get("idOrgan", cabecAmostraTO.getIdOrgCabec());
@@ -54,7 +53,6 @@ public class ListaCaracOrganActivity extends ActivityGeneric {
 
         for (int i = 0; i < rOrganCaracList.size(); i++) {
             rOrganCaracTO = (ROrganCaracTO) rOrganCaracList.get(i);
-            Log.i("PBM", "rOrganCaracTO.getIdCaracOrgan() = " + rOrganCaracTO.getIdCaracOrgan());
             rLista.add(rOrganCaracTO.getIdCaracOrgan());
         }
 
@@ -63,7 +61,6 @@ public class ListaCaracOrganActivity extends ActivityGeneric {
 
         for (int i = 0; i < caracOrganList.size(); i++) {
             caracOrganTO = (CaracOrganTO) caracOrganList.get(i);
-            Log.i("PBM", "caracOrganTO.getDescrCaracOrgan() = " + caracOrganTO.getDescrCaracOrgan());
             itens.add(caracOrganTO.getDescrCaracOrgan());
         }
 
@@ -85,7 +82,6 @@ public class ListaCaracOrganActivity extends ActivityGeneric {
                 cabecAmostraTO = (CabecAmostraTO) listCabecAmostra.get(0);
                 cabecAmostraTO.setIdCaracOrgCabec(caracOrganTO.getIdCaracOrgan());
                 cabecAmostraTO.setUltPonto(0L);
-                cabecAmostraTO.setIdExtBoletim(0L);
                 cabecAmostraTO.update();
                 cabecAmostraTO.commit();
 
@@ -152,8 +148,6 @@ public class ListaCaracOrganActivity extends ActivityGeneric {
                     }
                     else{
 
-
-                        ManipDadosEnvio.getInstance().envioDados( ListaCaracOrganActivity.this);
                         Intent it = new Intent(ListaCaracOrganActivity.this, ListaPontosActivity.class);
                         startActivity(it);
                         finish();

@@ -1,27 +1,18 @@
 package br.com.usinasantafe.pia;
 
-import android.app.ActivityManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.j256.ormlite.android.apptools.OpenHelperManager;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.usinasantafe.pia.bo.ManipDadosEnvio;
-import br.com.usinasantafe.pia.pst.DatabaseHelper;
 import br.com.usinasantafe.pia.pst.EspecificaPesquisa;
-import br.com.usinasantafe.pia.tb.variaveis.AltExcluirItemTO;
 import br.com.usinasantafe.pia.tb.variaveis.CabecAmostraTO;
 import br.com.usinasantafe.pia.tb.variaveis.ItemAmostraTO;
-import br.com.usinasantafe.pia.tb.variaveis.ItemSalvoTO;
 import br.com.usinasantafe.pia.tb.variaveis.RespItemAmostraTO;
 
 public class QuestaoAmostraActivity extends ActivityGeneric {
@@ -120,8 +111,6 @@ public class QuestaoAmostraActivity extends ActivityGeneric {
 
                         }
 
-                        ManipDadosEnvio.getInstance().envioDados(  QuestaoAmostraActivity.this);
-
                         Intent it = new Intent(QuestaoAmostraActivity.this, MsgPontoActivity.class);
                         startActivity(it);
                         finish();
@@ -137,26 +126,24 @@ public class QuestaoAmostraActivity extends ActivityGeneric {
                         respItemAmostraTO.setValorRespItem(0L);
                     }
 
-                    AltExcluirItemTO altExcluirItemTO = new AltExcluirItemTO();
-                    altExcluirItemTO.setIdRespItem(respItemAmostraTO.getIdRespItem());
-                    altExcluirItemTO.setIdCabecRespItem(respItemAmostraTO.getIdCabecRespItem());
-                    altExcluirItemTO.setIdAmostraRespItem(respItemAmostraTO.getIdAmostraRespItem());
-                    altExcluirItemTO.setPontoRespItem(respItemAmostraTO.getPontoRespItem());
-                    altExcluirItemTO.setValorRespItem(respItemAmostraTO.getValorRespItem());
-                    altExcluirItemTO.setTipoAltExc(1L);
-                    altExcluirItemTO.insert();
+//                    AltExcluirItemTO altExcluirItemTO = new AltExcluirItemTO();
+//                    altExcluirItemTO.setIdRespItem(respItemAmostraTO.getIdRespItem());
+//                    altExcluirItemTO.setIdCabecRespItem(respItemAmostraTO.getIdCabecRespItem());
+//                    altExcluirItemTO.setIdAmostraRespItem(respItemAmostraTO.getIdAmostraRespItem());
+//                    altExcluirItemTO.setPontoRespItem(respItemAmostraTO.getPontoRespItem());
+//                    altExcluirItemTO.setValorRespItem(respItemAmostraTO.getValorRespItem());
+//                    altExcluirItemTO.setTipoAltExc(1L);
+//                    altExcluirItemTO.insert();
 
-                    ItemSalvoTO itemSalvoTO = new ItemSalvoTO();
-                    List itemSalvoList = itemSalvoTO.get("idRespItem", respItemAmostraTO.getIdRespItem());
-                    if(itemSalvoList.size() > 0){
-                        itemSalvoTO = (ItemSalvoTO) itemSalvoList.get(0);
-                        itemSalvoTO.delete();
-                    }
+//                    ItemSalvoTO itemSalvoTO = new ItemSalvoTO();
+//                    List itemSalvoList = itemSalvoTO.get("idRespItem", respItemAmostraTO.getIdRespItem());
+//                    if(itemSalvoList.size() > 0){
+//                        itemSalvoTO = (ItemSalvoTO) itemSalvoList.get(0);
+//                        itemSalvoTO.delete();
+//                    }
 
                     respItemAmostraTO.update();
                     respItemAmostraTO.commit();
-
-                    ManipDadosEnvio.getInstance().envioDados(QuestaoAmostraActivity.this);
 
                     Intent it = new Intent(QuestaoAmostraActivity.this, ListaQuestaoActivity.class);
                     startActivity(it);

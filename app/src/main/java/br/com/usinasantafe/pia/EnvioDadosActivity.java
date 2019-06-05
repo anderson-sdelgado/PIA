@@ -47,11 +47,13 @@ public class EnvioDadosActivity extends ActivityGeneric {
                     progressBar = new ProgressDialog(EnvioDadosActivity.this);
                     progressBar.setCancelable(true);
                     progressBar.setMessage("ENVIANDO DADOS...");
-                    progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                    progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                    progressBar.setProgress(0);
+                    progressBar.setMax(100);
                     progressBar.show();
 
-                    ManipDadosEnvio.getInstance().setContext(EnvioDadosActivity.this, progressBar, 2);
-                    ManipDadosEnvio.getInstance().enviarAnalise();
+                    ManipDadosEnvio.getInstance().envioBoletim(EnvioDadosActivity.this, progressBar, EnvioDadosActivity.class);
+                    ManipDadosEnvio.getInstance().boletins();
 
                 } else {
 

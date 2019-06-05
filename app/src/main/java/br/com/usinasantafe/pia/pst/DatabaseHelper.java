@@ -17,10 +17,8 @@ import br.com.usinasantafe.pia.tb.estaticas.RCaracAmostraTO;
 import br.com.usinasantafe.pia.tb.estaticas.ROrganCaracTO;
 import br.com.usinasantafe.pia.tb.estaticas.SecaoTO;
 import br.com.usinasantafe.pia.tb.estaticas.TalhaoTO;
-import br.com.usinasantafe.pia.tb.variaveis.AltExcluirItemTO;
 import br.com.usinasantafe.pia.tb.variaveis.CabecAmostraTO;
 import br.com.usinasantafe.pia.tb.variaveis.ItemAmostraTO;
-import br.com.usinasantafe.pia.tb.variaveis.ItemSalvoTO;
 import br.com.usinasantafe.pia.tb.variaveis.RespItemAmostraTO;
 
 
@@ -72,8 +70,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			TableUtils.createTable(cs, CabecAmostraTO.class);
 			TableUtils.createTable(cs, ItemAmostraTO.class);
 			TableUtils.createTable(cs, RespItemAmostraTO.class);
-			TableUtils.createTable(cs, ItemSalvoTO.class);
-			TableUtils.createTable(cs, AltExcluirItemTO.class);
+//			TableUtils.createTable(cs, ItemSalvoTO.class);
+//			TableUtils.createTable(cs, AltExcluirItemTO.class);
 
 		}
 		catch(Exception e){

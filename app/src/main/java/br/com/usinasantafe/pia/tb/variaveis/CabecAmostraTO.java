@@ -16,8 +16,6 @@ public class CabecAmostraTO extends Entidade {
     @DatabaseField(generatedId=true)
     private Long idCabec;
     @DatabaseField
-    private Long idExtBoletim;
-    @DatabaseField
     private Long auditorCabec;
     @DatabaseField
     private String dtCabec;
@@ -103,13 +101,5 @@ public class CabecAmostraTO extends Entidade {
 
     public void setStatusAmostra(Long statusAmostra) {
         this.statusAmostra = statusAmostra;
-    }
-
-    public Long getIdExtBoletim() {
-        return idExtBoletim;
-    }
-
-    public void setIdExtBoletim(Long idExtBoletim) {
-        this.idExtBoletim = idExtBoletim;
     }
 }

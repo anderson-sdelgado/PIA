@@ -31,10 +31,10 @@ public class ReceberAlarme extends BroadcastReceiver {
 
 		Log.i("PIA", "DATA HORA = " + Tempo.getInstance().data());
 		System.gc();
-		if(ManipDadosEnvio.getInstance().verifDadosEnvio()){
-			Log.i("PIA", "ENVIANDO");
-			ManipDadosEnvio.getInstance().envioDados(context);
-		}
+//		if(ManipDadosEnvio.getInstance().verifDadosEnvio()){
+//			Log.i("PIA", "ENVIANDO");
+//			ManipDadosEnvio.getInstance().envioDados(context);
+//		}
 
 	}
 

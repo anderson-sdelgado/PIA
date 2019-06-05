@@ -68,9 +68,8 @@ public class ConHttpPostCadGenerico extends AsyncTask<String, Void, String> {
 			connection.disconnect();
 			
 		} catch (Exception e) {
+			ManipDadosEnvio.getInstance().respostaEnvio(false);
 			Log.i("ERRO", "Erro = " + e);
-			Tempo.getInstance().setEnvioDado(true);
-			ManipDadosEnvio.getInstance().setEnviando(false);
 			if(bufferedReader != null){
 				try {
 					bufferedReader.close();
@@ -99,25 +98,16 @@ public class ConHttpPostCadGenerico extends AsyncTask<String, Void, String> {
 	protected void onPostExecute(String result) {
 
 		try {
-			ManipDadosEnvio.getInstance().setEnviando(false);
 			Log.i("ECM", "VALOR RECEBIDO --> " + result);
-			if(result.trim().equals("GRAVOU-BOLFECHADO")){
-				ManipDadosEnvio.getInstance().delBolFechado();
-			}
-			else if(result.trim().equals("EDITOUAPONT")){
-				ManipDadosEnvio.getInstance().delAtualExcApont();
+			if(result.trim().equals("GRAVOU-DADOS")){
+				ManipDadosEnvio.getInstance().deletarDados();
 			}
 			else{
-				if(result.trim().contains("CABEC")){
-					ManipDadosEnvio.getInstance().atualDelBoletim(result);
-				}
-				else if(result.trim().contains("APONTA")){
-					ManipDadosEnvio.getInstance().atualAponta(result);
-				}
+				ManipDadosEnvio.getInstance().respostaEnvio(false);
 			}
-
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			ManipDadosEnvio.getInstance().respostaEnvio(false);
 			Log.i("ERRO", "Erro2 = " + e);
 		}
 		
