@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">PIA</string>
-    <string name="texto_menu_principal">PRINCIPAL - V 1.4</string>
+    <string name="texto_menu_principal">PRINCIPAL - V 1.05</string>
     <string name="texto_item_list">TESTE</string>
     <string name="texto_num1">1</string>
     <string name="texto_num2">2</string>
@@ -11,7 +11,8 @@
     <string name="texto_num7">7</string>
     <string name="texto_num8">8</string>
     <string name="texto_num9">9</string>
-    <string name="texto_padrao_canc">APAGAR</string>
+    <string name="texto_padrao_apagar">APAGAR</string>
+    <string name="texto_padrao_cancelar">CANCELAR</string>
     <string name="texto_num0">0</string>
     <string name="texto_num00">00</string>
     <string name="texto_virg">,</string>
@@ -38,4 +39,10 @@
     <string name="texto_padrao_excluir">EXCLUIR</string>
     <string name="texto_padrao_inserir">INSERIR</string>
     <string name="texto_envio_dados">ENVIANDO DADOS</string>
+    <string name="texto_senha">SENHA:</string>
+    <string name="texto_nro_aparelho">NRO APARELHO:</string>
+    <string name="texto_atualizar_bd">ATUALIZAR DADOS</string>
+    <string name="texto_hist_apont">PARADA: VERIFICACAO INICIAL</string>
+    <string name="texto_hist_horario">10:08</string>
+    <string name="texto_hist_impl_transb">TRANSBORDO: 1001</string>
 </resources>

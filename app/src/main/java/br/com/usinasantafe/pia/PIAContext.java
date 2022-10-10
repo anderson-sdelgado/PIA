@@ -5,16 +5,31 @@ import android.util.Log;
 
 import java.util.Calendar;
 
-/**
- * Created by anderson on 05/06/2017.
- */
+import br.com.usinasantafe.pia.control.ConfigCTR;
+import br.com.usinasantafe.pia.control.InfestacaoCTR;
 
 public class PIAContext extends Application {
 
+    private ConfigCTR configCTR;
+    private InfestacaoCTR infestacaoCTR;
+    public static String versaoWS = "2.00";
     private int posQuestaoAmostra;
     private int posPonto;
     private Long idRespItem;
     private int verTelaQuestao; // 1 - MSG PONTO E QUESTAO AMOSTRA; 2 - ALTERAR AMOSTRA;
+    private int tela;
+
+    public ConfigCTR getConfigCTR() {
+        if(configCTR == null)
+            configCTR = new ConfigCTR();
+        return configCTR;
+    }
+
+    public InfestacaoCTR getInfestacaoCTR() {
+        if(infestacaoCTR == null)
+            infestacaoCTR = new InfestacaoCTR();
+        return infestacaoCTR;
+    }
 
     public int getPosQuestaoAmostra() {
         return posQuestaoAmostra;
@@ -48,5 +63,11 @@ public class PIAContext extends Application {
         this.idRespItem = idRespItem;
     }
 
+    public int getTela() {
+        return tela;
+    }
 
+    public void setTela(int tela) {
+        this.tela = tela;
+    }
 }

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="br.com.usinasantafe.pia.EnvioDadosActivity">
+    tools:context="br.com.usinasantafe.pia.view.EnvioDadosActivity">
 
     <TextView
         android:id="@+id/textViewEnvioDados"
