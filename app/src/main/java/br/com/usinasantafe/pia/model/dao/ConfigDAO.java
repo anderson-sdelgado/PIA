@@ -81,11 +81,4 @@ public class ConfigDAO {
         configBean.commit();
     }
 
-    public void setUltPonto(Long ultPonto){
-        ConfigBean configBean = getConfig();
-        configBean.setUltPonto(ultPonto);
-        configBean.update();
-        configBean.commit();
-    }
-
 }
