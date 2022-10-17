@@ -11,12 +11,21 @@ import java.net.URL;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
+import br.com.usinasantafe.pia.model.dao.LogErroDAO;
 import br.com.usinasantafe.pia.util.EnvioDadosServ;
 
 public class PostCadGenerico extends AsyncTask<String, Void, String> {
 
 	private static PostCadGenerico instance = null;
 	private Map<String, Object> parametrosPost = null;
+	private String activity;
 
 	public PostCadGenerico() {
 	}
@@ -35,15 +44,25 @@ public class PostCadGenerico extends AsyncTask<String, Void, String> {
 		String resultado = null;
 		
 		String url = arg[0];
+		this.activity = arg[1];
 		
 		try {
 
 			String parametros = getQueryString(parametrosPost);
 			URL urlCon = new URL(url);
-			HttpURLConnection connection = (HttpURLConnection) urlCon.openConnection();
+			HttpsURLConnection connection = (HttpsURLConnection) urlCon.openConnection();
 			connection.setRequestMethod("POST");
 			connection.setDoInput(true);
 			connection.setDoOutput(true);
+			SSLContext sc = SSLContext.getInstance("SSL");
+			sc.init(null, trustAllCerts(), new java.security.SecureRandom());
+			connection.setSSLSocketFactory(sc.getSocketFactory());
+			connection.setHostnameVerifier(new HostnameVerifier() {
+				@Override
+				public boolean verify(String s, SSLSession sslSession) {
+					return true;
+				}
+			});
 			connection.connect();
 
 			OutputStream out = connection.getOutputStream();
@@ -65,13 +84,13 @@ public class PostCadGenerico extends AsyncTask<String, Void, String> {
 			connection.disconnect();
 			
 		} catch (Exception e) {
-			EnvioDadosServ.getInstance().respostaEnvio(false);
-			Log.i("ERRO", "Erro = " + e);
+			EnvioDadosServ.getInstance().respostaEnvio(false, activity);
+			LogErroDAO.getInstance().insertLogErro(e);
 			if(bufferedReader != null){
 				try {
 					bufferedReader.close();
-				} catch (Exception er) {
-					Log.i("ERRO", "Erro = " + er);
+				} catch (Exception erro) {
+					LogErroDAO.getInstance().insertLogErro(erro);
 				}
 				
 			}
@@ -82,7 +101,7 @@ public class PostCadGenerico extends AsyncTask<String, Void, String> {
 				try {
 					bufferedReader.close();
 				} catch (Exception e) {
-					Log.i("ERRO", "Erro = " + e);
+					LogErroDAO.getInstance().insertLogErro(e);
 				}
 				
 			}
@@ -97,14 +116,14 @@ public class PostCadGenerico extends AsyncTask<String, Void, String> {
 		try {
 			Log.i("ECM", "VALOR RECEBIDO --> " + result);
 			if(result.trim().startsWith("GRAVOU-DADOS")){
-				EnvioDadosServ.getInstance().updateDadosEnviado(result);
+				EnvioDadosServ.getInstance().updateDadosEnviado(result, activity);
 			}
 			else{
-				EnvioDadosServ.getInstance().respostaEnvio(false);
+				EnvioDadosServ.getInstance().respostaEnvio(false, activity);
 			}
 		} catch (Exception e) {
-			EnvioDadosServ.getInstance().respostaEnvio(false);
-			Log.i("ERRO", "Erro2 = " + e);
+			EnvioDadosServ.getInstance().respostaEnvio(false, activity);
+			LogErroDAO.getInstance().insertLogErro(e);
 		}
 		
     }
@@ -129,6 +148,21 @@ public class PostCadGenerico extends AsyncTask<String, Void, String> {
 		return urlParams;
 	}
 
-
+	public TrustManager[] trustAllCerts(){
+		return new TrustManager[]{
+				new X509TrustManager() {
+					public java.security.cert.X509Certificate[] getAcceptedIssuers()
+					{
+						return null;
+					}
+					public void checkClientTrusted(java.security.cert.X509Certificate[] certs, String authType)
+					{
+					}
+					public void checkServerTrusted(java.security.cert.X509Certificate[] certs, String authType)
+					{
+					}
+				}
+		};
+	}
 
 }

@@ -15,6 +15,7 @@ import br.com.usinasantafe.pia.model.bean.estaticas.AmostraBean;
 import br.com.usinasantafe.pia.model.bean.estaticas.AuditorBean;
 import br.com.usinasantafe.pia.model.bean.estaticas.CaracOrganBean;
 import br.com.usinasantafe.pia.model.bean.estaticas.OrganBean;
+import br.com.usinasantafe.pia.model.bean.estaticas.ROrganCaracBean;
 import br.com.usinasantafe.pia.model.bean.estaticas.SecaoBean;
 import br.com.usinasantafe.pia.model.bean.estaticas.TalhaoBean;
 import br.com.usinasantafe.pia.model.bean.variaveis.CabecAmostraBean;
@@ -105,10 +106,13 @@ public class InfestacaoCTR {
     }
 
     public boolean verAmostraCarac(Long idCaracOrganismo){
+        ROrganCaracDAO rOrganCaracDAO = new ROrganCaracDAO();
         RCaracAmostraDAO rCaracAmostraDAO = new RCaracAmostraDAO();
         AmostraDAO amostraDAO = new AmostraDAO();
-        if(rCaracAmostraDAO.verRCaracAmostraList(idCaracOrganismo)){
-            return amostraDAO.verAmostra(rCaracAmostraDAO.getRCaracAmostra(idCaracOrganismo).getIdAmostraOrgan());
+        ConfigCTR configCTR = new ConfigCTR();
+        ROrganCaracBean rOrganCaracBean = rOrganCaracDAO.getROrganCarac(configCTR.getConfig().getIdOrganConfig(), idCaracOrganismo);
+        if(rCaracAmostraDAO.verRCaracAmostraList(rOrganCaracBean.getIdROrganCarac())){
+            return amostraDAO.verAmostra(rCaracAmostraDAO.getRCaracAmostra(rOrganCaracBean.getIdROrganCarac()).getIdAmostraOrgan());
         } else {
             return false;
         }
@@ -186,7 +190,7 @@ public class InfestacaoCTR {
     public Long ultPonto(){
         CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
         RespItemAmostraDAO respItemAmostraDAO = new RespItemAmostraDAO();
-        if(respItemAmostraDAO.verRespItemAmostraList(cabecAmostraDAO.getCabecAberto().getIdCabec())){
+        if(respItemAmostraDAO.verRespItemAmostraFechado(cabecAmostraDAO.getCabecAberto().getIdCabec())){
             return respItemAmostraDAO.getUltRespItemAmostra(cabecAmostraDAO.getCabecAberto().getIdCabec()).getPontoRespItem();
         } else {
             return 0L;
@@ -216,9 +220,12 @@ public class InfestacaoCTR {
     }
 
     public List<AmostraBean> amostraList(Long idCaracOrganismo){
+        ConfigCTR configCTR = new ConfigCTR();
+        ROrganCaracDAO rOrganCaracDAO = new ROrganCaracDAO();
         RCaracAmostraDAO rCaracAmostraDAO = new RCaracAmostraDAO();
         AmostraDAO amostraDAO = new AmostraDAO();
-        return  amostraDAO.amostraList(rCaracAmostraDAO.getRCaracAmostra(idCaracOrganismo).getIdAmostraOrgan());
+        ROrganCaracBean rOrganCaracBean = rOrganCaracDAO.getROrganCarac(configCTR.getConfig().getIdOrganConfig(), idCaracOrganismo);
+        return  amostraDAO.amostraList(rCaracAmostraDAO.getRCaracAmostra(rOrganCaracBean.getIdROrganCarac()).getIdAmostraOrgan());
     }
 
     public int qtdeItemAmostra(){

@@ -15,13 +15,14 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import br.com.usinasantafe.pia.BuildConfig;
 import br.com.usinasantafe.pia.PIAContext;
 import br.com.usinasantafe.pia.R;
 import br.com.usinasantafe.pia.model.dao.LogProcessoDAO;
 
 public class MenuInicialActivity extends ActivityGeneric {
 
-    private ListView lista;
+    private ListView listaMenuInicial;
     private PIAContext piaContext;
     private TextView textViewProcesso;
     private Handler customHandler = new Handler();
@@ -30,6 +31,10 @@ public class MenuInicialActivity extends ActivityGeneric {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_inicial);
+
+        TextView textViewPrincipal = findViewById(R.id.textViewPrincipal);
+
+        textViewPrincipal.setText("PRINCIPAL - V " + BuildConfig.VERSION_NAME);
 
         piaContext = (PIAContext) getApplication();
 
@@ -61,10 +66,10 @@ public class MenuInicialActivity extends ActivityGeneric {
         itens.add("SAIR");
 
         AdapterList adapterList = new AdapterList(this, itens);
-        lista = findViewById(R.id.listaMenuInicial);
-        lista.setAdapter(adapterList);
+        listaMenuInicial = findViewById(R.id.listaMenuInicial);
+        listaMenuInicial.setAdapter(adapterList);
 
-        lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listaMenuInicial.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> l, View v, int position,

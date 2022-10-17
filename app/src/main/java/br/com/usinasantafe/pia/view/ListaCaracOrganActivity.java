@@ -68,7 +68,6 @@ public class ListaCaracOrganActivity extends ActivityGeneric {
                         "                piaContext.getInfestacaoCTR().setCaracOrganismoCabecAberto(caracOrganBean.getIdCaracOrganismo());\n" +
                         "                List<AmostraBean> amostraList = piaContext.getInfestacaoCTR().amostraList(caracOrganBean.getIdCaracOrganismo());\n" +
                         "                caracOrganList.clear();", getLocalClassName());
-                Log.i("PIA", "Posicao Carac = " + position);
                 CaracOrganBean caracOrganBean = caracOrganList.get(position);
                 piaContext.getConfigCTR().setIdCaracOrg(caracOrganBean.getIdCaracOrgan());
 

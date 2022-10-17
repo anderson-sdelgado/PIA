@@ -65,7 +65,6 @@ public class ListaOrganActivity extends ActivityGeneric {
                         "                piaContext.getConfigCTR().setIdOrg(organismoBean.getIdOrganismo());\n" +
                         "                organList.clear();\n" +
                         "                Intent it = new Intent(ListaOrganActivity.this, ListaCaracOrganActivity.class);", getLocalClassName());
-                Log.i("PIA", "Posicao Organ = " + position);
                 OrganBean organBean = organList.get(position);
                 piaContext.getConfigCTR().setIdOrg(organBean.getIdOrgan());
                 organList.clear();

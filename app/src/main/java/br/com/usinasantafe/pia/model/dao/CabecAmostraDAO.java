@@ -54,6 +54,12 @@ public class CabecAmostraDAO {
         return cabecAmostraBean.getAndOrderBy("statusAmostra", 2L, "idCabec", true);
     }
 
+    public List<CabecAmostraBean> cabecEnviadoList(){
+        CabecAmostraBean cabecAmostraBean = new CabecAmostraBean();
+        return cabecAmostraBean.getAndOrderBy("statusAmostra", 3L, "idCabec", true);
+    }
+
+
     public String dadosEnvioCabecAmostraFechado(){
         return dadosCabecAmostra(cabecFechadoList());
     }
@@ -136,7 +142,7 @@ public class CabecAmostraDAO {
 
     public ArrayList<CabecAmostraBean> cabecAmostraExcluirArrayList(){
 
-        List<CabecAmostraBean> cabecAmostraList = cabecFechadoList();
+        List<CabecAmostraBean> cabecAmostraList = cabecEnviadoList();
         ArrayList<CabecAmostraBean> cabecAmostraArrayList = new ArrayList<>();
         for (CabecAmostraBean cabecAmostraBeanBD : cabecAmostraList) {
             if(cabecAmostraBeanBD.getDthrLongCabec() < Tempo.getInstance().dthrLongDiaMenos(15)) {
@@ -148,15 +154,6 @@ public class CabecAmostraDAO {
 
     }
 
-    private EspecificaPesquisa getPesqIdCabec(Long idCabec){
-        EspecificaPesquisa pesquisa = new EspecificaPesquisa();
-        pesquisa.setCampo("idCabec");
-        pesquisa.setValor(idCabec);
-        pesquisa.setTipo(1);
-        return pesquisa;
-    }
-
-
     public void deleteCabecAberto(){
         List<CabecAmostraBean> cabecList = cabecAbertoList();
         for(CabecAmostraBean cabecAmostraBean : cabecList){
@@ -165,8 +162,28 @@ public class CabecAmostraDAO {
         cabecList.clear();
     }
 
-    public void deleteCabecFechado(CabecAmostraBean cabecAmostraBean){
-        cabecAmostraBean.delete();
+    public ArrayList<String> cabecAmostraAllArrayList(ArrayList<String> dadosArrayList){
+        dadosArrayList.add("CABEC");
+        CabecAmostraBean cabecAmostraBean = new CabecAmostraBean();
+        List<CabecAmostraBean> cabecAmostraList = cabecAmostraBean.orderBy("idCabec", true);
+        for (CabecAmostraBean cabecAmostraBeanBD : cabecAmostraList) {
+            dadosArrayList.add(dadosCabecAmostra(cabecAmostraBeanBD));
+        }
+        cabecAmostraList.clear();
+        return dadosArrayList;
+    }
+
+    private String dadosCabecAmostra(CabecAmostraBean cabecAmostraBean){
+        Gson gsonCabec = new Gson();
+        return gsonCabec.toJsonTree(cabecAmostraBean, cabecAmostraBean.getClass()).toString();
+    }
+
+    private EspecificaPesquisa getPesqIdCabec(Long idCabec){
+        EspecificaPesquisa pesquisa = new EspecificaPesquisa();
+        pesquisa.setCampo("idCabec");
+        pesquisa.setValor(idCabec);
+        pesquisa.setTipo(1);
+        return pesquisa;
     }
 
 }

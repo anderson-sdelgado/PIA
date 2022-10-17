@@ -44,13 +44,8 @@ public class AdapterListBaseDado extends BaseAdapter {
         convertView = layoutInflater.inflate(R.layout.activity_item_lista, null);
         TextView textView = convertView.findViewById(R.id.textViewItemList);
         textView.setText(itens.get(position));
-        if(itens.get(position).equals("BOLETIM")
-                || itens.get(position).equals("APONTAMENTO")
-                || itens.get(position).equals("APONT. IMPLEMENTO")
-                || itens.get(position).equals("RECOLHIMENTO")
-                || itens.get(position).equals("RENDIMENTO")
-                || itens.get(position).equals("CABEC CHECKLIST")
-                || itens.get(position).equals("ITEM CHECKLIST")){
+        if(itens.get(position).equals("CABEC")
+                || itens.get(position).equals("RESP")){
             textView.setTypeface(null, Typeface.BOLD);
         }
         return convertView;

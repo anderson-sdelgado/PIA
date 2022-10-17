@@ -39,14 +39,18 @@ public class RespItemAmostraDAO {
     }
 
     public void inserirRespItemAmostra(Long idCabec, Long idAmostra, Long valor, Long qtde){
-        RespItemAmostraBean respItemAmostraBean = new RespItemAmostraBean();
-        respItemAmostraBean.setIdCabec(idCabec);
-        respItemAmostraBean.setIdAmostraRespItem(idAmostra);
-        respItemAmostraBean.setPontoRespItem(qtde);
-        respItemAmostraBean.setValorRespItem(valor);
-        respItemAmostraBean.setStatusRespItem(1L);
-        respItemAmostraBean.insert();
-        respItemAmostraBean.commit();
+//        Random rand = new Random();
+//        int randomNum = rand.nextInt((50 - 1) + 1) + 1;
+        for(int i = 0; i < 60; i++){
+            RespItemAmostraBean respItemAmostraBean = new RespItemAmostraBean();
+            respItemAmostraBean.setIdCabec(idCabec);
+            respItemAmostraBean.setIdAmostraRespItem(idAmostra);
+            respItemAmostraBean.setPontoRespItem(qtde + i);
+            respItemAmostraBean.setValorRespItem(valor);
+            respItemAmostraBean.setStatusRespItem(1L);
+            respItemAmostraBean.insert();
+            respItemAmostraBean.commit();
+        }
     }
 
     public void updateRespItemAmostra(Long idRespItem, Long valor){
@@ -202,7 +206,9 @@ public class RespItemAmostraDAO {
 
     public List<RespItemAmostraBean> respRespItemAmostraList(ArrayList<Long> idCabec){
         RespItemAmostraBean respItemAmostra = new RespItemAmostraBean();
-        return respItemAmostra.inAndOrderBy("idCabec", idCabec, "idRespItem", true);
+        ArrayList pesqArrayList = new ArrayList();
+        pesqArrayList.add(getPesqStatusFechado());
+        return respItemAmostra.inAndGetAndOrderBy("idCabec", idCabec, pesqArrayList, "idRespItem", true);
     }
 
     public String dadosEnvioRespItemAmostra(List<RespItemAmostraBean> respItemList){
@@ -258,6 +264,22 @@ public class RespItemAmostraDAO {
             idRespItemAmostraList.add(respItemAmostra.getIdRespItem());
         }
         return idRespItemAmostraList;
+    }
+
+    public ArrayList<String> respAllArrayList(ArrayList<String> dadosArrayList){
+        dadosArrayList.add("RESP");
+        RespItemAmostraBean respItemAmostraBean = new RespItemAmostraBean();
+        List<RespItemAmostraBean> respItemAmostraList = respItemAmostraBean.orderBy("idRespItem", true);
+        for (RespItemAmostraBean respItemAmostraBeanBD : respItemAmostraList) {
+            dadosArrayList.add(dadosResp(respItemAmostraBeanBD));
+        }
+        respItemAmostraList.clear();
+        return dadosArrayList;
+    }
+
+    private String dadosResp(RespItemAmostraBean respItemAmostraBean){
+        Gson gsonItemImp = new Gson();
+        return gsonItemImp.toJsonTree(respItemAmostraBean, respItemAmostraBean.getClass()).toString();
     }
 
     private EspecificaPesquisa getPesqId(Long idRespItem){

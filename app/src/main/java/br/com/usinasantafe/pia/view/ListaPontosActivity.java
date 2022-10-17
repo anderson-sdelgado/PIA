@@ -207,7 +207,7 @@ public class ListaPontosActivity extends ActivityGeneric {
                                 "                        progressBar.setProgress(0);\n" +
                                 "                        progressBar.setMax(100);\n" +
                                 "                        progressBar.show();\n" +
-                                "                        EnvioDadosServ.getInstance().envioBoletim(ListaPontosActivity.this, progressBar, MenuInicialActivity.class);", getLocalClassName());
+                                "                        EnvioDadosServ.getInstance().envioBoletim(ListaPontosActivity.this, progressBar, MenuInicialActivity.class, getLocalClassName());", getLocalClassName());
                         progressBar = new ProgressDialog(ListaPontosActivity.this);
                         progressBar.setCancelable(true);
                         progressBar.setMessage("ENVIANDO DADOS...");
@@ -216,7 +216,7 @@ public class ListaPontosActivity extends ActivityGeneric {
                         progressBar.setMax(100);
                         progressBar.show();
 
-                        EnvioDadosServ.getInstance().envioBoletim(ListaPontosActivity.this, progressBar, MenuInicialActivity.class);
+                        EnvioDadosServ.getInstance().envioBoletim(ListaPontosActivity.this, progressBar, MenuInicialActivity.class, getLocalClassName());
 
                     } else {
 

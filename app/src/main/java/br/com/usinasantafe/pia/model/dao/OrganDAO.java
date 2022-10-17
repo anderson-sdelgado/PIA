@@ -14,5 +14,4 @@ public class OrganDAO {
         return organBean.all();
     }
 
-
 }

@@ -9,17 +9,26 @@ import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
+import br.com.usinasantafe.pia.model.dao.LogErroDAO;
+import br.com.usinasantafe.pia.model.dao.LogProcessoDAO;
 import br.com.usinasantafe.pia.util.AtualDadosServ;
 
 public class GetBDGenerico extends AsyncTask<String, Void, String> {
 
 	private static GetBDGenerico instance = null;
 	private String tipo = null;
-	
+	private String activity;
+
 	private UrlsConexaoHttp urlsConexaoHttp;
 
 	public GetBDGenerico() {
-		// TODO Auto-generated constructor stub
 	}
 
     public static GetBDGenerico getInstance() {
@@ -35,6 +44,7 @@ public class GetBDGenerico extends AsyncTask<String, Void, String> {
 		BufferedReader bufferedReader = null;
 		
 		tipo = arg[0];
+		this.activity = arg[1];
 		String url = "";
 		
 		try {
@@ -50,10 +60,19 @@ public class GetBDGenerico extends AsyncTask<String, Void, String> {
             }
 
 			URL urlCon = new URL(url);
-			HttpURLConnection connection = (HttpURLConnection) urlCon.openConnection();
+			HttpsURLConnection connection = (HttpsURLConnection) urlCon.openConnection();
 			connection.setRequestMethod("GET");
 			connection.setDoInput(true);
 			connection.setDoOutput(false);
+			SSLContext sc = SSLContext.getInstance("SSL");
+			sc.init(null, trustAllCerts(), new java.security.SecureRandom());
+			connection.setSSLSocketFactory(sc.getSocketFactory());
+			connection.setHostnameVerifier(new HostnameVerifier() {
+				@Override
+				public boolean verify(String s, SSLSession sslSession) {
+					return true;
+				}
+			});
 			connection.connect();
 
 			bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -69,22 +88,22 @@ public class GetBDGenerico extends AsyncTask<String, Void, String> {
 			connection.disconnect();
             
 		} catch (Exception e) {
+			LogErroDAO.getInstance().insertLogErro(e);
 			if(bufferedReader != null){
 				try {
 					bufferedReader.close();
 				} catch (Exception erro) {
-					Log.i("PIA", "ERRO1 = " + erro);
+					LogErroDAO.getInstance().insertLogErro(erro);
 				}
 			}
-			Log.i("PIA", "ERRO5 = " + e);
 		}
 		finally{
 			
 			if(bufferedReader != null){
 				try {
 					bufferedReader.close();
-				} catch (Exception e) {
-					Log.i("PIA", "ERRO2 = " + e);
+				} catch (Exception erro) {
+					LogErroDAO.getInstance().insertLogErro(erro);
 				}
 			}
 			
@@ -97,12 +116,30 @@ public class GetBDGenerico extends AsyncTask<String, Void, String> {
 
 		try {
 
-			AtualDadosServ.getInstance().manipularDadosHttp(tipo, result);
+			LogProcessoDAO.getInstance().insertLogProcesso("AtualDadosServ.getInstance().manipularDadosHttp('" + tipo + "', result);", activity);
+			AtualDadosServ.getInstance().manipularDadosHttp(tipo, result, activity);
 			
 		} catch (Exception e) {
-			Log.i("PIA", "ERRO3 = " + e);
+			LogErroDAO.getInstance().insertLogErro(e);
 		}
 
     }
+
+	public TrustManager[] trustAllCerts(){
+		return new TrustManager[]{
+				new X509TrustManager() {
+					public java.security.cert.X509Certificate[] getAcceptedIssuers()
+					{
+						return null;
+					}
+					public void checkClientTrusted(java.security.cert.X509Certificate[] certs, String authType)
+					{
+					}
+					public void checkServerTrusted(java.security.cert.X509Certificate[] certs, String authType)
+					{
+					}
+				}
+		};
+	}
 
 }

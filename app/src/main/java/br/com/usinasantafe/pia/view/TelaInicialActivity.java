@@ -30,20 +30,21 @@ public class TelaInicialActivity extends ActivityGeneric {
     private Runnable excluirBDThread = new Runnable() {
 
         public void run() {
-
             LogProcessoDAO.getInstance().insertLogProcesso("private Runnable excluirBDThread = new Runnable() {\n" +
                     "        public void run() {\n" +
                     "            clearBD();\n" +
                     "            goMenuInicial();", getLocalClassName());
             clearBD();
             goMenuInicial();
-
         }
+
     };
 
     public void clearBD() {
-        LogProcessoDAO.getInstance().insertLogProcesso("piaContext.getInfestacaoCTR().deleteCabecEnviado();", getLocalClassName());
+        LogProcessoDAO.getInstance().insertLogProcesso("piaContext.getInfestacaoCTR().deleteCabecEnviado();\n" +
+                "        piaContext.getConfigCTR().deleteLogs();", getLocalClassName());
         piaContext.getInfestacaoCTR().deleteCabecEnviado();
+        piaContext.getConfigCTR().deleteLogs();
     }
 
     public void goMenuInicial(){

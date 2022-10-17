@@ -11,17 +11,14 @@ import java.net.URL;
 import java.util.Iterator;
 import java.util.Map;
 
+import br.com.usinasantafe.pia.model.dao.LogErroDAO;
 import br.com.usinasantafe.pia.util.VerifDadosServ;
 
-
-/**
- * Created by anderson on 16/11/2015.
- */
 public class PostVerGenerico extends AsyncTask<String, Void, String> {
 
     private static PostCadGenerico instance = null;
     private Map<String, Object> parametrosPost = null;
-    private VerifDadosServ manipDadosVerif;
+    private String activity;
 
     public PostVerGenerico() {
     }
@@ -33,6 +30,7 @@ public class PostVerGenerico extends AsyncTask<String, Void, String> {
         String resultado = null;
 
         String url = arg[0];
+        this.activity = arg[1];
 
         try {
 
@@ -63,12 +61,12 @@ public class PostVerGenerico extends AsyncTask<String, Void, String> {
             connection.disconnect();
 
         } catch (Exception e) {
-            Log.i("ERRO", "Erro = " + e);
+            LogErroDAO.getInstance().insertLogErro(e);
             if(bufferedReader != null){
                 try {
                     bufferedReader.close();
-                } catch (Exception er) {
-                    Log.i("ERRO", "Erro = " + er);
+                } catch (Exception erro) {
+                    LogErroDAO.getInstance().insertLogErro(erro);
                 }
 
             }
@@ -79,7 +77,7 @@ public class PostVerGenerico extends AsyncTask<String, Void, String> {
                 try {
                     bufferedReader.close();
                 } catch (Exception e) {
-                    Log.i("ERRO", "Erro = " + e);
+                    LogErroDAO.getInstance().insertLogErro(e);
                 }
 
             }
@@ -92,10 +90,9 @@ public class PostVerGenerico extends AsyncTask<String, Void, String> {
 
         try {
             Log.i("ECM", "VALOR RECEBIDO --> " + result);
-            VerifDadosServ.getInstance().manipularDadosHttp(result);
+            VerifDadosServ.getInstance().manipularDadosHttp(result, this.activity);
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            Log.i("ERRO", "Erro2 = " + e);
+            LogErroDAO.getInstance().insertLogErro(e);
         }
 
     }

@@ -7,18 +7,14 @@ import android.util.Log;
 import java.util.HashMap;
 import java.util.Map;
 
+import br.com.usinasantafe.pia.model.dao.LogErroDAO;
 import br.com.usinasantafe.pia.util.conHttp.PostVerGenerico;
 import br.com.usinasantafe.pia.util.conHttp.UrlsConexaoHttp;
 import br.com.usinasantafe.pia.model.pst.GenericRecordable;
 
-
-/**
- * Created by anderson on 16/11/2015.
- */
 public class VerifDadosServ {
 
     private static VerifDadosServ instance = null;
-    private GenericRecordable genericRecordable;
     private UrlsConexaoHttp urlsConexaoHttp;
     private Context telaAtual;
     private Class telaProx;
@@ -37,7 +33,7 @@ public class VerifDadosServ {
         return instance;
     }
 
-    public void manipularDadosHttp(String result) {
+    public void manipularDadosHttp(String result, String activity) {
 
         if (!result.equals("")) {
             retornoVerifNormal(result);
@@ -52,7 +48,7 @@ public class VerifDadosServ {
         return classe;
     }
 
-    public void verDados(String dado, String tipo, Context telaAtual, Class telaProx, ProgressDialog progressDialog) {
+    public void verDados(String dado, String tipo, Context telaAtual, Class telaProx, ProgressDialog progressDialog, String activity) {
 
         urlsConexaoHttp = new UrlsConexaoHttp();
         this.telaAtual = telaAtual;
@@ -61,11 +57,11 @@ public class VerifDadosServ {
         this.dado = dado;
         this.tipo = tipo;
 
-        envioDados();
+        envioDados(activity);
 
     }
 
-    public void verDados(String dado, String tipo, Context telaAtual, Class telaProx, String variavel) {
+    public void verDados(String dado, String tipo, Context telaAtual, Class telaProx, String variavel, String activity) {
 
         urlsConexaoHttp = new UrlsConexaoHttp();
         this.telaAtual = telaAtual;
@@ -74,13 +70,13 @@ public class VerifDadosServ {
         this.dado = dado;
         this.tipo = tipo;
 
-        envioDados();
+        envioDados(activity);
 
     }
 
-    public void envioDados() {
+    public void envioDados(String activity) {
 
-        String[] url = {urlsConexaoHttp.urlVerifica(tipo)};
+        String[] url = {urlsConexaoHttp.urlVerifica(tipo), activity};
         Map<String, Object> parametrosPost = new HashMap<String, Object>();
         parametrosPost.put("dado", String.valueOf(dado));
 
@@ -98,7 +94,7 @@ public class VerifDadosServ {
 
 
         } catch (Exception e) {
-            Log.i("ERRO", "Erro Manip = " + e);
+            LogErroDAO.getInstance().insertLogErro(e);
         }
 
     }

@@ -57,7 +57,7 @@ public class EnvioDadosActivity extends ActivityGeneric {
                             "                    progressBar.setProgress(0);\n" +
                             "                    progressBar.setMax(100);\n" +
                             "                    progressBar.show();\n" +
-                            "                    EnvioDadosServ.getInstance().envioBoletim(EnvioDadosActivity.this, progressBar, EnvioDadosActivity.class);", getLocalClassName());
+                            "                    EnvioDadosServ.getInstance().envioBoletim(EnvioDadosActivity.this, progressBar, EnvioDadosActivity.class, getLocalClassName());", getLocalClassName());
                     progressBar = new ProgressDialog(EnvioDadosActivity.this);
                     progressBar.setCancelable(true);
                     progressBar.setMessage("ENVIANDO DADOS...");
@@ -66,7 +66,7 @@ public class EnvioDadosActivity extends ActivityGeneric {
                     progressBar.setMax(100);
                     progressBar.show();
 
-                    EnvioDadosServ.getInstance().envioBoletim(EnvioDadosActivity.this, progressBar, EnvioDadosActivity.class);
+                    EnvioDadosServ.getInstance().envioBoletim(EnvioDadosActivity.this, progressBar, EnvioDadosActivity.class, getLocalClassName());
 
                 } else {
 

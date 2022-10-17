@@ -97,7 +97,7 @@ public class ConfigActivity extends ActivityGeneric {
                             "                    progressBar.setMax(100);\n" +
                             "                    progressBar.show();\n" +
                             "                    AtualDadosServ.getInstance().atualizarBD(progressBar);\n" +
-                            "                    AtualDadosServ.getInstance().setContext(ConfiguracaoActivity.this);", getLocalClassName());
+                            "                    AtualDadosServ.getInstance().atualTodasTabBD( ConfigActivity.this, progressBar, getLocalClassName());", getLocalClassName());
                     progressBar = new ProgressDialog(v.getContext());
                     progressBar.setCancelable(true);
                     progressBar.setMessage("ATUALIZANDO ...");
@@ -106,7 +106,7 @@ public class ConfigActivity extends ActivityGeneric {
                     progressBar.setMax(100);
                     progressBar.show();
 
-                    AtualDadosServ.getInstance().atualizarBD(progressBar, ConfigActivity.this);
+                    AtualDadosServ.getInstance().atualTodasTabBD( ConfigActivity.this, progressBar, getLocalClassName());
 
                 } else {
 
