@@ -1,5 +1,7 @@
 package br.com.usinasantafe.pia.view;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -43,6 +45,26 @@ public class TalhaoActivity extends ActivityGeneric {
                         Intent it = new Intent(TalhaoActivity.this, ListaOrganActivity.class);
                         startActivity(it);
                         finish();
+
+                    } else {
+
+                        LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
+                                "                    AlertDialog.Builder alerta = new AlertDialog.Builder(TalhaoActivity.this);\n" +
+                                "                    alerta.setTitle(\"ATENÇÃO\");\n" +
+                                "                    alerta.setMessage(\"O.S. INVÁLIDA. POR FAVOR, VERIFIQUE A NUMERAÇÃO DE O.S. DIGITADA.\");", getLocalClassName());
+                        AlertDialog.Builder alerta = new AlertDialog.Builder(TalhaoActivity.this);
+                        alerta.setTitle("ATENÇÃO");
+                        alerta.setMessage("TALHÃO INVÁLIDO. POR FAVOR, VERIFIQUE A NUMERAÇÃO DE TALHÃO DIGITADO É VALIDO E BATE COM A SEÇÃO.");
+                        alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"OK\", new DialogInterface.OnClickListener() {\n" +
+                                        "                        @Override\n" +
+                                        "                        public void onClick(DialogInterface dialog, int which) {", getLocalClassName());
+                            }
+                        });
+
+                        alerta.show();
 
                     }
 

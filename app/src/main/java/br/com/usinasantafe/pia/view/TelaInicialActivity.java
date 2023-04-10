@@ -48,11 +48,34 @@ public class TelaInicialActivity extends ActivityGeneric {
     }
 
     public void goMenuInicial(){
-        LogProcessoDAO.getInstance().insertLogProcesso("public void goMenuInicial(){\n" +
-                "        Intent it = new Intent(TelaInicialActivity.this, MenuInicialActivity.class);", getLocalClassName());
-        Intent it = new Intent(TelaInicialActivity.this, MenuInicialActivity.class);
+        LogProcessoDAO.getInstance().insertLogProcesso("public void goMenuInicial(){", getLocalClassName());
+        Intent it;
+        if (!piaContext.getInfestacaoCTR().verCabecAberto()) {
+            LogProcessoDAO.getInstance().insertLogProcesso("if (!piaContext.getInfestacaoCTR().verCabecAberto()) {\n" +
+                    "            it = new Intent(TelaInicialActivity.this, MenuInicialActivity.class);", getLocalClassName());
+            it = new Intent(TelaInicialActivity.this, MenuInicialActivity.class);
+        } else {
+            LogProcessoDAO.getInstance().insertLogProcesso("} else {", getLocalClassName());
+            if (piaContext.getInfestacaoCTR().hasElemItemAmostra()) {
+                LogProcessoDAO.getInstance().insertLogProcesso("if (piaContext.getInfestacaoCTR().hasElemItemAmostra()) {\n" +
+                        "                piaContext.getInfestacaoCTR().deleteRespItemAmostraAberto();\n" +
+                        "                it = new Intent(TelaInicialActivity.this, ListaPontosActivity.class);", getLocalClassName());
+                piaContext.getInfestacaoCTR().deleteRespItemAmostraAberto();
+                it = new Intent(TelaInicialActivity.this, ListaPontosActivity.class);
+            } else {
+                LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
+                        "                piaContext.getInfestacaoCTR().deleteCabecAberto();\n" +
+                        "                it = new Intent(TelaInicialActivity.this, MenuInicialActivity.class);", getLocalClassName());
+                piaContext.getInfestacaoCTR().deleteCabecAberto();
+                it = new Intent(TelaInicialActivity.this, MenuInicialActivity.class);
+            }
+        }
         startActivity(it);
         finish();
+
+    }
+
+    public void onBackPressed()  {
     }
 
 }

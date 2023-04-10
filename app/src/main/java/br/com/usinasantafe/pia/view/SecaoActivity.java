@@ -1,5 +1,7 @@
 package br.com.usinasantafe.pia.view;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -35,6 +37,7 @@ public class SecaoActivity extends ActivityGeneric {
                             "                    Long codSecao = Long.parseLong(editTextPadrao.getText().toString());", getLocalClassName());
                     Long codSecao = Long.parseLong(editTextPadrao.getText().toString());
                     if(piaContext.getInfestacaoCTR().verSecaoCod(codSecao)) {
+
                         LogProcessoDAO.getInstance().insertLogProcesso("if(piaContext.getInfestacaoCTR().verSecaoCod(codSecao)) {\n" +
                                 "                        piaContext.getConfigCTR().setSecao(piaContext.getInfestacaoCTR().getSecaoCod(codSecao).getIdSecao());\n" +
                                 "                        Intent it = new Intent(SecaoActivity.this, TalhaoActivity.class);", getLocalClassName());
@@ -42,6 +45,27 @@ public class SecaoActivity extends ActivityGeneric {
                         Intent it = new Intent(SecaoActivity.this, TalhaoActivity.class);
                         startActivity(it);
                         finish();
+
+                    } else {
+
+                        LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
+                                "                    AlertDialog.Builder alerta = new AlertDialog.Builder(SecaoActivity.this);\n" +
+                                "                    alerta.setTitle(\"ATENÇÃO\");\n" +
+                                "                    alerta.setMessage(\"O.S. INVÁLIDA. POR FAVOR, VERIFIQUE A NUMERAÇÃO DE O.S. DIGITADA.\");", getLocalClassName());
+                        AlertDialog.Builder alerta = new AlertDialog.Builder(SecaoActivity.this);
+                        alerta.setTitle("ATENÇÃO");
+                        alerta.setMessage("SEÇÃO INVÁLIDA. POR FAVOR, VERIFIQUE A NUMERAÇÃO DE SEÇÃO DIGITADA É VALIDA E BATE COM A O.S.");
+                        alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"OK\", new DialogInterface.OnClickListener() {\n" +
+                                        "                        @Override\n" +
+                                        "                        public void onClick(DialogInterface dialog, int which) {", getLocalClassName());
+                            }
+                        });
+
+                        alerta.show();
+
                     }
 
                 }

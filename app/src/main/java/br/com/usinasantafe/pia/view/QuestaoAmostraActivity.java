@@ -85,9 +85,8 @@ public class QuestaoAmostraActivity extends ActivityGeneric {
                         startActivity(it);
 
                     }
-                    finish();
 
-                } else if(piaContext.getVerTelaQuestao() == 2) {
+                } else {
 
                     LogProcessoDAO.getInstance().insertLogProcesso("} else if(piaContext.getVerTelaQuestao() == 2) {\n" +
                             "                    piaContext.getInfestacaoCTR().updateRespItemAmostra(piaContext.getIdRespItem(), valor);\n" +
@@ -95,9 +94,9 @@ public class QuestaoAmostraActivity extends ActivityGeneric {
                     piaContext.getInfestacaoCTR().updateRespItemAmostra(piaContext.getIdRespItem(), valor);
                     Intent it = new Intent(QuestaoAmostraActivity.this, ListaQuestaoActivity.class);
                     startActivity(it);
-                    finish();
 
                 }
+                finish();
 
                 System.gc();
 
@@ -141,7 +140,7 @@ public class QuestaoAmostraActivity extends ActivityGeneric {
                         }
                         finish();
 
-                    } else if(piaContext.getVerTelaQuestao() == 2) {
+                    } else {
 
                         LogProcessoDAO.getInstance().insertLogProcesso("} else if(piaContext.getVerTelaQuestao() == 2) {\n" +
                                 "                        Intent it = new Intent(QuestaoAmostraActivity.this, ListaQuestaoActivity.class);", getLocalClassName());

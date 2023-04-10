@@ -129,6 +129,27 @@ public class OSActivity extends ActivityGeneric {
                         Intent it = new Intent(OSActivity.this, SecaoActivity.class);
                         startActivity(it);
                         finish();
+
+                    } else {
+
+                        LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
+                                "                    AlertDialog.Builder alerta = new AlertDialog.Builder(OSActivity.this);\n" +
+                                "                    alerta.setTitle(\"ATENÇÃO\");\n" +
+                                "                    alerta.setMessage(\"O.S. INVÁLIDA. POR FAVOR, VERIFIQUE A NUMERAÇÃO DE O.S. DIGITADA.\");", getLocalClassName());
+                        AlertDialog.Builder alerta = new AlertDialog.Builder(OSActivity.this);
+                        alerta.setTitle("ATENÇÃO");
+                        alerta.setMessage("O.S. INVÁLIDA. POR FAVOR, VERIFIQUE A NUMERAÇÃO DE O.S. DIGITADA.");
+                        alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"OK\", new DialogInterface.OnClickListener() {\n" +
+                                        "                        @Override\n" +
+                                        "                        public void onClick(DialogInterface dialog, int which) {", getLocalClassName());
+                            }
+                        });
+
+                        alerta.show();
+
                     }
 
                 }

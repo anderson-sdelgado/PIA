@@ -78,7 +78,8 @@ public class InfestacaoCTR {
         ConfigCTR configCTR = new ConfigCTR();
         if(secaoDAO.verSecaoCod(codSecao)){
             Long idSecao = secaoDAO.getSecaoCod(codSecao).getIdSecao();
-            if(idSecao == osDAO.getOSNro(configCTR.getConfig().getOSConfig()).getIdProprAgr()){
+            Long idSecaoOS = osDAO.getOSNro(configCTR.getConfig().getOSConfig()).getIdProprAgr();
+            if(idSecao.equals(idSecaoOS)){
                 return true;
             } else {
                 return false;
@@ -167,9 +168,9 @@ public class InfestacaoCTR {
         return respItemAmostraDAO.respItemAmostraList(cabecAmostraDAO.getCabecAberto().getIdCabec(), ponto);
     }
 
-    public AmostraBean getAmostra(Long idAmostra){
+    public AmostraBean getAmostraIdAmostra(Long idAmostra){
         AmostraDAO amostraDAO = new AmostraDAO();
-        return amostraDAO.getAmostra(idAmostra);
+        return amostraDAO.getAmostraIdAmostra(idAmostra);
     }
 
     public ItemAmostraBean getItemAmostra(int posicao){
@@ -225,7 +226,7 @@ public class InfestacaoCTR {
         RCaracAmostraDAO rCaracAmostraDAO = new RCaracAmostraDAO();
         AmostraDAO amostraDAO = new AmostraDAO();
         ROrganCaracBean rOrganCaracBean = rOrganCaracDAO.getROrganCarac(configCTR.getConfig().getIdOrganConfig(), idCaracOrganismo);
-        return  amostraDAO.amostraList(rCaracAmostraDAO.getRCaracAmostra(rOrganCaracBean.getIdROrganCarac()).getIdAmostraOrgan());
+        return  amostraDAO.amostraIdAmostraOrganList(rCaracAmostraDAO.getRCaracAmostra(rOrganCaracBean.getIdROrganCarac()).getIdAmostraOrgan());
     }
 
     public int qtdeItemAmostra(){

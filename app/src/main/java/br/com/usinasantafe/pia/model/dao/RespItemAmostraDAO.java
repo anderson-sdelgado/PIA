@@ -39,24 +39,20 @@ public class RespItemAmostraDAO {
     }
 
     public void inserirRespItemAmostra(Long idCabec, Long idAmostra, Long valor, Long qtde){
-//        Random rand = new Random();
-//        int randomNum = rand.nextInt((50 - 1) + 1) + 1;
-        for(int i = 0; i < 60; i++){
-            RespItemAmostraBean respItemAmostraBean = new RespItemAmostraBean();
-            respItemAmostraBean.setIdCabec(idCabec);
-            respItemAmostraBean.setIdAmostraRespItem(idAmostra);
-            respItemAmostraBean.setPontoRespItem(qtde + i);
-            respItemAmostraBean.setValorRespItem(valor);
-            respItemAmostraBean.setStatusRespItem(1L);
-            respItemAmostraBean.insert();
-            respItemAmostraBean.commit();
-        }
+        RespItemAmostraBean respItemAmostraBean = new RespItemAmostraBean();
+        respItemAmostraBean.setIdCabec(idCabec);
+        respItemAmostraBean.setIdAmostraRespItem(idAmostra);
+        respItemAmostraBean.setPontoRespItem(qtde);
+        respItemAmostraBean.setValorRespItem(valor);
+        respItemAmostraBean.setStatusRespItem(1L);
+        respItemAmostraBean.insert();
+        respItemAmostraBean.commit();
     }
 
     public void updateRespItemAmostra(Long idRespItem, Long valor){
         RespItemAmostraBean respItemAmostraBean = getRespItemAmostra(idRespItem);
         respItemAmostraBean.setValorRespItem(valor);
-        respItemAmostraBean.insert();
+        respItemAmostraBean.update();
         respItemAmostraBean.commit();
     }
 

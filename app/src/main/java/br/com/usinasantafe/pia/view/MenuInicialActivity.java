@@ -88,33 +88,12 @@ public class MenuInicialActivity extends ActivityGeneric {
                     LogProcessoDAO.getInstance().insertLogProcesso("if (text.equals(\"APONTAMENTO\")) {", getLocalClassName());
                     if(piaContext.getInfestacaoCTR().hasElemAuditor()
                         && piaContext.getConfigCTR().hasElements()) {
-                        LogProcessoDAO.getInstance().insertLogProcesso("if(piaContext.getInfestacaoCTR().hasElemAuditor() \n" +
-                                "                        && piaContext.getConfigCTR().hasElements()) {", getLocalClassName());
-                        if (!piaContext.getInfestacaoCTR().verCabecAberto()) {
-                            LogProcessoDAO.getInstance().insertLogProcesso("if (!piaContext.getInfestacaoCTR().verCabecAberto()) {\n" +
-                                    "                            Intent it = new Intent(MenuInicialActivity.this, AuditorActivity.class);", getLocalClassName());
-                            Intent it = new Intent(MenuInicialActivity.this, AuditorActivity.class);
-                            startActivity(it);
-                        } else {
-                            LogProcessoDAO.getInstance().insertLogProcesso("} else {", getLocalClassName());
-                            if (piaContext.getInfestacaoCTR().hasElemItemAmostra()) {
-                                LogProcessoDAO.getInstance().insertLogProcesso("if (piaContext.getInfestacaoCTR().hasElemItemAmostra()) {\n" +
-                                        "                                piaContext.getInfestacaoCTR().deleteRespItemAmostra();\n" +
-                                        "                                Intent it = new Intent(MenuInicialActivity.this, ListaPontosActivity.class);", getLocalClassName());
-                                piaContext.getInfestacaoCTR().deleteRespItemAmostraAberto();
-                                Intent it = new Intent(MenuInicialActivity.this, ListaPontosActivity.class);
-                                startActivity(it);
-                            } else {
-                                LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
-                                        "                                piaContext.getInfestacaoCTR().deleteCabecAberto();\n" +
-                                        "                                Intent it = new Intent(MenuInicialActivity.this, AuditorActivity.class);", getLocalClassName());
-                                piaContext.getInfestacaoCTR().deleteCabecAberto();
-                                Intent it = new Intent(MenuInicialActivity.this, AuditorActivity.class);
-                                startActivity(it);
-                            }
-                        }
+                        LogProcessoDAO.getInstance().insertLogProcesso("if(piaContext.getInfestacaoCTR().hasElemAuditor()\n" +
+                                "                        && piaContext.getConfigCTR().hasElements()) {\n" +
+                                "                        Intent it = new Intent(MenuInicialActivity.this, AuditorActivity.class);", getLocalClassName());
+                        Intent it = new Intent(MenuInicialActivity.this, AuditorActivity.class);
+                        startActivity(it);
                         finish();
-
                     }
 
                 } else if (text.equals("ENVIO DE DADOS")) {

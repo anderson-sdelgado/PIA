@@ -54,7 +54,7 @@ public class ListaQuestaoActivity extends ActivityGeneric {
         respItemAmostraList = piaContext.getInfestacaoCTR().getRespItemAmostraList((long) piaContext.getPosPonto());
 
         for (RespItemAmostraBean respItemAmostraBean : respItemAmostraList) {
-            AmostraBean amostraBean = piaContext.getInfestacaoCTR().getAmostra(respItemAmostraBean.getIdAmostraRespItem());
+            AmostraBean amostraBean = piaContext.getInfestacaoCTR().getAmostraIdAmostra(respItemAmostraBean.getIdAmostraRespItem());
             itens.add(amostraBean.getDescrAmostra() + "\nVALOR: " + respItemAmostraBean.getValorRespItem());
         }
 
