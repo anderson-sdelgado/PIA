@@ -25,9 +25,10 @@ public class TalhaoDAO {
 
     }
 
-    public TalhaoBean getTalhaCod(Long codTalhao){
+    public TalhaoBean getTalhaCod(Long idSecao, Long codTalhao){
 
         ArrayList pesqArrayList = new ArrayList();
+        pesqArrayList.add(getPesqIdSecao(idSecao));
         pesqArrayList.add(getPesqCod(codTalhao));
 
         TalhaoBean talhaoBean = new TalhaoBean();

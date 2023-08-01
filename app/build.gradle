@@ -10,8 +10,8 @@ android {
         applicationId "br.com.usinasantafe.pia"
         minSdkVersion 22
         targetSdk 31
-        versionCode 3
-        versionName "2.01"
+        versionCode 4
+        versionName "2.02"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -27,6 +27,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
+    namespace 'br.com.usinasantafe.pia'
 
 }
 

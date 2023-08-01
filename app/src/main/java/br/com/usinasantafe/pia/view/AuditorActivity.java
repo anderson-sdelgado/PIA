@@ -64,7 +64,7 @@ public class AuditorActivity extends ActivityGeneric {
                             progressBar.setMax(100);
                             progressBar.show();
 
-                            LogProcessoDAO.getInstance().insertLogProcesso("pmmContext.getMotoMecFertCTR().atualDados(OperadorActivity.this, AuditorActivity.class, progressBar, \"Auditor\", 1, getLocalClassName());", getLocalClassName());
+                            LogProcessoDAO.getInstance().insertLogProcesso("pmmContext.getMotoMecFertCTR().atualDados(AuditorActivity.this, AuditorActivity.class, progressBar, \"Auditor\", 1, getLocalClassName());", getLocalClassName());
                             piaContext.getInfestacaoCTR().atualDados(AuditorActivity.this, AuditorActivity.class, progressBar, "Auditor", 1, getLocalClassName());
 
                         } else {

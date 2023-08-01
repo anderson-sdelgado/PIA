@@ -136,7 +136,8 @@ public class InfestacaoCTR {
 
     public TalhaoBean getTalhaCod(Long codTalhao){
         TalhaoDAO talhaoDAO = new TalhaoDAO();
-        return talhaoDAO.getTalhaCod(codTalhao);
+        ConfigCTR configCTR = new ConfigCTR();
+        return talhaoDAO.getTalhaCod(configCTR.getConfig().getSecaoConfig(), codTalhao);
     }
 
     public ItemAmostraBean getItemAmostraCabec(){
@@ -399,6 +400,10 @@ public class InfestacaoCTR {
                 break;
             case "OS":
                 classeArrayList.add("OSBean");
+                break;
+            case "Secao":
+                classeArrayList.add("SecaoBean");
+                classeArrayList.add("TalhaoBean");
                 break;
         }
         return classeArrayList;

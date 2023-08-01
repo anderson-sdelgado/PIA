@@ -65,12 +65,13 @@ public class AtualDadosServ {
 				for(int i = 0; i < jsonArray.length(); i++){
 					JSONObject objeto = jsonArray.getJSONObject(i);
 					Gson gson = new Gson();
+					Log.i("PIA", "OBJETO -> " + objeto.toString());
 					genericRecordable.insert(gson.fromJson(objeto.toString(), classe), classe);
 				}
 
 				if(contAtualBD > 0){
 					LogProcessoDAO.getInstance().insertLogProcesso("if(contAtualBD > 0){\n" +
-							"\t\t\t\t\tatualizandoBD(activity);", activity);
+							"atualizandoBD(activity);", activity);
 					atualizandoBD(activity);
 				}
 
