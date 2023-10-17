@@ -40,7 +40,7 @@ public class ListaOrganActivity extends ActivityGeneric {
                 "        organListView = findViewById(R.id.listOrgan);\n" +
                 "        organListView.setAdapter(adapterList);", getLocalClassName());
 
-        ArrayList<String> itens = new ArrayList<String>();
+        ArrayList<String> itens = new ArrayList<>();
 
         organList = piaContext.getInfestacaoCTR().organismoList();
 
@@ -52,40 +52,32 @@ public class ListaOrganActivity extends ActivityGeneric {
         organListView = findViewById(R.id.listOrgan);
         organListView.setAdapter(adapterList);
 
-        organListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> l, View v, int position,
-                                    long id) {
+        organListView.setOnItemClickListener((l, v, position, id) -> {
 
-                LogProcessoDAO.getInstance().insertLogProcesso("organListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {\n" +
-                        "            @Override\n" +
-                        "            public void onItemClick(AdapterView<?> l, View v, int position,\n" +
-                        "                                    long id) {\n" +
-                        "                OrganismoBean organismoBean = organList.get(position);\n" +
-                        "                piaContext.getConfigCTR().setIdOrg(organismoBean.getIdOrganismo());\n" +
-                        "                organList.clear();\n" +
-                        "                Intent it = new Intent(ListaOrganActivity.this, ListaCaracOrganActivity.class);", getLocalClassName());
-                OrganBean organBean = organList.get(position);
-                piaContext.getConfigCTR().setIdOrg(organBean.getIdOrgan());
-                organList.clear();
-                Intent it = new Intent(ListaOrganActivity.this, ListaCaracOrganActivity.class);
-                startActivity(it);
-                finish();
-            }
-
+            LogProcessoDAO.getInstance().insertLogProcesso("organListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {\n" +
+                    "            @Override\n" +
+                    "            public void onItemClick(AdapterView<?> l, View v, int position,\n" +
+                    "                                    long id) {\n" +
+                    "                OrganismoBean organismoBean = organList.get(position);\n" +
+                    "                piaContext.getConfigCTR().setIdOrg(organismoBean.getIdOrganismo());\n" +
+                    "                organList.clear();\n" +
+                    "                Intent it = new Intent(ListaOrganActivity.this, ListaCaracOrganActivity.class);", getLocalClassName());
+            OrganBean organBean = organList.get(position);
+            piaContext.getConfigCTR().setIdOrg(organBean.getIdOrgan());
+            organList.clear();
+            Intent it = new Intent(ListaOrganActivity.this, ListaCaracOrganActivity.class);
+            startActivity(it);
+            finish();
         });
 
-        buttonRetOrgan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LogProcessoDAO.getInstance().insertLogProcesso("buttonRetOrgan.setOnClickListener(new View.OnClickListener() {\n" +
-                        "            @Override\n" +
-                        "            public void onClick(View v) {\n" +
-                        "                Intent it = new Intent(ListaOrganActivity.this, TalhaoActivity.class);", getLocalClassName());
-                Intent it = new Intent(ListaOrganActivity.this, TalhaoActivity.class);
-                startActivity(it);
-                finish();
-            }
+        buttonRetOrgan.setOnClickListener(v -> {
+            LogProcessoDAO.getInstance().insertLogProcesso("buttonRetOrgan.setOnClickListener(new View.OnClickListener() {\n" +
+                    "            @Override\n" +
+                    "            public void onClick(View v) {\n" +
+                    "                Intent it = new Intent(ListaOrganActivity.this, TalhaoActivity.class);", getLocalClassName());
+            Intent it = new Intent(ListaOrganActivity.this, TalhaoActivity.class);
+            startActivity(it);
+            finish();
         });
 
     }

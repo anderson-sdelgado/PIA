@@ -41,70 +41,58 @@ public class EnvioDadosActivity extends ActivityGeneric {
             textViewEnvioDados.setText("CONTÉM " + piaContext.getInfestacaoCTR().qtdeCabecFechado() + " ANALISE(S) PARA SEREM(S) REENVIADA(S).");
         }
 
-        buttonSimEnvioDados.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LogProcessoDAO.getInstance().insertLogProcesso("buttonSimEnvioDados.setOnClickListener(new View.OnClickListener() {\n" +
-                        "            @Override\n" +
-                        "            public void onClick(View v) {", getLocalClassName());
-                if (connectNetwork) {
+        buttonSimEnvioDados.setOnClickListener(v -> {
+            LogProcessoDAO.getInstance().insertLogProcesso("buttonSimEnvioDados.setOnClickListener(new View.OnClickListener() {\n" +
+                    "            @Override\n" +
+                    "            public void onClick(View v) {", getLocalClassName());
+            if (connectNetwork) {
 
-                    LogProcessoDAO.getInstance().insertLogProcesso("if (connectNetwork) {\n" +
-                            "                    progressBar = new ProgressDialog(EnvioDadosActivity.this);\n" +
-                            "                    progressBar.setCancelable(true);\n" +
-                            "                    progressBar.setMessage(\"ENVIANDO DADOS...\");\n" +
-                            "                    progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);\n" +
-                            "                    progressBar.setProgress(0);\n" +
-                            "                    progressBar.setMax(100);\n" +
-                            "                    progressBar.show();\n" +
-                            "                    EnvioDadosServ.getInstance().envioBoletim(EnvioDadosActivity.this, progressBar, EnvioDadosActivity.class, getLocalClassName());", getLocalClassName());
-                    progressBar = new ProgressDialog(EnvioDadosActivity.this);
-                    progressBar.setCancelable(true);
-                    progressBar.setMessage("ENVIANDO DADOS...");
-                    progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                    progressBar.setProgress(0);
-                    progressBar.setMax(100);
-                    progressBar.show();
+                LogProcessoDAO.getInstance().insertLogProcesso("if (connectNetwork) {\n" +
+                        "                    progressBar = new ProgressDialog(EnvioDadosActivity.this);\n" +
+                        "                    progressBar.setCancelable(true);\n" +
+                        "                    progressBar.setMessage(\"ENVIANDO DADOS...\");\n" +
+                        "                    progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);\n" +
+                        "                    progressBar.setProgress(0);\n" +
+                        "                    progressBar.setMax(100);\n" +
+                        "                    progressBar.show();\n" +
+                        "                    EnvioDadosServ.getInstance().envioBoletim(EnvioDadosActivity.this, progressBar, EnvioDadosActivity.class, getLocalClassName());", getLocalClassName());
+                progressBar = new ProgressDialog(EnvioDadosActivity.this);
+                progressBar.setCancelable(true);
+                progressBar.setMessage("ENVIANDO DADOS...");
+                progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                progressBar.setProgress(0);
+                progressBar.setMax(100);
+                progressBar.show();
 
-                    EnvioDadosServ.getInstance().envioBoletim(EnvioDadosActivity.this, progressBar, EnvioDadosActivity.class, getLocalClassName());
+                EnvioDadosServ.getInstance().envioBoletim(EnvioDadosActivity.this, progressBar, EnvioDadosActivity.class, getLocalClassName());
 
-                } else {
+            } else {
 
-                    LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
-                            "                    AlertDialog.Builder alerta = new AlertDialog.Builder(EnvioDadosActivity.this);\n" +
-                            "                    alerta.setTitle(\"ATENÇÃO\");\n" +
-                            "                    alerta.setMessage(\"FALHA NA CONEXÃO DE DADOS. O CELULAR ESTA SEM SINAL. POR FAVOR, TENTE NOVAMENTE QUANDO O CELULAR ESTIVE COM SINAL.\");", getLocalClassName());
-                    AlertDialog.Builder alerta = new AlertDialog.Builder(EnvioDadosActivity.this);
-                    alerta.setTitle("ATENÇÃO");
-                    alerta.setMessage("FALHA NA CONEXÃO DE DADOS. O CELULAR ESTA SEM SINAL. POR FAVOR, TENTE NOVAMENTE QUANDO O CELULAR ESTIVE COM SINAL.");
-                    alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"OK\", new DialogInterface.OnClickListener() {\n" +
-                                    "                        @Override\n" +
-                                    "                        public void onClick(DialogInterface dialog, int which) {", getLocalClassName());
-                        }
-                    });
-
-                    alerta.show();
-                }
-
-
+                LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
+                        "                    AlertDialog.Builder alerta = new AlertDialog.Builder(EnvioDadosActivity.this);\n" +
+                        "                    alerta.setTitle(\"ATENÇÃO\");\n" +
+                        "                    alerta.setMessage(\"FALHA NA CONEXÃO DE DADOS. O CELULAR ESTA SEM SINAL. POR FAVOR, TENTE NOVAMENTE QUANDO O CELULAR ESTIVE COM SINAL.\");", getLocalClassName());
+                AlertDialog.Builder alerta = new AlertDialog.Builder(EnvioDadosActivity.this);
+                alerta.setTitle("ATENÇÃO");
+                alerta.setMessage("FALHA NA CONEXÃO DE DADOS. O CELULAR ESTA SEM SINAL. POR FAVOR, TENTE NOVAMENTE QUANDO O CELULAR ESTIVE COM SINAL.");
+                alerta.setPositiveButton("OK", (dialog, which) -> LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"OK\", new DialogInterface.OnClickListener() {\n" +
+                        "                        @Override\n" +
+                        "                        public void onClick(DialogInterface dialog, int which) {", getLocalClassName()));
+                alerta.show();
             }
+
+
         });
 
 
-        buttonNaoEnvioDados.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent it = new Intent(EnvioDadosActivity.this, MenuInicialActivity.class);
-                LogProcessoDAO.getInstance().insertLogProcesso("buttonNaoEnvioDados.setOnClickListener(new View.OnClickListener() {\n" +
-                        "            @Override\n" +
-                        "            public void onClick(View v) {\n" +
-                        "                Intent it = new Intent(EnvioDadosActivity.this, MenuInicialActivity.class);", getLocalClassName());
-                startActivity(it);
-                finish();
-            }
+        buttonNaoEnvioDados.setOnClickListener(v -> {
+            Intent it = new Intent(EnvioDadosActivity.this, MenuInicialActivity.class);
+            LogProcessoDAO.getInstance().insertLogProcesso("buttonNaoEnvioDados.setOnClickListener(new View.OnClickListener() {\n" +
+                    "            @Override\n" +
+                    "            public void onClick(View v) {\n" +
+                    "                Intent it = new Intent(EnvioDadosActivity.this, MenuInicialActivity.class);", getLocalClassName());
+            startActivity(it);
+            finish();
         });
 
     }

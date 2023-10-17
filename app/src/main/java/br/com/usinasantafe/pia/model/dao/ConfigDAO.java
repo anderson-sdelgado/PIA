@@ -30,10 +30,10 @@ public class ConfigDAO {
         return ret;
     }
 
-    public void salvarConfig(String numLinha, String senha){
+    public void salvarConfig(Long nroAparelho, String senha){
         ConfigBean configBean = new ConfigBean();
         configBean.deleteAll();
-        configBean.setNumLinhaConfig(Long.valueOf(numLinha));
+        configBean.setNroAparelhoConfig(nroAparelho);
         configBean.setSenhaConfig(senha);
         configBean.insert();
         configBean.commit();

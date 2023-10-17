@@ -26,61 +26,52 @@ public class SenhaActivity extends ActivityGeneric {
 
         piaContext = (PIAContext) getApplication();
 
-        buttonOkSenha.setOnClickListener(new View.OnClickListener() {
-            @SuppressWarnings("unchecked")
-            @Override
-            public void onClick(View v) {
+        buttonOkSenha.setOnClickListener(v -> {
 
-                LogProcessoDAO.getInstance().insertLogProcesso("buttonOkSenha.setOnClickListener(new View.OnClickListener() {\n" +
-                        "            @SuppressWarnings(\"unchecked\")\n" +
-                        "            @Override\n" +
-                        "            public void onClick(View v) {", getLocalClassName());
-                if (!piaContext.getConfigCTR().hasElements()) {
-                    LogProcessoDAO.getInstance().insertLogProcesso("if (!piaContext.getConfigCTR().hasElements()) {\n" +
-                            "                    Intent it = new Intent(SenhaActivity.this, ConfigActivity.class);", getLocalClassName());
-                    Intent it = new Intent(SenhaActivity.this, ConfigActivity.class);
-                    startActivity(it);
-                    finish();
-                } else {
-                    if (piaContext.getTela() == 1){
-                        LogProcessoDAO.getInstance().insertLogProcesso("if (piaContext.getConfigCTR().getConfig().getPosicaoTela() == 11L){", getLocalClassName());
-                        if (piaContext.getConfigCTR().verSenha(editTextSenha.getText().toString())) {
-                            LogProcessoDAO.getInstance().insertLogProcesso("if (piaContext.getConfigCTR().verSenha(editTextSenha.getText().toString())) {\n" +
-                                    "Intent it = new Intent(SenhaActivity.this, ConfigActivity.class);", getLocalClassName());
-                            Intent it = new Intent(SenhaActivity.this, ConfigActivity.class);
-                            startActivity(it);
-                            finish();
-
-                        }
-                    }
-                    else{
-                        LogProcessoDAO.getInstance().insertLogProcesso("} else {", getLocalClassName());
-                        if (editTextSenha.getText().toString().equals("fgbny946")) {
-                            LogProcessoDAO.getInstance().insertLogProcesso("if (editTextSenha.getText().toString().equals(\"fgbny946\")) {\n" +
-                                    "Intent it = new Intent(SenhaActivity.this, LogProcessoActivity.class);", getLocalClassName());
-                            Intent it = new Intent(SenhaActivity.this, LogProcessoActivity.class);
-                            startActivity(it);
-                            finish();
-                        }
-                    }
-                }
-
-
-            }
-        });
-
-        buttonCancSenha.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LogProcessoDAO.getInstance().insertLogProcesso("buttonCancSenha.setOnClickListener(new View.OnClickListener() {\n" +
-                        "            @Override\n" +
-                        "            public void onClick(View v) {\n" +
-                        "                Intent it = new Intent(SenhaActivity.this, MenuInicialActivity.class);", getLocalClassName());
-                Intent it = new Intent(SenhaActivity.this, MenuInicialActivity.class);
+            LogProcessoDAO.getInstance().insertLogProcesso("buttonOkSenha.setOnClickListener(new View.OnClickListener() {\n" +
+                    "            @SuppressWarnings(\"unchecked\")\n" +
+                    "            @Override\n" +
+                    "            public void onClick(View v) {", getLocalClassName());
+            if (!piaContext.getConfigCTR().hasElements()) {
+                LogProcessoDAO.getInstance().insertLogProcesso("if (!piaContext.getConfigCTR().hasElements()) {\n" +
+                        "                    Intent it = new Intent(SenhaActivity.this, ConfigActivity.class);", getLocalClassName());
+                Intent it = new Intent(SenhaActivity.this, ConfigActivity.class);
                 startActivity(it);
                 finish();
+            } else {
+                if (piaContext.getTela() == 1) {
+                    LogProcessoDAO.getInstance().insertLogProcesso("if (piaContext.getConfigCTR().getConfig().getPosicaoTela() == 11L){", getLocalClassName());
+                    if (piaContext.getConfigCTR().verSenha(editTextSenha.getText().toString())) {
+                        LogProcessoDAO.getInstance().insertLogProcesso("if (piaContext.getConfigCTR().verSenha(editTextSenha.getText().toString())) {\n" +
+                                "Intent it = new Intent(SenhaActivity.this, ConfigActivity.class);", getLocalClassName());
+                        Intent it = new Intent(SenhaActivity.this, ConfigActivity.class);
+                        startActivity(it);
+                        finish();
+
+                    }
+                } else {
+                    LogProcessoDAO.getInstance().insertLogProcesso("} else {", getLocalClassName());
+                    if (editTextSenha.getText().toString().equals("fgbny946")) {
+                        LogProcessoDAO.getInstance().insertLogProcesso("if (editTextSenha.getText().toString().equals(\"fgbny946\")) {\n" +
+                                "Intent it = new Intent(SenhaActivity.this, LogProcessoActivity.class);", getLocalClassName());
+                        Intent it = new Intent(SenhaActivity.this, LogProcessoActivity.class);
+                        startActivity(it);
+                        finish();
+                    }
+                }
             }
 
+
+        });
+
+        buttonCancSenha.setOnClickListener(v -> {
+            LogProcessoDAO.getInstance().insertLogProcesso("buttonCancSenha.setOnClickListener(new View.OnClickListener() {\n" +
+                    "            @Override\n" +
+                    "            public void onClick(View v) {\n" +
+                    "                Intent it = new Intent(SenhaActivity.this, MenuInicialActivity.class);", getLocalClassName());
+            Intent it = new Intent(SenhaActivity.this, MenuInicialActivity.class);
+            startActivity(it);
+            finish();
         });
 
     }

@@ -69,7 +69,7 @@ public class ListaPontosActivity extends ActivityGeneric {
         TalhaoBean talhaoBean = piaContext.getInfestacaoCTR().getTalhao();
         textViewTalhao.setText("TALHAO: " + talhaoBean.getCodTalhao());
 
-        ArrayList<String> itens = new ArrayList<String>();
+        ArrayList<String> itens = new ArrayList<>();
 
         for (int i = 0; i < piaContext.getInfestacaoCTR().ultPonto(); i++) {
             int pos = i + 1;
@@ -80,173 +80,140 @@ public class ListaPontosActivity extends ActivityGeneric {
         lista = findViewById(R.id.listViewPontos);
         lista.setAdapter(adapterList);
 
-        lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> l, View v, int position,
-                                    long id) {
+        lista.setOnItemClickListener((l, v, position, id) -> {
 
-                LogProcessoDAO.getInstance().insertLogProcesso("lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {\n" +
-                        "            @Override\n" +
-                        "            public void onItemClick(AdapterView<?> l, View v, int position,\n" +
-                        "                                    long id) {\n" +
-                        "                piaContext.setPosPonto(position);\n" +
-                        "                Intent it = new Intent(ListaPontosActivity.this, ListaQuestaoActivity.class);", getLocalClassName());
-                piaContext.setPosPonto(position);
-                Intent it = new Intent(ListaPontosActivity.this, ListaQuestaoActivity.class);
-                startActivity(it);
-                finish();
-
-            }
+            LogProcessoDAO.getInstance().insertLogProcesso("lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {\n" +
+                    "            @Override\n" +
+                    "            public void onItemClick(AdapterView<?> l, View v, int position,\n" +
+                    "                                    long id) {\n" +
+                    "                piaContext.setPosPonto(position);\n" +
+                    "                Intent it = new Intent(ListaPontosActivity.this, ListaQuestaoActivity.class);", getLocalClassName());
+            piaContext.setPosPonto(position);
+            Intent it = new Intent(ListaPontosActivity.this, ListaQuestaoActivity.class);
+            startActivity(it);
+            finish();
 
         });
 
-        buttonInserirPonto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        buttonInserirPonto.setOnClickListener(v -> {
 
-                LogProcessoDAO.getInstance().insertLogProcesso("buttonInserirPonto.setOnClickListener(new View.OnClickListener() {\n" +
-                        "            @Override\n" +
-                        "            public void onClick(View v) {\n" +
-                        "                piaContext.setVerTelaQuestao(1);\n" +
-                        "                Intent it = new Intent(ListaPontosActivity.this, MsgPontoActivity.class);", getLocalClassName());
-                piaContext.setVerTelaQuestao(1);
-                Intent it = new Intent(ListaPontosActivity.this, MsgPontoActivity.class);
+            LogProcessoDAO.getInstance().insertLogProcesso("buttonInserirPonto.setOnClickListener(new View.OnClickListener() {\n" +
+                    "            @Override\n" +
+                    "            public void onClick(View v) {\n" +
+                    "                piaContext.setVerTelaQuestao(1);\n" +
+                    "                Intent it = new Intent(ListaPontosActivity.this, MsgPontoActivity.class);", getLocalClassName());
+            piaContext.setVerTelaQuestao(1);
+            Intent it = new Intent(ListaPontosActivity.this, MsgPontoActivity.class);
+            startActivity(it);
+            finish();
+
+        });
+
+        buttonExcluirAnalise.setOnClickListener(v -> {
+
+            LogProcessoDAO.getInstance().insertLogProcesso("buttonExcluirAnalise.setOnClickListener(new View.OnClickListener() {\n" +
+                    "            @Override\n" +
+                    "            public void onClick(View v) {\n" +
+                    "                AlertDialog.Builder alerta = new AlertDialog.Builder(ListaPontosActivity.this);\n" +
+                    "                alerta.setTitle(\"ATENÇÃO\");\n" +
+                    "                alerta.setMessage(\"DESEJAR REALMENTE EXCLUIR ESSE ANALISE?\");", getLocalClassName());
+            AlertDialog.Builder alerta = new AlertDialog.Builder(ListaPontosActivity.this);
+            alerta.setTitle("ATENÇÃO");
+            alerta.setMessage("DESEJAR REALMENTE EXCLUIR ESSE ANALISE?");
+            alerta.setPositiveButton("SIM", (dialog, which) -> {
+
+                LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"SIM\", new DialogInterface.OnClickListener() {\n" +
+                        "                    @Override\n" +
+                        "                    public void onClick(DialogInterface dialog, int which) {\n" +
+                        "                        piaContext.getInfestacaoCTR().deleteCabecAbertoAll();\n" +
+                        "                        Intent it = new Intent(ListaPontosActivity.this, MenuInicialActivity.class);", getLocalClassName());
+                piaContext.getInfestacaoCTR().deleteCabecAbertoAll();
+                Intent it = new Intent(ListaPontosActivity.this, MenuInicialActivity.class);
                 startActivity(it);
                 finish();
 
-            }
+            });
+
+            alerta.setNegativeButton("NÃO", (dialog, which) -> LogProcessoDAO.getInstance().insertLogProcesso("alerta.setNegativeButton(\"NÃO\", new DialogInterface.OnClickListener() {\n" +
+                    "                    @Override\n" +
+                    "                    public void onClick(DialogInterface dialog, int which) {", getLocalClassName()));
+            alerta.show();
+
         });
 
-        buttonExcluirAnalise.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        buttonEnviarAnalise.setOnClickListener(v -> {
+            LogProcessoDAO.getInstance().insertLogProcesso("buttonEnviarAnalise.setOnClickListener(new View.OnClickListener() {\n" +
+                    "            @Override\n" +
+                    "            public void onClick(View v) {", getLocalClassName());
+            if(!piaContext.getInfestacaoCTR().verRespItemAmostraList()){
 
-                LogProcessoDAO.getInstance().insertLogProcesso("buttonExcluirAnalise.setOnClickListener(new View.OnClickListener() {\n" +
-                        "            @Override\n" +
-                        "            public void onClick(View v) {\n" +
-                        "                AlertDialog.Builder alerta = new AlertDialog.Builder(ListaPontosActivity.this);\n" +
-                        "                alerta.setTitle(\"ATENÇÃO\");\n" +
-                        "                alerta.setMessage(\"DESEJAR REALMENTE EXCLUIR ESSE ANALISE?\");", getLocalClassName());
-                AlertDialog.Builder alerta = new AlertDialog.Builder(ListaPontosActivity.this);
+                LogProcessoDAO.getInstance().insertLogProcesso("if(!piaContext.getInfestacaoCTR().verRespItemAmostraList()){\n" +
+                        "                    String mensagem = \"POR FAVOR, INSIRA PONTOS ANTES DE ENVIAR OS DADOS.\";\n" +
+                        "                    AlertDialog.Builder alerta = new AlertDialog.Builder( ListaPontosActivity.this);\n" +
+                        "                    alerta.setTitle(\"ATENÇÃO\");\n" +
+                        "                    alerta.setMessage(mensagem);", getLocalClassName());
+                String mensagem = "POR FAVOR, INSIRA PONTOS ANTES DE ENVIAR OS DADOS.";
+
+                AlertDialog.Builder alerta = new AlertDialog.Builder( ListaPontosActivity.this);
                 alerta.setTitle("ATENÇÃO");
-                alerta.setMessage("DESEJAR REALMENTE EXCLUIR ESSE ANALISE?");
-                alerta.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"SIM\", new DialogInterface.OnClickListener() {\n" +
-                                "                    @Override\n" +
-                                "                    public void onClick(DialogInterface dialog, int which) {\n" +
-                                "                        piaContext.getInfestacaoCTR().deleteCabecAbertoAll();\n" +
-                                "                        Intent it = new Intent(ListaPontosActivity.this, MenuInicialActivity.class);", getLocalClassName());
-                        piaContext.getInfestacaoCTR().deleteCabecAbertoAll();
-                        Intent it = new Intent(ListaPontosActivity.this, MenuInicialActivity.class);
-                        startActivity(it);
-                        finish();
-
-                    }
-
-                });
-
-                alerta.setNegativeButton("NÃO", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        LogProcessoDAO.getInstance().insertLogProcesso("alerta.setNegativeButton(\"NÃO\", new DialogInterface.OnClickListener() {\n" +
-                                "                    @Override\n" +
-                                "                    public void onClick(DialogInterface dialog, int which) {", getLocalClassName());
-                    }
-
-                });
-
+                alerta.setMessage(mensagem);
+                alerta.setPositiveButton("OK", (dialog, which) -> LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"OK\", new DialogInterface.OnClickListener() {\n" +
+                        "                        @Override\n" +
+                        "                        public void onClick(DialogInterface dialog, int which) {", getLocalClassName()));
                 alerta.show();
 
-            }
-        });
+            } else {
 
-        buttonEnviarAnalise.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LogProcessoDAO.getInstance().insertLogProcesso("buttonEnviarAnalise.setOnClickListener(new View.OnClickListener() {\n" +
-                        "            @Override\n" +
-                        "            public void onClick(View v) {", getLocalClassName());
-                if(!piaContext.getInfestacaoCTR().verRespItemAmostraList()){
+                LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
+                        "                    piaContext.getInfestacaoCTR().fecharCabec();", getLocalClassName());
+                piaContext.getInfestacaoCTR().fecharCabec();
 
-                    LogProcessoDAO.getInstance().insertLogProcesso("if(!piaContext.getInfestacaoCTR().verRespItemAmostraList()){\n" +
-                            "                    String mensagem = \"POR FAVOR, INSIRA PONTOS ANTES DE ENVIAR OS DADOS.\";\n" +
-                            "                    AlertDialog.Builder alerta = new AlertDialog.Builder( ListaPontosActivity.this);\n" +
-                            "                    alerta.setTitle(\"ATENÇÃO\");\n" +
-                            "                    alerta.setMessage(mensagem);", getLocalClassName());
-                    String mensagem = "POR FAVOR, INSIRA PONTOS ANTES DE ENVIAR OS DADOS.";
+                if (connectNetwork) {
 
-                    AlertDialog.Builder alerta = new AlertDialog.Builder( ListaPontosActivity.this);
-                    alerta.setTitle("ATENÇÃO");
-                    alerta.setMessage(mensagem);
-                    alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"OK\", new DialogInterface.OnClickListener() {\n" +
-                                    "                        @Override\n" +
-                                    "                        public void onClick(DialogInterface dialog, int which) {", getLocalClassName());
-                        }
-                    });
-                    alerta.show();
+                    LogProcessoDAO.getInstance().insertLogProcesso("if (connectNetwork) {\n" +
+                            "                        progressBar = new ProgressDialog(ListaPontosActivity.this);\n" +
+                            "                        progressBar.setCancelable(true);\n" +
+                            "                        progressBar.setMessage(\"ENVIANDO DADOS...\");\n" +
+                            "                        progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);\n" +
+                            "                        progressBar.setProgress(0);\n" +
+                            "                        progressBar.setMax(100);\n" +
+                            "                        progressBar.show();\n" +
+                            "                        EnvioDadosServ.getInstance().envioBoletim(ListaPontosActivity.this, progressBar, MenuInicialActivity.class, getLocalClassName());", getLocalClassName());
+                    progressBar = new ProgressDialog(ListaPontosActivity.this);
+                    progressBar.setCancelable(true);
+                    progressBar.setMessage("ENVIANDO DADOS...");
+                    progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                    progressBar.setProgress(0);
+                    progressBar.setMax(100);
+                    progressBar.show();
+
+                    EnvioDadosServ.getInstance().envioBoletim(ListaPontosActivity.this, progressBar, MenuInicialActivity.class, getLocalClassName());
 
                 } else {
 
                     LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
-                            "                    piaContext.getInfestacaoCTR().fecharCabec();", getLocalClassName());
-                    piaContext.getInfestacaoCTR().fecharCabec();
+                            "                        AlertDialog.Builder alerta = new AlertDialog.Builder(ListaPontosActivity.this);\n" +
+                            "                        alerta.setTitle(\"ATENÇÃO\");\n" +
+                            "                        alerta.setMessage(\"FALHA NA CONEXÃO DE DADOS. O CELULAR ESTA SEM SINAL. POR FAVOR, TENTE NOVAMENTE QUANDO O CELULAR ESTIVE COM SINAL.\");", getLocalClassName());
+                    AlertDialog.Builder alerta = new AlertDialog.Builder(ListaPontosActivity.this);
+                    alerta.setTitle("ATENÇÃO");
+                    alerta.setMessage("FALHA NA CONEXÃO DE DADOS. O CELULAR ESTA SEM SINAL. POR FAVOR, TENTE NOVAMENTE QUANDO O CELULAR ESTIVE COM SINAL.");
+                    alerta.setPositiveButton("OK", (dialog, which) -> {
+                        LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"OK\", new DialogInterface.OnClickListener() {\n" +
+                                "                            @Override\n" +
+                                "                            public void onClick(DialogInterface dialog, int which) {\n" +
+                                "                                Intent it = new Intent( ListaPontosActivity.this, MenuInicialActivity.class);", getLocalClassName());
+                        Intent it = new Intent( ListaPontosActivity.this, MenuInicialActivity.class);
+                        startActivity(it);
+                        finish();
+                    });
 
-                    if (connectNetwork) {
-
-                        LogProcessoDAO.getInstance().insertLogProcesso("if (connectNetwork) {\n" +
-                                "                        progressBar = new ProgressDialog(ListaPontosActivity.this);\n" +
-                                "                        progressBar.setCancelable(true);\n" +
-                                "                        progressBar.setMessage(\"ENVIANDO DADOS...\");\n" +
-                                "                        progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);\n" +
-                                "                        progressBar.setProgress(0);\n" +
-                                "                        progressBar.setMax(100);\n" +
-                                "                        progressBar.show();\n" +
-                                "                        EnvioDadosServ.getInstance().envioBoletim(ListaPontosActivity.this, progressBar, MenuInicialActivity.class, getLocalClassName());", getLocalClassName());
-                        progressBar = new ProgressDialog(ListaPontosActivity.this);
-                        progressBar.setCancelable(true);
-                        progressBar.setMessage("ENVIANDO DADOS...");
-                        progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                        progressBar.setProgress(0);
-                        progressBar.setMax(100);
-                        progressBar.show();
-
-                        EnvioDadosServ.getInstance().envioBoletim(ListaPontosActivity.this, progressBar, MenuInicialActivity.class, getLocalClassName());
-
-                    } else {
-
-                        LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
-                                "                        AlertDialog.Builder alerta = new AlertDialog.Builder(ListaPontosActivity.this);\n" +
-                                "                        alerta.setTitle(\"ATENÇÃO\");\n" +
-                                "                        alerta.setMessage(\"FALHA NA CONEXÃO DE DADOS. O CELULAR ESTA SEM SINAL. POR FAVOR, TENTE NOVAMENTE QUANDO O CELULAR ESTIVE COM SINAL.\");", getLocalClassName());
-                        AlertDialog.Builder alerta = new AlertDialog.Builder(ListaPontosActivity.this);
-                        alerta.setTitle("ATENÇÃO");
-                        alerta.setMessage("FALHA NA CONEXÃO DE DADOS. O CELULAR ESTA SEM SINAL. POR FAVOR, TENTE NOVAMENTE QUANDO O CELULAR ESTIVE COM SINAL.");
-                        alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"OK\", new DialogInterface.OnClickListener() {\n" +
-                                        "                            @Override\n" +
-                                        "                            public void onClick(DialogInterface dialog, int which) {\n" +
-                                        "                                Intent it = new Intent( ListaPontosActivity.this, MenuInicialActivity.class);", getLocalClassName());
-                                Intent it = new Intent( ListaPontosActivity.this, MenuInicialActivity.class);
-                                startActivity(it);
-                                finish();
-                            }
-                        });
-
-                        alerta.show();
-                    }
-
-
+                    alerta.show();
                 }
 
+
             }
+
         });
 
     }

@@ -19,7 +19,6 @@ public class AdapterListBaseDado extends BaseAdapter {
     private LayoutInflater layoutInflater;
 
     public AdapterListBaseDado(Context context, ArrayList<String> itens) {
-
         this.itens = itens;
         layoutInflater = LayoutInflater.from(context);
     }

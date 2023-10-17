@@ -45,7 +45,7 @@ public class ListaCaracOrganActivity extends ActivityGeneric {
 
         caracOrganList = piaContext.getInfestacaoCTR().caracOrganismoList();
 
-        ArrayList<String> itens = new ArrayList<String>();
+        ArrayList<String> itens = new ArrayList<>();
 
         for (CaracOrganBean caracOrganBean : caracOrganList) {
             itens.add(caracOrganBean.getDescrCaracOrgan());
@@ -55,86 +55,72 @@ public class ListaCaracOrganActivity extends ActivityGeneric {
         lista = findViewById(R.id.listCaracOrgan);
         lista.setAdapter(adapterList);
 
-        lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> l, View v, int position,
-                                    long id) {
+        lista.setOnItemClickListener((l, v, position, id) -> {
 
-                LogProcessoDAO.getInstance().insertLogProcesso("lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {\n" +
-                        "            @Override\n" +
-                        "            public void onItemClick(AdapterView<?> l, View v, int position,\n" +
-                        "                                    long id) {\n" +
-                        "                CaracOrganBean caracOrganBean = caracOrganList.get(position);\n" +
-                        "                piaContext.getInfestacaoCTR().setCaracOrganismoCabecAberto(caracOrganBean.getIdCaracOrganismo());\n" +
-                        "                List<AmostraBean> amostraList = piaContext.getInfestacaoCTR().amostraList(caracOrganBean.getIdCaracOrganismo());\n" +
-                        "                caracOrganList.clear();", getLocalClassName());
-                CaracOrganBean caracOrganBean = caracOrganList.get(position);
-                piaContext.getConfigCTR().setIdCaracOrg(caracOrganBean.getIdCaracOrgan());
+            LogProcessoDAO.getInstance().insertLogProcesso("lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {\n" +
+                    "            @Override\n" +
+                    "            public void onItemClick(AdapterView<?> l, View v, int position,\n" +
+                    "                                    long id) {\n" +
+                    "                CaracOrganBean caracOrganBean = caracOrganList.get(position);\n" +
+                    "                piaContext.getInfestacaoCTR().setCaracOrganismoCabecAberto(caracOrganBean.getIdCaracOrganismo());\n" +
+                    "                List<AmostraBean> amostraList = piaContext.getInfestacaoCTR().amostraList(caracOrganBean.getIdCaracOrganismo());\n" +
+                    "                caracOrganList.clear();", getLocalClassName());
+            CaracOrganBean caracOrganBean = caracOrganList.get(position);
+            piaContext.getConfigCTR().setIdCaracOrg(caracOrganBean.getIdCaracOrgan());
 
-                if(piaContext.getInfestacaoCTR().verAmostraCarac(caracOrganBean.getIdCaracOrgan())){
+            if(piaContext.getInfestacaoCTR().verAmostraCarac(caracOrganBean.getIdCaracOrgan())){
 
-                    LogProcessoDAO.getInstance().insertLogProcesso("if(piaContext.getInfestacaoCTR().verAmostraCarac(caracOrganBean.getIdCaracOrgan())){\n" +
-                            "                    piaContext.setVerTelaQuestao(1);\n" +
-                            "                    piaContext.getInfestacaoCTR().salvarCabecAberto();\n" +
-                            "                    List<AmostraBean> amostraList = piaContext.getInfestacaoCTR().amostraList(caracOrganBean.getIdCaracOrgan());\n" +
-                            "                    boolean retorno = piaContext.getInfestacaoCTR().inserirItemAmostra(amostraList);\n" +
-                            "                    caracOrganList.clear();", getLocalClassName());
-                    piaContext.setVerTelaQuestao(1);
-                    piaContext.getInfestacaoCTR().salvarCabecAberto();
-                    List<AmostraBean> amostraList = piaContext.getInfestacaoCTR().amostraList(caracOrganBean.getIdCaracOrgan());
-                    boolean retorno = piaContext.getInfestacaoCTR().inserirItemAmostra(amostraList);
-                    caracOrganList.clear();
+                LogProcessoDAO.getInstance().insertLogProcesso("if(piaContext.getInfestacaoCTR().verAmostraCarac(caracOrganBean.getIdCaracOrgan())){\n" +
+                        "                    piaContext.setVerTelaQuestao(1);\n" +
+                        "                    piaContext.getInfestacaoCTR().salvarCabecAberto();\n" +
+                        "                    List<AmostraBean> amostraList = piaContext.getInfestacaoCTR().amostraList(caracOrganBean.getIdCaracOrgan());\n" +
+                        "                    boolean retorno = piaContext.getInfestacaoCTR().inserirItemAmostra(amostraList);\n" +
+                        "                    caracOrganList.clear();", getLocalClassName());
+                piaContext.setVerTelaQuestao(1);
+                piaContext.getInfestacaoCTR().salvarCabecAberto();
+                List<AmostraBean> amostraList = piaContext.getInfestacaoCTR().amostraList(caracOrganBean.getIdCaracOrgan());
+                boolean retorno = piaContext.getInfestacaoCTR().inserirItemAmostra(amostraList);
+                caracOrganList.clear();
 
-                    Intent it;
-                    if(retorno){
-                        LogProcessoDAO.getInstance().insertLogProcesso("if(retorno){\n" +
-                                "                        it = new Intent(ListaCaracOrganActivity.this, QuestaoCabecActivity.class);", getLocalClassName());
-                        it = new Intent(ListaCaracOrganActivity.this, QuestaoCabecActivity.class);
-                    } else {
-                        LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
-                                "                        it = new Intent(ListaCaracOrganActivity.this, ListaPontosActivity.class);", getLocalClassName());
-                        it = new Intent(ListaCaracOrganActivity.this, ListaPontosActivity.class);
-                    }
-                    startActivity(it);
-                    finish();
-
+                Intent it;
+                if(retorno){
+                    LogProcessoDAO.getInstance().insertLogProcesso("if(retorno){\n" +
+                            "                        it = new Intent(ListaCaracOrganActivity.this, QuestaoCabecActivity.class);", getLocalClassName());
+                    it = new Intent(ListaCaracOrganActivity.this, QuestaoCabecActivity.class);
                 } else {
-
                     LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
-                            "                    AlertDialog.Builder alerta = new AlertDialog.Builder(ListaCaracOrganActivity.this);\n" +
-                            "                    alerta.setTitle(\"ATENCAO\");\n" +
-                            "                    alerta.setMessage(\"ESSA CARACTERÍSTICA NÃO CONTÉM ITEM. POR FAVOR, VERIFIQUE SE CARACTERÍSTICA QUE DESEJA APONTAR.\");", getLocalClassName());
-                    AlertDialog.Builder alerta = new AlertDialog.Builder(ListaCaracOrganActivity.this);
-                    alerta.setTitle("ATENCAO");
-                    alerta.setMessage("ESSA CARACTERÍSTICA NÃO CONTÉM ITEM. POR FAVOR, VERIFIQUE SE CARACTERÍSTICA QUE DESEJA APONTAR.");
-                    alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"OK\", new DialogInterface.OnClickListener() {\n" +
-                                    "                        @Override\n" +
-                                    "                        public void onClick(DialogInterface dialog, int which) {", getLocalClassName());
-                        }
-                    });
-
-                    alerta.show();
-
+                            "                        it = new Intent(ListaCaracOrganActivity.this, ListaPontosActivity.class);", getLocalClassName());
+                    it = new Intent(ListaCaracOrganActivity.this, ListaPontosActivity.class);
                 }
+                startActivity(it);
+                finish();
+
+            } else {
+
+                LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
+                        "                    AlertDialog.Builder alerta = new AlertDialog.Builder(ListaCaracOrganActivity.this);\n" +
+                        "                    alerta.setTitle(\"ATENCAO\");\n" +
+                        "                    alerta.setMessage(\"ESSA CARACTERÍSTICA NÃO CONTÉM ITEM. POR FAVOR, VERIFIQUE SE CARACTERÍSTICA QUE DESEJA APONTAR.\");", getLocalClassName());
+                AlertDialog.Builder alerta = new AlertDialog.Builder(ListaCaracOrganActivity.this);
+                alerta.setTitle("ATENCAO");
+                alerta.setMessage("ESSA CARACTERÍSTICA NÃO CONTÉM ITEM. POR FAVOR, VERIFIQUE SE CARACTERÍSTICA QUE DESEJA APONTAR.");
+                alerta.setPositiveButton("OK", (dialog, which) -> LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"OK\", new DialogInterface.OnClickListener() {\n" +
+                        "                        @Override\n" +
+                        "                        public void onClick(DialogInterface dialog, int which) {", getLocalClassName()));
+                alerta.show();
 
             }
 
         });
 
-        buttonRetCaracOrgan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LogProcessoDAO.getInstance().insertLogProcesso("buttonRetCaracOrgan.setOnClickListener(new View.OnClickListener() {\n" +
-                        "            @Override\n" +
-                        "            public void onClick(View v) {\n" +
-                        "                Intent it = new Intent(ListaCaracOrganActivity.this, ListaOrganActivity.class);", getLocalClassName());
-                Intent it = new Intent(ListaCaracOrganActivity.this, ListaOrganActivity.class);
-                startActivity(it);
-                finish();
-            }
+        buttonRetCaracOrgan.setOnClickListener(v -> {
+            LogProcessoDAO.getInstance().insertLogProcesso("buttonRetCaracOrgan.setOnClickListener(new View.OnClickListener() {\n" +
+                    "            @Override\n" +
+                    "            public void onClick(View v) {\n" +
+                    "                Intent it = new Intent(ListaCaracOrganActivity.this, ListaOrganActivity.class);", getLocalClassName());
+            Intent it = new Intent(ListaCaracOrganActivity.this, ListaOrganActivity.class);
+            startActivity(it);
+            finish();
         });
 
     }

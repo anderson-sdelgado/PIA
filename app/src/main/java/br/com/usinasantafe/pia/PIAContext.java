@@ -12,7 +12,7 @@ public class PIAContext extends Application {
 
     private ConfigCTR configCTR;
     private InfestacaoCTR infestacaoCTR;
-    public static String versaoWS = "2.00";
+    public static String versaoWS = "2.01";
     private int posQuestaoAmostra;
     private int posPonto;
     private Long idRespItem;

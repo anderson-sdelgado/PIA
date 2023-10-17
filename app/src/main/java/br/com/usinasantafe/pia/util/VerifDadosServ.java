@@ -7,7 +7,9 @@ import android.util.Log;
 import java.util.HashMap;
 import java.util.Map;
 
+import br.com.usinasantafe.pia.control.ConfigCTR;
 import br.com.usinasantafe.pia.model.dao.LogErroDAO;
+import br.com.usinasantafe.pia.model.dao.LogProcessoDAO;
 import br.com.usinasantafe.pia.util.conHttp.PostVerGenerico;
 import br.com.usinasantafe.pia.util.conHttp.UrlsConexaoHttp;
 import br.com.usinasantafe.pia.model.pst.GenericRecordable;
@@ -18,11 +20,10 @@ public class VerifDadosServ {
     private UrlsConexaoHttp urlsConexaoHttp;
     private Context telaAtual;
     private Class telaProx;
-    private String variavel;
-    private int qtde;
     private ProgressDialog progressDialog;
-    private String dado;
-    private String tipo;
+    private String dados;
+    private String classe;
+    private String senha;
 
     public VerifDadosServ() {
     }
@@ -33,72 +34,39 @@ public class VerifDadosServ {
         return instance;
     }
 
-    public void manipularDadosHttp(String result, String activity) {
+    public void manipularDadosHttp(String result) {
 
-        if (!result.equals("")) {
-            retornoVerifNormal(result);
-        }
+        ConfigCTR configCTR = new ConfigCTR();
+        configCTR.recToken(result.trim(), this.senha, this.telaAtual, this.telaProx, this.progressDialog);
 
     }
 
-    public String manipLocalClasse(String classe) {
-        if (classe.contains("TO")) {
-            classe = urlsConexaoHttp.localPSTEstatica + classe;
-        }
-        return classe;
-    }
+    public void salvarToken(String senha, String dados, Context telaAtual, Class telaProx, ProgressDialog progressDialog, String activity) {
 
-    public void verDados(String dado, String tipo, Context telaAtual, Class telaProx, ProgressDialog progressDialog, String activity) {
-
-        urlsConexaoHttp = new UrlsConexaoHttp();
+        this.urlsConexaoHttp = new UrlsConexaoHttp();
         this.telaAtual = telaAtual;
         this.telaProx = telaProx;
         this.progressDialog = progressDialog;
-        this.dado = dado;
-        this.tipo = tipo;
+        this.dados = dados;
+        this.senha = senha;
+        this.classe = "Token";
 
-        envioDados(activity);
-
-    }
-
-    public void verDados(String dado, String tipo, Context telaAtual, Class telaProx, String variavel, String activity) {
-
-        urlsConexaoHttp = new UrlsConexaoHttp();
-        this.telaAtual = telaAtual;
-        this.telaProx = telaProx;
-        this.variavel = variavel;
-        this.dado = dado;
-        this.tipo = tipo;
-
-        envioDados(activity);
+        envioVerif(activity);
 
     }
 
-    public void envioDados(String activity) {
+    public void envioVerif(String activity) {
 
-        String[] url = {urlsConexaoHttp.urlVerifica(tipo), activity};
-        Map<String, Object> parametrosPost = new HashMap<String, Object>();
-        parametrosPost.put("dado", String.valueOf(dado));
+        String[] url = {urlsConexaoHttp.urlVerifica(classe), activity};
+        Map<String, Object> parametrosPost = new HashMap<>();
+        parametrosPost.put("dado", String.valueOf(dados));
 
+        Log.i("PMM", "postVerGenerico.execute('" + urlsConexaoHttp.urlVerifica(classe) + "'); - Dados de Envio = " + this.dados);
+        LogProcessoDAO.getInstance().insertLogProcesso("postVerGenerico.execute('" + urlsConexaoHttp.urlVerifica(classe) + "'); - Dados de Envio = " + this.dados, activity);
         PostVerGenerico postVerGenerico = new PostVerGenerico();
         postVerGenerico.setParametrosPost(parametrosPost);
         postVerGenerico.execute(url);
 
     }
-
-
-    public void retornoVerifNormal(String result) {
-
-
-        try {
-
-
-        } catch (Exception e) {
-            LogErroDAO.getInstance().insertLogErro(e);
-        }
-
-    }
-
-
 
 }

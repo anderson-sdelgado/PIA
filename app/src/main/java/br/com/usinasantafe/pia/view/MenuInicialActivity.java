@@ -57,7 +57,7 @@ public class MenuInicialActivity extends ActivityGeneric {
             ActivityCompat.requestPermissions(this, PERMISSIONS, 112);
         }
 
-        ArrayList<String> itens = new ArrayList<String>();
+        ArrayList<String> itens = new ArrayList<>();
 
         itens.add("APONTAMENTO");
         itens.add("ENVIO DE DADOS");
@@ -69,25 +69,22 @@ public class MenuInicialActivity extends ActivityGeneric {
         listaMenuInicial = findViewById(R.id.listaMenuInicial);
         listaMenuInicial.setAdapter(adapterList);
 
-        listaMenuInicial.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listaMenuInicial.setOnItemClickListener((l, v, position, id) -> {
 
-            @Override
-            public void onItemClick(AdapterView<?> l, View v, int position,
-                                    long id) {
+            LogProcessoDAO.getInstance().insertLogProcesso("lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {\n" +
+                    "            @Override\n" +
+                    "            public void onItemClick(AdapterView<?> l, View v, int position,\n" +
+                    "                                    long id) {\n" +
+                    "                TextView textView = v.findViewById(R.id.textViewItemList);\n" +
+                    "                String text = textView.getText().toString();", getLocalClassName());
+            TextView textView = v.findViewById(R.id.textViewItemList);
+            String text = textView.getText().toString();
 
-                LogProcessoDAO.getInstance().insertLogProcesso("lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {\n" +
-                        "            @Override\n" +
-                        "            public void onItemClick(AdapterView<?> l, View v, int position,\n" +
-                        "                                    long id) {\n" +
-                        "                TextView textView = v.findViewById(R.id.textViewItemList);\n" +
-                        "                String text = textView.getText().toString();", getLocalClassName());
-                TextView textView = v.findViewById(R.id.textViewItemList);
-                String text = textView.getText().toString();
-
-                if (text.equals("APONTAMENTO")) {
+            switch (text) {
+                case "APONTAMENTO": {
                     LogProcessoDAO.getInstance().insertLogProcesso("if (text.equals(\"APONTAMENTO\")) {", getLocalClassName());
-                    if(piaContext.getInfestacaoCTR().hasElemAuditor()
-                        && piaContext.getConfigCTR().hasElements()) {
+                    if (piaContext.getInfestacaoCTR().hasElemAuditor()
+                            && piaContext.getConfigCTR().hasElements()) {
                         LogProcessoDAO.getInstance().insertLogProcesso("if(piaContext.getInfestacaoCTR().hasElemAuditor()\n" +
                                 "                        && piaContext.getConfigCTR().hasElements()) {\n" +
                                 "                        Intent it = new Intent(MenuInicialActivity.this, AuditorActivity.class);", getLocalClassName());
@@ -95,16 +92,17 @@ public class MenuInicialActivity extends ActivityGeneric {
                         startActivity(it);
                         finish();
                     }
-
-                } else if (text.equals("ENVIO DE DADOS")) {
-
+                    break;
+                }
+                case "ENVIO DE DADOS": {
                     LogProcessoDAO.getInstance().insertLogProcesso("} else if (text.equals(\"ENVIO DE DADOS\")) {\n" +
                             "                    Intent it = new Intent(MenuInicialActivity.this, EnvioDadosActivity.class);", getLocalClassName());
                     Intent it = new Intent(MenuInicialActivity.this, EnvioDadosActivity.class);
                     startActivity(it);
                     finish();
-
-                } else if (text.equals("CONFIGURAÇÃO")) {
+                    break;
+                }
+                case "CONFIGURAÇÃO": {
                     LogProcessoDAO.getInstance().insertLogProcesso("} else if (text.equals(\"CONFIGURAÇÃO\")) {\n" +
                             "                    piaContext.setTela(1);\n" +
                             "                    Intent it = new Intent(MenuInicialActivity.this, SenhaActivity.class);", getLocalClassName());
@@ -112,8 +110,9 @@ public class MenuInicialActivity extends ActivityGeneric {
                     Intent it = new Intent(MenuInicialActivity.this, SenhaActivity.class);
                     startActivity(it);
                     finish();
-
-                } else if (text.equals("LOG")) {
+                    break;
+                }
+                case "LOG": {
                     LogProcessoDAO.getInstance().insertLogProcesso("} else if (text.equals(\"LOG\")) {\n" +
                             "                    piaContext.setTela(2);\n" +
                             "                    Intent it = new Intent(MenuInicialActivity.this, SenhaActivity.class);", getLocalClassName());
@@ -121,9 +120,9 @@ public class MenuInicialActivity extends ActivityGeneric {
                     Intent it = new Intent(MenuInicialActivity.this, SenhaActivity.class);
                     startActivity(it);
                     finish();
-
-                } else if (text.equals("SAIR")) {
-
+                    break;
+                }
+                case "SAIR": {
                     LogProcessoDAO.getInstance().insertLogProcesso("} else if (text.equals(\"SAIR\")) {\n" +
                             "                    Intent intent = new Intent(Intent.ACTION_MAIN);\n" +
                             "                    intent.addCategory(Intent.CATEGORY_HOME);\n" +
@@ -133,9 +132,8 @@ public class MenuInicialActivity extends ActivityGeneric {
                     intent.addCategory(Intent.CATEGORY_HOME);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
-
+                    break;
                 }
-
             }
 
         });

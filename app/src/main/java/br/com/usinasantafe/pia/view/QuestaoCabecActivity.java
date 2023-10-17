@@ -34,42 +34,36 @@ public class QuestaoCabecActivity extends ActivityGeneric {
         textViewPadrao.setText(piaContext.getInfestacaoCTR().getItemAmostraCabec().getDescrItem());
         editText.setText("");
 
-        buttonOkQC.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LogProcessoDAO.getInstance().insertLogProcesso("buttonOkQC.setOnClickListener(new View.OnClickListener() {\n" +
-                        "            @Override\n" +
-                        "            public void onClick(View v) {", getLocalClassName());
-                if (!editTextPadrao.getText().toString().equals("")) {
+        buttonOkQC.setOnClickListener(v -> {
+            LogProcessoDAO.getInstance().insertLogProcesso("buttonOkQC.setOnClickListener(new View.OnClickListener() {\n" +
+                    "            @Override\n" +
+                    "            public void onClick(View v) {", getLocalClassName());
+            if (!editTextPadrao.getText().toString().equals("")) {
 
-                    LogProcessoDAO.getInstance().insertLogProcesso("if (!editTextPadrao.getText().toString().equals(\"\")) {\n" +
-                            "                    piaContext.setVerTelaQuestao(1);\n" +
-                            "                    piaContext.getInfestacaoCTR().updateItemAmostraCabec(Long.parseLong(editTextPadrao.getText().toString()));\n" +
-                            "                    Intent it = new Intent(QuestaoCabecActivity.this, MsgPontoActivity.class);", getLocalClassName());
-                    piaContext.setVerTelaQuestao(1);
-                    piaContext.getInfestacaoCTR().updateItemAmostraCabec(Long.parseLong(editTextPadrao.getText().toString()));
+                LogProcessoDAO.getInstance().insertLogProcesso("if (!editTextPadrao.getText().toString().equals(\"\")) {\n" +
+                        "                    piaContext.setVerTelaQuestao(1);\n" +
+                        "                    piaContext.getInfestacaoCTR().updateItemAmostraCabec(Long.parseLong(editTextPadrao.getText().toString()));\n" +
+                        "                    Intent it = new Intent(QuestaoCabecActivity.this, MsgPontoActivity.class);", getLocalClassName());
+                piaContext.setVerTelaQuestao(1);
+                piaContext.getInfestacaoCTR().updateItemAmostraCabec(Long.parseLong(editTextPadrao.getText().toString()));
 
-                    Intent it = new Intent(QuestaoCabecActivity.this, MsgPontoActivity.class);
-                    startActivity(it);
-                    finish();
-
-                }
-
+                Intent it = new Intent(QuestaoCabecActivity.this, MsgPontoActivity.class);
+                startActivity(it);
+                finish();
 
             }
+
+
         });
 
-        buttonCancQC.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LogProcessoDAO.getInstance().insertLogProcesso("buttonCancQC.setOnClickListener(new View.OnClickListener() {\n" +
-                        "            @Override\n" +
-                        "            public void onClick(View v) {", getLocalClassName());
-                if(editTextPadrao.getText().toString().length() > 0){
-                    LogProcessoDAO.getInstance().insertLogProcesso("if(editTextPadrao.getText().toString().length() > 0){\n" +
-                            "                    editTextPadrao.setText(editTextPadrao.getText().toString().substring(0, editTextPadrao.getText().toString().length() - 1));", getLocalClassName());
-                    editTextPadrao.setText(editTextPadrao.getText().toString().substring(0, editTextPadrao.getText().toString().length() - 1));
-                }
+        buttonCancQC.setOnClickListener(v -> {
+            LogProcessoDAO.getInstance().insertLogProcesso("buttonCancQC.setOnClickListener(new View.OnClickListener() {\n" +
+                    "            @Override\n" +
+                    "            public void onClick(View v) {", getLocalClassName());
+            if(editTextPadrao.getText().toString().length() > 0){
+                LogProcessoDAO.getInstance().insertLogProcesso("if(editTextPadrao.getText().toString().length() > 0){\n" +
+                        "                    editTextPadrao.setText(editTextPadrao.getText().toString().substring(0, editTextPadrao.getText().toString().length() - 1));", getLocalClassName());
+                editTextPadrao.setText(editTextPadrao.getText().toString().substring(0, editTextPadrao.getText().toString().length() - 1));
             }
         });
 

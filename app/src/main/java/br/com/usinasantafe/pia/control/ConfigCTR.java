@@ -1,17 +1,27 @@
 package br.com.usinasantafe.pia.control;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.usinasantafe.pia.model.bean.AtualAplicBean;
 import br.com.usinasantafe.pia.model.bean.variaveis.ConfigBean;
 import br.com.usinasantafe.pia.model.bean.variaveis.LogErroBean;
 import br.com.usinasantafe.pia.model.bean.variaveis.LogProcessoBean;
+import br.com.usinasantafe.pia.model.dao.AtualAplicDAO;
 import br.com.usinasantafe.pia.model.dao.CabecAmostraDAO;
 import br.com.usinasantafe.pia.model.dao.ConfigDAO;
 import br.com.usinasantafe.pia.model.dao.ItemAmostraDAO;
 import br.com.usinasantafe.pia.model.dao.LogErroDAO;
 import br.com.usinasantafe.pia.model.dao.LogProcessoDAO;
 import br.com.usinasantafe.pia.model.dao.RespItemAmostraDAO;
+import br.com.usinasantafe.pia.util.AtualDadosServ;
+import br.com.usinasantafe.pia.util.VerifDadosServ;
 
 public class ConfigCTR {
 
@@ -33,9 +43,9 @@ public class ConfigCTR {
         return configDAO.verSenha(senha);
     }
 
-    public void salvarConfig(String numLinha, String senha){
+    public void salvarConfig(Long nroAparelho, String senha){
         ConfigDAO configDAO = new ConfigDAO();
-        configDAO.salvarConfig(numLinha, senha);
+        configDAO.salvarConfig(nroAparelho, senha);
     }
 
     public void setOS(Long os){
@@ -92,6 +102,45 @@ public class ConfigCTR {
         LogErroDAO logErroDAO = new LogErroDAO();
         logProcessoDAO.deleteLogProcesso();
         logErroDAO.deleteLogErro();
+    }
+
+    public void salvarToken(String senha, String versao, Long nroAparelho, Context telaAtual, Class telaProx, ProgressDialog progressDialog, String activity){
+        AtualAplicDAO atualAplicDAO = new AtualAplicDAO();
+        LogProcessoDAO.getInstance().insertLogProcesso("equipDAO.verEquip(equipDAO.dadosVerEquip(Long.parseLong(nroEquip), versao), telaAtual, telaProx, progressDialog, activity, tipo);", activity);
+        VerifDadosServ.getInstance().salvarToken(senha, atualAplicDAO.dadosAplic(nroAparelho, versao), telaAtual, telaProx, progressDialog, activity);
+    }
+
+    public void recToken(String result, String senha, Context telaAtual, Class telaProx, ProgressDialog progressDialog) {
+
+        AtualAplicBean atualAplicBean = new AtualAplicBean();
+
+        try {
+
+            progressDialog.dismiss();
+
+            JSONObject jObj = new JSONObject(result);
+            JSONArray jsonArray = jObj.getJSONArray("dados");
+
+            if (jsonArray.length() > 0) {
+                AtualAplicDAO atualAplicDAO = new AtualAplicDAO();
+                atualAplicBean = atualAplicDAO.recAparelho(jsonArray);
+            }
+
+            salvarConfig(atualAplicBean.getNroAparelho(), senha);
+
+            progressDialog = new ProgressDialog(telaAtual);
+            progressDialog.setCancelable(true);
+            progressDialog.setMessage("ATUALIZANDO ...");
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.setProgress(0);
+            progressDialog.setMax(100);
+            progressDialog.show();
+
+            AtualDadosServ.getInstance().atualTodasTabBD(telaAtual, telaProx, progressDialog, "ConfigActivity");
+
+        } catch (Exception e) {
+            LogErroDAO.getInstance().insertLogErro(e);
+        }
     }
 
 }

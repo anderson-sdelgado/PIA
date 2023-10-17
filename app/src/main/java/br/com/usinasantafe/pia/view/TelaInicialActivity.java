@@ -27,17 +27,13 @@ public class TelaInicialActivity extends ActivityGeneric {
         customHandler.postDelayed(excluirBDThread, 0);
     }
 
-    private Runnable excluirBDThread = new Runnable() {
-
-        public void run() {
-            LogProcessoDAO.getInstance().insertLogProcesso("private Runnable excluirBDThread = new Runnable() {\n" +
-                    "        public void run() {\n" +
-                    "            clearBD();\n" +
-                    "            goMenuInicial();", getLocalClassName());
-            clearBD();
-            goMenuInicial();
-        }
-
+    private Runnable excluirBDThread = () -> {
+        LogProcessoDAO.getInstance().insertLogProcesso("private Runnable excluirBDThread = new Runnable() {\n" +
+                "        public void run() {\n" +
+                "            clearBD();\n" +
+                "            goMenuInicial();", getLocalClassName());
+        clearBD();
+        goMenuInicial();
     };
 
     public void clearBD() {

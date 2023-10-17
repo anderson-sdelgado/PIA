@@ -50,7 +50,7 @@ public class ListaQuestaoActivity extends ActivityGeneric {
         int pos = piaContext.getPosPonto() + 1;
         textViewTituloPonto.setText("PONTO " + pos);
 
-        ArrayList<String> itens = new ArrayList<String>();
+        ArrayList<String> itens = new ArrayList<>();
         respItemAmostraList = piaContext.getInfestacaoCTR().getRespItemAmostraList((long) piaContext.getPosPonto());
 
         for (RespItemAmostraBean respItemAmostraBean : respItemAmostraList) {
@@ -61,92 +61,70 @@ public class ListaQuestaoActivity extends ActivityGeneric {
         AdapterList adapterList = new AdapterList(this, itens);
         lista = findViewById(R.id.listViewQuestao);
         lista.setAdapter(adapterList);
-        lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> l, View v, int position,
-                                    long id) {
+        lista.setOnItemClickListener((l, v, position, id) -> {
 
-                LogProcessoDAO.getInstance().insertLogProcesso("lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {\n" +
-                        "            @Override\n" +
-                        "            public void onItemClick(AdapterView<?> l, View v, int position,\n" +
-                        "                                    long id) {\n" +
-                        "                RespItemAmostraBean respItemAmostraTO = (RespItemAmostraBean) respItemAmostraList.get(position);\n" +
-                        "                piaContext.setIdRespItem(respItemAmostraTO.getIdRespItem());\n" +
-                        "                piaContext.setVerTelaQuestao(2);\n" +
-                        "                respItemAmostraList.clear();\n" +
-                        "                Intent it = new Intent(ListaQuestaoActivity.this, QuestaoAmostraActivity.class);", getLocalClassName());
-                RespItemAmostraBean respItemAmostraTO = respItemAmostraList.get(position);
-                piaContext.setIdRespItem(respItemAmostraTO.getIdRespItem());
-                piaContext.setVerTelaQuestao(2);
-                respItemAmostraList.clear();
+            LogProcessoDAO.getInstance().insertLogProcesso("lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {\n" +
+                    "            @Override\n" +
+                    "            public void onItemClick(AdapterView<?> l, View v, int position,\n" +
+                    "                                    long id) {\n" +
+                    "                RespItemAmostraBean respItemAmostraTO = (RespItemAmostraBean) respItemAmostraList.get(position);\n" +
+                    "                piaContext.setIdRespItem(respItemAmostraTO.getIdRespItem());\n" +
+                    "                piaContext.setVerTelaQuestao(2);\n" +
+                    "                respItemAmostraList.clear();\n" +
+                    "                Intent it = new Intent(ListaQuestaoActivity.this, QuestaoAmostraActivity.class);", getLocalClassName());
+            RespItemAmostraBean respItemAmostraTO = respItemAmostraList.get(position);
+            piaContext.setIdRespItem(respItemAmostraTO.getIdRespItem());
+            piaContext.setVerTelaQuestao(2);
+            respItemAmostraList.clear();
 
-                Intent it = new Intent(ListaQuestaoActivity.this, QuestaoAmostraActivity.class);
-                startActivity(it);
-                finish();
-
-            }
+            Intent it = new Intent(ListaQuestaoActivity.this, QuestaoAmostraActivity.class);
+            startActivity(it);
+            finish();
 
         });
 
-        buttonListaQuestaoRetornar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        buttonListaQuestaoRetornar.setOnClickListener(v -> {
 
-                LogProcessoDAO.getInstance().insertLogProcesso("buttonListaQuestaoRetornar.setOnClickListener(new View.OnClickListener() {\n" +
-                        "            @Override\n" +
-                        "            public void onClick(View v) {\n" +
-                        "                Intent it = new Intent(ListaQuestaoActivity.this, ListaPontosActivity.class);", getLocalClassName());
+            LogProcessoDAO.getInstance().insertLogProcesso("buttonListaQuestaoRetornar.setOnClickListener(new View.OnClickListener() {\n" +
+                    "            @Override\n" +
+                    "            public void onClick(View v) {\n" +
+                    "                Intent it = new Intent(ListaQuestaoActivity.this, ListaPontosActivity.class);", getLocalClassName());
+            Intent it = new Intent(ListaQuestaoActivity.this, ListaPontosActivity.class);
+            startActivity(it);
+            finish();
+
+        });
+
+        buttonListaQuestaoExcluir.setOnClickListener(v -> {
+
+            LogProcessoDAO.getInstance().insertLogProcesso("buttonListaQuestaoExcluir.setOnClickListener(new View.OnClickListener() {\n" +
+                    "            @Override\n" +
+                    "            public void onClick(View v) {\n" +
+                    "                AlertDialog.Builder alerta = new AlertDialog.Builder(ListaQuestaoActivity.this);\n" +
+                    "                alerta.setTitle(\"ATENÇÃO\");\n" +
+                    "                alerta.setMessage(\"DESEJAR REALMENTE EXCLUIR ESSE PONTO?\");", getLocalClassName());
+            AlertDialog.Builder alerta = new AlertDialog.Builder(ListaQuestaoActivity.this);
+            alerta.setTitle("ATENÇÃO");
+            alerta.setMessage("DESEJAR REALMENTE EXCLUIR ESSE PONTO?");
+            alerta.setPositiveButton("SIM", (dialog, which) -> {
+
+                LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"SIM\", new DialogInterface.OnClickListener() {\n" +
+                        "                    @Override\n" +
+                        "                    public void onClick(DialogInterface dialog, int which) {\n" +
+                        "                        piaContext.getInfestacaoCTR().deleteRespItemAmostra((long) piaContext.getPosPonto());\n" +
+                        "                        Intent it = new Intent(ListaQuestaoActivity.this, ListaPontosActivity.class);", getLocalClassName());
+                piaContext.getInfestacaoCTR().deleteRespItemAmostra((long) piaContext.getPosPonto());
                 Intent it = new Intent(ListaQuestaoActivity.this, ListaPontosActivity.class);
                 startActivity(it);
                 finish();
 
-            }
-        });
+            });
 
-        buttonListaQuestaoExcluir.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            alerta.setNegativeButton("NÃO", (dialog, which) -> LogProcessoDAO.getInstance().insertLogProcesso("alerta.setNegativeButton(\"NÃO\", new DialogInterface.OnClickListener() {\n" +
+                    "                    @Override\n" +
+                    "                    public void onClick(DialogInterface dialog, int which) {", getLocalClassName()));
+            alerta.show();
 
-                LogProcessoDAO.getInstance().insertLogProcesso("buttonListaQuestaoExcluir.setOnClickListener(new View.OnClickListener() {\n" +
-                        "            @Override\n" +
-                        "            public void onClick(View v) {\n" +
-                        "                AlertDialog.Builder alerta = new AlertDialog.Builder(ListaQuestaoActivity.this);\n" +
-                        "                alerta.setTitle(\"ATENÇÃO\");\n" +
-                        "                alerta.setMessage(\"DESEJAR REALMENTE EXCLUIR ESSE PONTO?\");", getLocalClassName());
-                AlertDialog.Builder alerta = new AlertDialog.Builder(ListaQuestaoActivity.this);
-                alerta.setTitle("ATENÇÃO");
-                alerta.setMessage("DESEJAR REALMENTE EXCLUIR ESSE PONTO?");
-                alerta.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"SIM\", new DialogInterface.OnClickListener() {\n" +
-                                "                    @Override\n" +
-                                "                    public void onClick(DialogInterface dialog, int which) {\n" +
-                                "                        piaContext.getInfestacaoCTR().deleteRespItemAmostra((long) piaContext.getPosPonto());\n" +
-                                "                        Intent it = new Intent(ListaQuestaoActivity.this, ListaPontosActivity.class);", getLocalClassName());
-                        piaContext.getInfestacaoCTR().deleteRespItemAmostra((long) piaContext.getPosPonto());
-                        Intent it = new Intent(ListaQuestaoActivity.this, ListaPontosActivity.class);
-                        startActivity(it);
-                        finish();
-
-                    }
-
-                });
-
-                alerta.setNegativeButton("NÃO", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        LogProcessoDAO.getInstance().insertLogProcesso("alerta.setNegativeButton(\"NÃO\", new DialogInterface.OnClickListener() {\n" +
-                                "                    @Override\n" +
-                                "                    public void onClick(DialogInterface dialog, int which) {", getLocalClassName());
-                    }
-
-                });
-
-                alerta.show();
-
-            }
         });
 
     }

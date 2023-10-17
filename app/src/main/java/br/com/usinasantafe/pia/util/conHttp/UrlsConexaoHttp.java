@@ -6,8 +6,8 @@ public class UrlsConexaoHttp {
 
     public static String versao = "versao_" + PIAContext.versaoWS.replace(".", "_");
 
-//    public static String url = "https://www.usinasantafe.com.br/piadev/view/";
-    public static String url = "https://www.usinasantafe.com.br/piaqa/view/";
+    public static String url = "https://www.usinasantafe.com.br/piadev/view/";
+//    public static String url = "https://www.usinasantafe.com.br/piaqa/view/";
 //    public static String url = "https://www.usinasantafe.com.br/piaprod/" + versao + "/view/";
 
     public static String localPSTEstatica = "br.com.usinasantafe.pia.model.bean.estaticas.";
@@ -31,7 +31,11 @@ public class UrlsConexaoHttp {
     }
 
     public String urlVerifica(String classe) {
-        return "";
+        String retorno = "";
+        if (classe.equals("Token")) {
+            retorno = url + "aparelho.php";
+        }
+        return retorno;
     }
 
 }
