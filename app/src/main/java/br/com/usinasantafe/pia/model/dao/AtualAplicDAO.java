@@ -20,7 +20,6 @@ public class AtualAplicDAO {
     public AtualAplicDAO() {
     }
 
-
     public String dadosAplic(Long nroAparelho, String versaoAplic){
 
         AtualAplicBean atualAplicBean = new AtualAplicBean();

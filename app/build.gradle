@@ -4,12 +4,12 @@ plugins {
 
 android {
 
-    compileSdk 31
+    compileSdk 34
 
     defaultConfig {
         applicationId "br.com.usinasantafe.pia"
         minSdkVersion 22
-        targetSdk 31
+        targetSdk 34
         versionCode 5
         versionName "2.03"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"

@@ -6,9 +6,9 @@ public class UrlsConexaoHttp {
 
     public static String versao = "versao_" + PIAContext.versaoWS.replace(".", "_");
 
-    public static String url = "https://www.usinasantafe.com.br/piadev/view/";
+//    public static String url = "https://www.usinasantafe.com.br/piadev/view/";
 //    public static String url = "https://www.usinasantafe.com.br/piaqa/view/";
-//    public static String url = "https://www.usinasantafe.com.br/piaprod/" + versao + "/view/";
+    public static String url = "https://www.usinasantafe.com.br/piaprod/" + versao + "/view/";
 
     public static String localPSTEstatica = "br.com.usinasantafe.pia.model.bean.estaticas.";
     public static String localUrl = "br.com.usinasantafe.pia.util.conHttp.UrlsConexaoHttp";

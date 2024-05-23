@@ -62,17 +62,14 @@ public class EnvioDadosServ {
         AlertDialog.Builder alerta = new AlertDialog.Builder(this.telaAtual);
         alerta.setTitle("ATENCAO");
         alerta.setMessage(msg);
-        alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"OK\", new DialogInterface.OnClickListener() {\n" +
-                        "            @Override\n" +
-                        "            public void onClick(DialogInterface dialog, int which) {\n" +
-                        "                Intent it = new Intent(telaAtual, telaProx);\n" +
-                        "                telaAtual.startActivity(it);", activity);
-                Intent it = new Intent(telaAtual, telaProx);
-                telaAtual.startActivity(it);
-            }
+        alerta.setPositiveButton("OK", (dialog, which) -> {
+            LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"OK\", new DialogInterface.OnClickListener() {\n" +
+                    "            @Override\n" +
+                    "            public void onClick(DialogInterface dialog, int which) {\n" +
+                    "                Intent it = new Intent(telaAtual, telaProx);\n" +
+                    "                telaAtual.startActivity(it);", activity);
+            Intent it = new Intent(telaAtual, telaProx);
+            telaAtual.startActivity(it);
         });
 
         alerta.show();
