@@ -9,16 +9,30 @@ public class AmostraDAO {
     public AmostraDAO() {
     }
 
-    public boolean verAmostra(Long idAmostra){
-        List<AmostraBean> amostraList = amostraIdAmostraOrganList(idAmostra);
+    public int qtdeAmostraIdAmostraOrgan(Long idAmostraOrgan){
+        List<AmostraBean> amostraList = amostraIdAmostraOrganList(idAmostraOrgan);
+        int size = amostraList.size();
+        amostraList.clear();
+        return size;
+    }
+
+    public boolean verAmostraIdAmostraOrgan(Long idAmostraOrgan){
+        List<AmostraBean> amostraList = amostraIdAmostraOrganList(idAmostraOrgan);
         boolean retorno = amostraList.size() > 0;
         amostraList.clear();
         return retorno;
     }
 
-    public AmostraBean getAmostraIdAmostra(Long idAmostra){
+    public AmostraBean getAmostraId(Long idAmostra){
         List<AmostraBean> amostraList = amostraIdAmostraList(idAmostra);
         AmostraBean amostraFitoBean = amostraList.get(0);
+        amostraList.clear();
+        return amostraFitoBean;
+    }
+
+    public AmostraBean getAmostraIdAmostraOrganSeq(Long idAmostraOrgan, int seq){
+        List<AmostraBean> amostraList = amostraIdAmostraOrganList(idAmostraOrgan);
+        AmostraBean amostraFitoBean = amostraList.get(seq);
         amostraList.clear();
         return amostraFitoBean;
     }

@@ -41,28 +41,28 @@ public class ConfigDAO {
 
     public void setOS(Long os){
         ConfigBean configBean = getConfig();
-        configBean.setOSConfig(os);
+        configBean.setNroOSConfig(os);
         configBean.update();
         configBean.commit();
     }
 
     public void setAuditor(Long auditor){
         ConfigBean configBean = getConfig();
-        configBean.setAuditorConfig(auditor);
+        configBean.setMatricAuditorConfig(auditor);
         configBean.update();
         configBean.commit();
     }
 
     public void setSecao(Long secao){
         ConfigBean configBean = getConfig();
-        configBean.setSecaoConfig(secao);
+        configBean.setIdSecaoConfig(secao);
         configBean.update();
         configBean.commit();
     }
 
     public void setTalhao(Long talhao){
         ConfigBean configBean = getConfig();
-        configBean.setTalhaoConfig(talhao);
+        configBean.setIdTalhaoConfig(talhao);
         configBean.update();
         configBean.commit();
     }

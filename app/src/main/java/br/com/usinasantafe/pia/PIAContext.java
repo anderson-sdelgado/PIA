@@ -1,9 +1,6 @@
 package br.com.usinasantafe.pia;
 
 import android.app.Application;
-import android.util.Log;
-
-import java.util.Calendar;
 
 import br.com.usinasantafe.pia.control.ConfigCTR;
 import br.com.usinasantafe.pia.control.InfestacaoCTR;
@@ -17,7 +14,7 @@ public class PIAContext extends Application {
     private int posPonto;
     private Long idRespItem;
     private int verTelaQuestao; // 1 - MSG PONTO E QUESTAO AMOSTRA; 2 - ALTERAR AMOSTRA;
-    private int tela;
+    private int vertelaConfigORLogs;
 
     public ConfigCTR getConfigCTR() {
         if(configCTR == null)
@@ -63,11 +60,11 @@ public class PIAContext extends Application {
         this.idRespItem = idRespItem;
     }
 
-    public int getTela() {
-        return tela;
+    public int getVertelaConfigORLogs() {
+        return vertelaConfigORLogs;
     }
 
-    public void setTela(int tela) {
-        this.tela = tela;
+    public void setVertelaConfigORLogs(int vertelaConfigORLogs) {
+        this.vertelaConfigORLogs = vertelaConfigORLogs;
     }
 }

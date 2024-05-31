@@ -61,37 +61,20 @@ public class ListaCaracOrganActivity extends ActivityGeneric {
                     "            @Override\n" +
                     "            public void onItemClick(AdapterView<?> l, View v, int position,\n" +
                     "                                    long id) {\n" +
-                    "                CaracOrganBean caracOrganBean = caracOrganList.get(position);\n" +
-                    "                piaContext.getInfestacaoCTR().setCaracOrganismoCabecAberto(caracOrganBean.getIdCaracOrganismo());\n" +
-                    "                List<AmostraBean> amostraList = piaContext.getInfestacaoCTR().amostraList(caracOrganBean.getIdCaracOrganismo());\n" +
-                    "                caracOrganList.clear();", getLocalClassName());
+                    "                CaracOrganBean caracOrganBean = caracOrganList.get(position);", getLocalClassName());
             CaracOrganBean caracOrganBean = caracOrganList.get(position);
-            piaContext.getConfigCTR().setIdCaracOrg(caracOrganBean.getIdCaracOrgan());
 
             if(piaContext.getInfestacaoCTR().verAmostraCarac(caracOrganBean.getIdCaracOrgan())){
 
                 LogProcessoDAO.getInstance().insertLogProcesso("if(piaContext.getInfestacaoCTR().verAmostraCarac(caracOrganBean.getIdCaracOrgan())){\n" +
-                        "                    piaContext.setVerTelaQuestao(1);\n" +
-                        "                    piaContext.getInfestacaoCTR().salvarCabecAberto();\n" +
-                        "                    List<AmostraBean> amostraList = piaContext.getInfestacaoCTR().amostraList(caracOrganBean.getIdCaracOrgan());\n" +
-                        "                    boolean retorno = piaContext.getInfestacaoCTR().inserirItemAmostra(amostraList);\n" +
-                        "                    caracOrganList.clear();", getLocalClassName());
-                piaContext.setVerTelaQuestao(1);
-                piaContext.getInfestacaoCTR().salvarCabecAberto();
-                List<AmostraBean> amostraList = piaContext.getInfestacaoCTR().amostraList(caracOrganBean.getIdCaracOrgan());
-                boolean retorno = piaContext.getInfestacaoCTR().inserirItemAmostra(amostraList);
+                        "                piaContext.getConfigCTR().setIdCaracOrg(caracOrganBean.getIdCaracOrgan());\n" +
+                        "                caracOrganList.clear();\n" +
+                        "                Intent it = new Intent(ListaCaracOrganActivity.this, OSActivity.class);\n" +
+                        "                startActivity(it);\n" +
+                        "                finish();", getLocalClassName());
+                piaContext.getConfigCTR().setIdCaracOrg(caracOrganBean.getIdCaracOrgan());
                 caracOrganList.clear();
-
-                Intent it;
-                if(retorno){
-                    LogProcessoDAO.getInstance().insertLogProcesso("if(retorno){\n" +
-                            "                        it = new Intent(ListaCaracOrganActivity.this, QuestaoCabecActivity.class);", getLocalClassName());
-                    it = new Intent(ListaCaracOrganActivity.this, QuestaoCabecActivity.class);
-                } else {
-                    LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
-                            "                        it = new Intent(ListaCaracOrganActivity.this, ListaPontosActivity.class);", getLocalClassName());
-                    it = new Intent(ListaCaracOrganActivity.this, ListaPontosActivity.class);
-                }
+                Intent it = new Intent(ListaCaracOrganActivity.this, OSActivity.class);
                 startActivity(it);
                 finish();
 

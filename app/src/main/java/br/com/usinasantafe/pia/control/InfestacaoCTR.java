@@ -3,11 +3,6 @@ package br.com.usinasantafe.pia.control;
 import android.app.ProgressDialog;
 import android.content.Context;
 
-import com.google.gson.Gson;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,13 +15,14 @@ import br.com.usinasantafe.pia.model.bean.estaticas.SecaoBean;
 import br.com.usinasantafe.pia.model.bean.estaticas.TalhaoBean;
 import br.com.usinasantafe.pia.model.bean.variaveis.CabecAmostraBean;
 import br.com.usinasantafe.pia.model.bean.variaveis.ConfigBean;
-import br.com.usinasantafe.pia.model.bean.variaveis.ItemAmostraBean;
+import br.com.usinasantafe.pia.model.bean.variaveis.LocalAmostraBean;
 import br.com.usinasantafe.pia.model.bean.variaveis.RespItemAmostraBean;
 import br.com.usinasantafe.pia.model.dao.AmostraDAO;
 import br.com.usinasantafe.pia.model.dao.AuditorDAO;
 import br.com.usinasantafe.pia.model.dao.CabecAmostraDAO;
 import br.com.usinasantafe.pia.model.dao.CaracOrganismoDAO;
-import br.com.usinasantafe.pia.model.dao.ItemAmostraDAO;
+import br.com.usinasantafe.pia.model.dao.LocalAmostraDAO;
+import br.com.usinasantafe.pia.model.dao.LogErroDAO;
 import br.com.usinasantafe.pia.model.dao.LogProcessoDAO;
 import br.com.usinasantafe.pia.model.dao.OSDAO;
 import br.com.usinasantafe.pia.model.dao.OrganDAO;
@@ -45,11 +41,6 @@ public class InfestacaoCTR {
     public boolean hasElemAuditor(){
         AuditorDAO auditorDAO = new AuditorDAO();
         return auditorDAO.hasElements();
-    }
-
-    public boolean hasElemItemAmostra(){
-        ItemAmostraDAO itemAmostraDAO = new ItemAmostraDAO();
-        return itemAmostraDAO.hasElements();
     }
 
     public boolean verCabecAberto(){
@@ -78,12 +69,8 @@ public class InfestacaoCTR {
         ConfigCTR configCTR = new ConfigCTR();
         if(secaoDAO.verSecaoCod(codSecao)){
             Long idSecao = secaoDAO.getSecaoCod(codSecao).getIdSecao();
-            Long idSecaoOS = osDAO.getOSNro(configCTR.getConfig().getOSConfig()).getIdProprAgr();
-            if(idSecao.equals(idSecaoOS)){
-                return true;
-            } else {
-                return false;
-            }
+            Long idSecaoOS = osDAO.getOSNro(configCTR.getConfig().getNroOSConfig()).getIdProprAgr();
+            return idSecao.equals(idSecaoOS);
         } else {
             return false;
         }
@@ -92,7 +79,7 @@ public class InfestacaoCTR {
     public boolean verTalhaCod(Long codTalhao){
         TalhaoDAO talhaoDAO = new TalhaoDAO();
         ConfigCTR configCTR = new ConfigCTR();
-        return talhaoDAO.verTalhaCod(configCTR.getConfig().getSecaoConfig(), codTalhao);
+        return talhaoDAO.verTalhaCod(configCTR.getConfig().getIdSecaoConfig(), codTalhao);
     }
 
     public boolean verRespItemAmostraList(){
@@ -113,7 +100,7 @@ public class InfestacaoCTR {
         ConfigCTR configCTR = new ConfigCTR();
         ROrganCaracBean rOrganCaracBean = rOrganCaracDAO.getROrganCarac(configCTR.getConfig().getIdOrganConfig(), idCaracOrganismo);
         if(rCaracAmostraDAO.verRCaracAmostraList(rOrganCaracBean.getIdROrganCarac())){
-            return amostraDAO.verAmostra(rCaracAmostraDAO.getRCaracAmostra(rOrganCaracBean.getIdROrganCarac()).getIdAmostraOrgan());
+            return amostraDAO.verAmostraIdAmostraOrgan(rCaracAmostraDAO.getRCaracAmostra(rOrganCaracBean.getIdROrganCarac()).getIdAmostraOrgan());
         } else {
             return false;
         }
@@ -122,6 +109,12 @@ public class InfestacaoCTR {
     public int qtdeCabecFechado(){
         CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
         return cabecAmostraDAO.qtdeCabecFechado();
+    }
+
+    public int qtdeItemAmostra(){
+        AmostraDAO amostraDAO = new AmostraDAO();
+        CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
+        return amostraDAO.qtdeAmostraIdAmostraOrgan(cabecAmostraDAO.getCabecAbertoApont().getIdAmostraOrgan());
     }
 
     public AuditorBean getAuditorMatric(Long matricAuditor){
@@ -137,30 +130,29 @@ public class InfestacaoCTR {
     public TalhaoBean getTalhaCod(Long codTalhao){
         TalhaoDAO talhaoDAO = new TalhaoDAO();
         ConfigCTR configCTR = new ConfigCTR();
-        return talhaoDAO.getTalhaCod(configCTR.getConfig().getSecaoConfig(), codTalhao);
-    }
-
-    public ItemAmostraBean getItemAmostraCabec(){
-        ItemAmostraDAO itemAmostraDAO = new ItemAmostraDAO();
-        return itemAmostraDAO.getItemAmostraCabec();
+        return talhaoDAO.getTalhaCod(configCTR.getConfig().getIdSecaoConfig(), codTalhao);
     }
 
     public AuditorBean getAuditor(){
         CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
         AuditorDAO auditorDAO = new AuditorDAO();
-        return auditorDAO.getAuditorId(cabecAmostraDAO.getCabecAberto().getAuditorCabec());
+        return auditorDAO.getAuditorId(cabecAmostraDAO.getCabecAbertoApont().getMatricAuditor());
     }
 
     public SecaoBean getSecao(){
         CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
+        LocalAmostraDAO localAmostraDAO = new LocalAmostraDAO();
         SecaoDAO secaoDAO = new SecaoDAO();
-        return secaoDAO.getSecaoId(cabecAmostraDAO.getCabecAberto().getSecaoCabec());
+        LocalAmostraBean localAmostraBean = localAmostraDAO.getLocalAmostra(cabecAmostraDAO.getCabecAbertoApont().getIdCabec());
+        return secaoDAO.getSecaoId(localAmostraBean.getIdSecao());
     }
 
     public TalhaoBean getTalhao(){
         CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
+        LocalAmostraDAO localAmostraDAO = new LocalAmostraDAO();
         TalhaoDAO talhaoDAO = new TalhaoDAO();
-        return talhaoDAO.getTalhaId(cabecAmostraDAO.getCabecAberto().getTalhaoCabec());
+        LocalAmostraBean localAmostraBean = localAmostraDAO.getLocalAmostra(cabecAmostraDAO.getCabecAbertoApont().getIdCabec());
+        return talhaoDAO.getTalhaId(localAmostraBean.getIdTalhao());
     }
 
     public List<RespItemAmostraBean> getRespItemAmostraList(Long ponto){
@@ -171,32 +163,13 @@ public class InfestacaoCTR {
 
     public AmostraBean getAmostraIdAmostra(Long idAmostra){
         AmostraDAO amostraDAO = new AmostraDAO();
-        return amostraDAO.getAmostraIdAmostra(idAmostra);
+        return amostraDAO.getAmostraId(idAmostra);
     }
 
-    public ItemAmostraBean getItemAmostra(int posicao){
-        ItemAmostraDAO itemAmostraDAO = new ItemAmostraDAO();
-        return itemAmostraDAO.getItemAmostra(posicao);
-    }
-
-    public List<CabecAmostraBean> cabecFechadoList(){
+    public AmostraBean getItemAmostra(int posicao){
         CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
-        return cabecAmostraDAO.cabecFechadoList();
-    }
-
-    public List<RespItemAmostraBean> respItemAmostraFechadoList(Long idCabec){
-        RespItemAmostraDAO respItemAmostraDAO = new RespItemAmostraDAO();
-        return respItemAmostraDAO.respItemAmostraFechadoList(idCabec);
-    }
-
-    public Long ultPonto(){
-        CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
-        RespItemAmostraDAO respItemAmostraDAO = new RespItemAmostraDAO();
-        if(respItemAmostraDAO.verRespItemAmostraFechado(cabecAmostraDAO.getCabecAberto().getIdCabec())){
-            return respItemAmostraDAO.getUltRespItemAmostra(cabecAmostraDAO.getCabecAberto().getIdCabec()).getPontoRespItem();
-        } else {
-            return 0L;
-        }
+        AmostraDAO amostraDAO = new AmostraDAO();
+        return amostraDAO.getAmostraIdAmostraOrganSeq(cabecAmostraDAO.getCabecAbertoApont().getIdAmostraOrgan(), posicao);
     }
 
     public RespItemAmostraBean getRespItemAmostra(Long idRespItem){
@@ -204,9 +177,9 @@ public class InfestacaoCTR {
         return respItemAmostraDAO.getRespItemAmostra(idRespItem);
     }
 
-    public ItemAmostraBean getItemAmostraId(Long idAmostraItem){
-        ItemAmostraDAO itemAmostraDAO = new ItemAmostraDAO();
-        return itemAmostraDAO.getItemAmostraId(idAmostraItem);
+    public AmostraBean getAmostraId(Long idAmostraItem){
+        AmostraDAO amostraDAO = new AmostraDAO();
+        return amostraDAO.getAmostraId(idAmostraItem);
     }
 
     public List<OrganBean> organismoList(){
@@ -221,49 +194,44 @@ public class InfestacaoCTR {
         return caracOrganismoDAO.caracOrganismoList(rOrganCaracDAO.idCaracOrganArrayList(configCTR.getConfig().getIdOrganConfig()));
     }
 
-    public List<AmostraBean> amostraList(Long idCaracOrganismo){
-        ConfigCTR configCTR = new ConfigCTR();
-        ROrganCaracDAO rOrganCaracDAO = new ROrganCaracDAO();
-        RCaracAmostraDAO rCaracAmostraDAO = new RCaracAmostraDAO();
-        AmostraDAO amostraDAO = new AmostraDAO();
-        ROrganCaracBean rOrganCaracBean = rOrganCaracDAO.getROrganCarac(configCTR.getConfig().getIdOrganConfig(), idCaracOrganismo);
-        return  amostraDAO.amostraIdAmostraOrganList(rCaracAmostraDAO.getRCaracAmostra(rOrganCaracBean.getIdROrganCarac()).getIdAmostraOrgan());
-    }
 
-    public int qtdeItemAmostra(){
-        ItemAmostraDAO itemAmostraDAO = new ItemAmostraDAO();
-        return itemAmostraDAO.qtdeItemAmostra();
-    }
-
-    public String dadosEnvioBolFechadoMMFert(){
+    public List<CabecAmostraBean> dadosEnvioAmostra(){
 
         CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
-        String dadosEnvioBoletim = cabecAmostraDAO.dadosEnvioCabecAmostraFechado();
-
+        LocalAmostraDAO localAmostraDAO = new LocalAmostraDAO();
         RespItemAmostraDAO respItemAmostraDAO = new RespItemAmostraDAO();
-        String dadosEnvioApont = respItemAmostraDAO.dadosEnvioRespItemAmostra(respItemAmostraDAO.respRespItemAmostraList(cabecAmostraDAO.idCabecAmostraArrayList(cabecAmostraDAO.cabecFechadoList())));
 
-        return dadosEnvioBoletim + "_" + dadosEnvioApont;
+        List<CabecAmostraBean> cabecAmostraList = cabecAmostraDAO.cabecFechadoList();
+        for (int i = 0; i < cabecAmostraList.size(); i++) {
+            List<LocalAmostraBean> localAmostraList = localAmostraDAO.localAmostraList(cabecAmostraList.get(i).getIdCabec());
+            cabecAmostraList.get(i).setLocalAmostraList(localAmostraList);
+            List<RespItemAmostraBean> respItemAmostraList = respItemAmostraDAO.respItemAmostraList(cabecAmostraList.get(i).getIdCabec());
+            cabecAmostraList.get(i).setRespItemAmostraList(respItemAmostraList);
+        }
+        return cabecAmostraList;
+
     }
 
     public void salvarCabecAberto(){
         CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
+        LocalAmostraDAO localAmostraDAO = new LocalAmostraDAO();
         ConfigCTR configCTR = new ConfigCTR();
         ConfigBean configBean = configCTR.getConfig();
-        cabecAmostraDAO.salvarCabecAberto(configBean.getAuditorConfig(), configBean.getOSConfig(), configBean.getSecaoConfig()
-                , configBean.getTalhaoConfig(), configBean.getIdOrganConfig(), configBean.getIdCaracOrganConfig());
-    }
-
-    public boolean inserirItemAmostra(List<AmostraBean> amostraList) {
-        CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
-        ItemAmostraDAO itemAmostraDAO = new ItemAmostraDAO();
-        return itemAmostraDAO.inserirItemAmostra(cabecAmostraDAO.getCabecAberto().getIdCabec(), amostraList);
+        ROrganCaracDAO rOrganCaracDAO = new ROrganCaracDAO();
+        RCaracAmostraDAO rCaracAmostraDAO = new RCaracAmostraDAO();
+        ROrganCaracBean rOrganCaracBean = rOrganCaracDAO.getROrganCarac(configCTR.getConfig().getIdOrganConfig(), configBean.getIdCaracOrganConfig());
+        Long idAmostraOrgan = rCaracAmostraDAO.getRCaracAmostra(rOrganCaracBean.getIdROrganCarac()).getIdAmostraOrgan();
+        cabecAmostraDAO.salvarCabecAberto(configBean.getMatricAuditorConfig(), configBean.getIdOrganConfig(), configBean.getIdCaracOrganConfig(), idAmostraOrgan);
+        localAmostraDAO.salvarLocal(cabecAmostraDAO.getCabecAbertoApont().getIdCabec(), configBean.getNroOSConfig(), configBean.getIdSecaoConfig(), configBean.getIdTalhaoConfig());
     }
 
     public void inserirRespItemAmostra(Long idAmostra, Long valor){
         CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
+        LocalAmostraDAO localAmostraDAO = new LocalAmostraDAO();
+        CabecAmostraBean cabecAmostraBean = cabecAmostraDAO.getCabecAbertoApont();
+        Long idLocal = localAmostraDAO.getLocalAmostra(cabecAmostraBean.getIdCabec()).getIdLocal();
         RespItemAmostraDAO respItemAmostraDAO = new RespItemAmostraDAO();
-        respItemAmostraDAO.inserirRespItemAmostra(cabecAmostraDAO.getCabecAberto().getIdCabec(), idAmostra, valor, (ultPonto() + 1));
+        respItemAmostraDAO.inserirRespItemAmostra(cabecAmostraBean.getIdCabec(), idLocal, idAmostra, valor, cabecAmostraBean.getPonto());
     }
 
     public void updateRespItemAmostra(Long idRespItem, Long valor){
@@ -271,32 +239,26 @@ public class InfestacaoCTR {
         respItemAmostraDAO.updateRespItemAmostra(idRespItem, valor);
     }
 
-    public void updateRespItemAmostraFechado(){
-        CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
-        CabecAmostraBean cabecAmostraBean = cabecAmostraDAO.getCabecAberto();;
-        RespItemAmostraDAO respItemAmostraDAO = new RespItemAmostraDAO();
-        respItemAmostraDAO.updateRespItemAmostraFechado(cabecAmostraBean.getIdCabec());
-    }
-
-    public void updateItemAmostraCabec(Long valor){
-        ItemAmostraDAO itemAmostraDAO = new ItemAmostraDAO();
-        itemAmostraDAO.updateItemAmostraCabec(valor);
-    }
 
     public void fecharCabec(){
         CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
-        ItemAmostraDAO itemAmostraDAO = new ItemAmostraDAO();
-        itemAmostraDAO.deleteItemAmostra();
-        cabecAmostraDAO.fecharCabec();
+        LocalAmostraDAO localAmostraDAO = new LocalAmostraDAO();
+        localAmostraDAO.fecharLocal(cabecAmostraDAO.getCabecAbertoApont().getIdCabec());
+        cabecAmostraDAO.fecharCabecAbertoApont();
     }
 
-    public void deleteCabecAbertoAll(){
+    public void fecharPonto(){
         CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
+        cabecAmostraDAO.fecharPonto();
+    }
+
+    public void deleteCabecAbertoApontAll(){
+        CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
+        LocalAmostraDAO localAmostraDAO = new LocalAmostraDAO();
         RespItemAmostraDAO respItemAmostraDAO = new RespItemAmostraDAO();
-        ItemAmostraDAO itemAmostraDAO = new ItemAmostraDAO();
-        CabecAmostraBean cabecAmostraBean = cabecAmostraDAO.getCabecAberto();
+        CabecAmostraBean cabecAmostraBean = cabecAmostraDAO.getCabecAbertoApont();
+        localAmostraDAO.deleteLocalAmostra(cabecAmostraBean.getIdCabec());
         respItemAmostraDAO.deleteRespItemAmostra(cabecAmostraBean.getIdCabec());
-        itemAmostraDAO.deleteItemAmostra();
         cabecAmostraDAO.deleteCabecAberto();
     }
 
@@ -305,64 +267,36 @@ public class InfestacaoCTR {
         cabecAmostraDAO.deleteCabecAberto();
     }
 
-    public void deleteRespItemAmostraAberto(){
+    public void deleteRespItemAmostra(Long idAmostra){
         CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
-        CabecAmostraBean cabecAmostraBean = cabecAmostraDAO.getCabecAberto();;
+        CabecAmostraBean cabecAmostraBean = cabecAmostraDAO.getCabecAberto();
         RespItemAmostraDAO respItemAmostraDAO = new RespItemAmostraDAO();
-        respItemAmostraDAO.deleteRespItemAmostraAberto(cabecAmostraBean.getIdCabec());
+        respItemAmostraDAO.deleteRespItemAmostra(cabecAmostraBean.getIdCabec(), idAmostra, cabecAmostraBean.getPonto());
     }
 
-    public void deleteRespItemAmostraAberto(Long idAmostra){
-        CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
-        CabecAmostraBean cabecAmostraBean = cabecAmostraDAO.getCabecAberto();;
-        RespItemAmostraDAO respItemAmostraDAO = new RespItemAmostraDAO();
-        respItemAmostraDAO.deleteRespItemAmostraAberto(cabecAmostraBean.getIdCabec(), idAmostra);
-    }
-
-    public void deleteRespItemAmostra(Long ponto){
+    public void deleteRespItemAmostraPonto(Long ponto){
         CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
         CabecAmostraBean cabecAmostraBean = cabecAmostraDAO.getCabecAberto();;
         RespItemAmostraDAO respItemAmostraDAO = new RespItemAmostraDAO();
         respItemAmostraDAO.deleteRespItemAmostra(cabecAmostraBean.getIdCabec(), ponto);
     }
 
-    public void updateCabecEnviado(String objeto) throws Exception {
-
-        JSONObject jObjCabec = new JSONObject(objeto);
-        JSONArray jsonArrayCabec = jObjCabec.getJSONArray("cabec");
-
-        for (int i = 0; i < jsonArrayCabec.length(); i++) {
-
-            JSONObject objBol = jsonArrayCabec.getJSONObject(i);
-            Gson gsonBol = new Gson();
-            CabecAmostraBean cabecAmostraBean = gsonBol.fromJson(objBol.toString(), CabecAmostraBean.class);
-
-            CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
-            cabecAmostraDAO.updateCabecEnviado(cabecAmostraBean.getIdCabec());
-
-        }
-
+    public Long ponto(){
+        CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
+        CabecAmostraBean cabecAmostraBean = cabecAmostraDAO.getCabecAbertoApont();
+        return cabecAmostraBean.getPonto();
     }
 
-    public Long updateRespEnviado(String objeto) throws Exception {
+    public void updateAmostraEnviada(List<CabecAmostraBean> cabecAmostraList, String activity) {
 
-        JSONObject jObjResp = new JSONObject(objeto);
-        JSONArray jsonArrayResp = jObjResp.getJSONArray("resp");
+        try {
 
-        Long idCabec = 0L;
+            CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
+            cabecAmostraDAO.updateCabecEnviado(cabecAmostraList);
 
-        for (int i = 0; i < jsonArrayResp.length(); i++) {
-
-            JSONObject objBol = jsonArrayResp.getJSONObject(i);
-            Gson gsonBol = new Gson();
-            RespItemAmostraBean respItemAmostraBean = gsonBol.fromJson(objBol.toString(), RespItemAmostraBean.class);
-
-            RespItemAmostraDAO respItemAmostraDAO = new RespItemAmostraDAO();
-            idCabec = respItemAmostraDAO.updateRespItemAmostraEnviado(respItemAmostraBean.getIdRespItem());
-
+        } catch (Exception e){
+            LogErroDAO.getInstance().insertLogErro(e);
         }
-
-        return idCabec;
 
     }
 
@@ -373,7 +307,10 @@ public class InfestacaoCTR {
 
         for (CabecAmostraBean cabecAmostraBean : cabecAmostraArrayList) {
 
+            LocalAmostraDAO localAmostraDAO = new LocalAmostraDAO();
             RespItemAmostraDAO respItemAmostraDAO = new RespItemAmostraDAO();
+            ArrayList<Long> idLocalAmostraArrayList = localAmostraDAO.idLocalAmostraArrayList(localAmostraDAO.localAmostraList(cabecAmostraBean.getIdCabec()));
+            localAmostraDAO.deleteLocalAmostra(idLocalAmostraArrayList);
             ArrayList<Long> idRespItemAmostraArrayList = respItemAmostraDAO.idRespItemAmostraArrayList(respItemAmostraDAO.respItemAmostraList(cabecAmostraBean.getIdCabec()));
             respItemAmostraDAO.deleteRespItemAmostra(idRespItemAmostraArrayList);
 
@@ -409,4 +346,21 @@ public class InfestacaoCTR {
         return classeArrayList;
     }
 
+    public void clearPontoIncompleto() {
+        CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
+        CabecAmostraBean cabecAmostraBean = cabecAmostraDAO.getCabecAbertoApont();
+        if(cabecAmostraBean.getStatusPonto() == 1L){
+            RespItemAmostraDAO respItemAmostraDAO = new RespItemAmostraDAO();
+            respItemAmostraDAO.deleteRespItemAmostra(cabecAmostraBean.getIdCabec(), cabecAmostraBean.getPonto());
+            cabecAmostraDAO.updatePonto(cabecAmostraBean.getIdCabec(), cabecAmostraBean.getPonto() - 1);
+            cabecAmostraDAO.fecharPonto();
+        }
+    }
+
+    public void addPonto() {
+        CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
+        CabecAmostraBean cabecAmostraBean = cabecAmostraDAO.getCabecAbertoApont();
+        cabecAmostraDAO.updatePonto(cabecAmostraBean.getIdCabec(), cabecAmostraBean.getPonto() + 1);
+        cabecAmostraDAO.fecharPonto();
+    }
 }

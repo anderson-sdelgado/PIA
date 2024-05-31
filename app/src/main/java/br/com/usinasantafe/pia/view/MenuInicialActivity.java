@@ -8,8 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import android.view.View;
-import android.widget.AdapterView;
+
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -106,7 +105,7 @@ public class MenuInicialActivity extends ActivityGeneric {
                     LogProcessoDAO.getInstance().insertLogProcesso("} else if (text.equals(\"CONFIGURAÇÃO\")) {\n" +
                             "                    piaContext.setTela(1);\n" +
                             "                    Intent it = new Intent(MenuInicialActivity.this, SenhaActivity.class);", getLocalClassName());
-                    piaContext.setTela(1);
+                    piaContext.setVertelaConfigORLogs(1);
                     Intent it = new Intent(MenuInicialActivity.this, SenhaActivity.class);
                     startActivity(it);
                     finish();
@@ -116,7 +115,7 @@ public class MenuInicialActivity extends ActivityGeneric {
                     LogProcessoDAO.getInstance().insertLogProcesso("} else if (text.equals(\"LOG\")) {\n" +
                             "                    piaContext.setTela(2);\n" +
                             "                    Intent it = new Intent(MenuInicialActivity.this, SenhaActivity.class);", getLocalClassName());
-                    piaContext.setTela(2);
+                    piaContext.setVertelaConfigORLogs(2);
                     Intent it = new Intent(MenuInicialActivity.this, SenhaActivity.class);
                     startActivity(it);
                     finish();

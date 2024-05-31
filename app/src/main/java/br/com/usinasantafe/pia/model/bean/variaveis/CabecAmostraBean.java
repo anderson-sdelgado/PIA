@@ -3,6 +3,8 @@ package br.com.usinasantafe.pia.model.bean.variaveis;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.util.List;
+
 import br.com.usinasantafe.pia.model.pst.Entidade;
 
 /**
@@ -16,23 +18,29 @@ public class CabecAmostraBean extends Entidade {
     @DatabaseField(generatedId=true)
     private Long idCabec;
     @DatabaseField
-    private Long auditorCabec;
+    private Long matricAuditor;
     @DatabaseField
-    private String dthrCabec;
+    private String dthr;
     @DatabaseField
-    private Long dthrLongCabec;
+    private Long dthrLong;
     @DatabaseField
-    private Long osCabec;
+    private Long idOrgan;
     @DatabaseField
-    private Long secaoCabec;
+    private Long idCaracOrgan;
     @DatabaseField
-    private Long talhaoCabec;
+    private Long idAmostraOrgan;
     @DatabaseField
-    private Long idOrganCabec;
+    private Long ponto;
     @DatabaseField
-    private Long idCaracOrganCabec;
+    private Long statusPonto; // 1 - Apontando; 2 - Encerrado;
     @DatabaseField
-    private Long statusAmostra; // 1 - Aberto; 2 - Encerrado; 3 - Enviado;
+    private Long statusCabec; // 1 - Aberto; 2 - Encerrado; 3 - Enviado;
+    @DatabaseField
+    private Long statusApont; // 0 - Stand-by; 1 - Apontando;
+
+    private List<LocalAmostraBean> localAmostraList;
+
+    private List<RespItemAmostraBean> respItemAmostraList;
 
     public CabecAmostraBean() {
     }
@@ -41,75 +49,103 @@ public class CabecAmostraBean extends Entidade {
         return idCabec;
     }
 
-    public Long getAuditorCabec() {
-        return auditorCabec;
+    public Long getMatricAuditor() {
+        return matricAuditor;
     }
 
-    public void setAuditorCabec(Long auditorCabec) {
-        this.auditorCabec = auditorCabec;
+    public void setMatricAuditor(Long matricAuditor) {
+        this.matricAuditor = matricAuditor;
     }
 
-    public String getDthrCabec() {
-        return dthrCabec;
+    public Long getIdOrgan() {
+        return idOrgan;
     }
 
-    public void setDthrCabec(String dthrCabec) {
-        this.dthrCabec = dthrCabec;
+    public void setIdOrgan(Long idOrgan) {
+        this.idOrgan = idOrgan;
     }
 
-    public Long getDthrLongCabec() {
-        return dthrLongCabec;
+    public Long getIdCaracOrgan() {
+        return idCaracOrgan;
     }
 
-    public void setDthrLongCabec(Long dthrLongCabec) {
-        this.dthrLongCabec = dthrLongCabec;
+    public void setIdCaracOrgan(Long idCaracOrgan) {
+        this.idCaracOrgan = idCaracOrgan;
     }
 
-    public Long getSecaoCabec() {
-        return secaoCabec;
+    public Long getStatusCabec() {
+        return statusCabec;
     }
 
-    public void setSecaoCabec(Long secaoCabec) {
-        this.secaoCabec = secaoCabec;
+    public void setStatusCabec(Long statusCabec) {
+        this.statusCabec = statusCabec;
     }
 
-    public Long getTalhaoCabec() {
-        return talhaoCabec;
+    public void setIdCabec(Long idCabec) {
+        this.idCabec = idCabec;
     }
 
-    public void setTalhaoCabec(Long talhaoCabec) {
-        this.talhaoCabec = talhaoCabec;
+    public Long getStatusApont() {
+        return statusApont;
     }
 
-    public Long getIdOrganCabec() {
-        return idOrganCabec;
+    public void setStatusApont(Long statusApont) {
+        this.statusApont = statusApont;
     }
 
-    public void setIdOrganCabec(Long idOrganCabec) {
-        this.idOrganCabec = idOrganCabec;
+    public String getDthr() {
+        return dthr;
     }
 
-    public Long getIdCaracOrganCabec() {
-        return idCaracOrganCabec;
+    public void setDthr(String dthr) {
+        this.dthr = dthr;
     }
 
-    public void setIdCaracOrganCabec(Long idCaracOrganCabec) {
-        this.idCaracOrganCabec = idCaracOrganCabec;
+    public Long getDthrLong() {
+        return dthrLong;
     }
 
-    public Long getStatusAmostra() {
-        return statusAmostra;
+    public void setDthrLong(Long dthrLong) {
+        this.dthrLong = dthrLong;
     }
 
-    public void setStatusAmostra(Long statusAmostra) {
-        this.statusAmostra = statusAmostra;
+    public List<LocalAmostraBean> getLocalAmostraList() {
+        return localAmostraList;
     }
 
-    public Long getOsCabec() {
-        return osCabec;
+    public void setLocalAmostraList(List<LocalAmostraBean> localAmostraList) {
+        this.localAmostraList = localAmostraList;
     }
 
-    public void setOsCabec(Long osCabec) {
-        this.osCabec = osCabec;
+    public List<RespItemAmostraBean> getRespItemAmostraList() {
+        return respItemAmostraList;
+    }
+
+    public void setRespItemAmostraList(List<RespItemAmostraBean> respItemAmostraList) {
+        this.respItemAmostraList = respItemAmostraList;
+    }
+
+    public Long getIdAmostraOrgan() {
+        return idAmostraOrgan;
+    }
+
+    public void setIdAmostraOrgan(Long idAmostraOrgan) {
+        this.idAmostraOrgan = idAmostraOrgan;
+    }
+
+    public Long getPonto() {
+        return ponto;
+    }
+
+    public void setPonto(Long ponto) {
+        this.ponto = ponto;
+    }
+
+    public Long getStatusPonto() {
+        return statusPonto;
+    }
+
+    public void setStatusPonto(Long statusPonto) {
+        this.statusPonto = statusPonto;
     }
 }

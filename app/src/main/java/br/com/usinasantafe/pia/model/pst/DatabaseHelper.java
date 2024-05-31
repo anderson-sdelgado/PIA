@@ -17,7 +17,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	
 	private static DatabaseHelper instance;
 	public static final String FORCA_DB_NAME = "pia_db";
-	public static final int FORCA_BD_VERSION = 2;
+	public static final int FORCA_BD_VERSION = 3;
 	
 	public static DatabaseHelper getInstance(){
 		return instance;
@@ -41,7 +41,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 		
 		try{
 
-			createTable(cs);
+			createTable3(cs);
 
 		}
 		catch(Exception e){
@@ -59,9 +59,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 		
 		try {
 			
-			if(oldVersion == 1 && newVersion == 2){
-				dropTable(cs);
-				createTable(cs);
+			if(oldVersion < 3 && newVersion == 3){
+				dropTable1and2(cs);
+				createTable3(cs);
 			}
 
 		} catch (Exception e) {
@@ -70,7 +70,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 		
 	}
 
-	public void dropTable(ConnectionSource cs) throws SQLException {
+	public void dropTable1and2(ConnectionSource cs) throws SQLException {
 		TableUtils.dropTable(cs, AmostraBean.class, true);
 		TableUtils.dropTable(cs, AuditorBean.class, true);
 		TableUtils.dropTable(cs, CaracOrganBean.class, true);
@@ -89,7 +89,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 		TableUtils.dropTable(cs, RespItemAmostraBean.class, true);
 	}
 
-	public void createTable(ConnectionSource cs) throws SQLException {
+	public void createTable3(ConnectionSource cs) throws SQLException {
 		TableUtils.createTable(cs, AmostraBean.class);
 		TableUtils.createTable(cs, AuditorBean.class);
 		TableUtils.createTable(cs, CaracOrganBean.class);
@@ -101,6 +101,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 		TableUtils.createTable(cs, TalhaoBean.class);
 
 		TableUtils.createTable(cs, CabecAmostraBean.class);
+		TableUtils.createTable(cs, LocalAmostraBean.class);
 		TableUtils.createTable(cs, ConfigBean.class);
 		TableUtils.createTable(cs, ItemAmostraBean.class);
 		TableUtils.createTable(cs, LogErroBean.class);

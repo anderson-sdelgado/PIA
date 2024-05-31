@@ -32,7 +32,7 @@ public class PostCadGenerico extends AsyncTask<String, Void, String> {
 
     public static PostCadGenerico getInstance() {
         if (instance == null)
-        instance = new PostCadGenerico();
+        	instance = new PostCadGenerico();
         return instance;
     }
 
@@ -111,9 +111,8 @@ public class PostCadGenerico extends AsyncTask<String, Void, String> {
 		try {
 			Log.i("ECM", "VALOR RECEBIDO --> " + result);
 			if(result.trim().startsWith("GRAVOU-DADOS")){
-				EnvioDadosServ.getInstance().updateDadosEnviado(result, activity);
-			}
-			else{
+//				EnvioDadosServ.getInstance().updateDadosEnviado(result, activity);
+			} else {
 				EnvioDadosServ.getInstance().respostaEnvio(false, activity);
 			}
 		} catch (Exception e) {

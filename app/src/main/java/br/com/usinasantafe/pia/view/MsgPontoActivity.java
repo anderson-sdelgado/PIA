@@ -26,14 +26,16 @@ public class MsgPontoActivity extends ActivityGeneric {
         Button buttonNaoPonto = findViewById(R.id.buttonNaoPonto);
 
         LogProcessoDAO.getInstance().insertLogProcesso("textViewPonto.setText(\"DESEJA INSERIR PONTO \" + piaContext.getConfigCTR().getConfig().getUltPonto() + \"?\");", getLocalClassName());
-        textViewPonto.setText("DESEJA INSERIR PONTO " + (piaContext.getInfestacaoCTR().ultPonto() + 1) + "?");
+        textViewPonto.setText("DESEJA INSERIR PONTO " + (piaContext.getInfestacaoCTR().ponto() + 1) + "?");
 
         buttonSimPonto.setOnClickListener(v -> {
+
             LogProcessoDAO.getInstance().insertLogProcesso("buttonSimPonto.setOnClickListener(new View.OnClickListener() {\n" +
                     "            @Override\n" +
                     "            public void onClick(View v) {\n" +
                     "                piaContext.setPosQuestaoAmostra(0);\n" +
                     "                Intent it = new Intent(MsgPontoActivity.this, QuestaoAmostraActivity.class);", getLocalClassName());
+            piaContext.getInfestacaoCTR().addPonto();
             piaContext.setPosQuestaoAmostra(0);
             Intent it = new Intent(MsgPontoActivity.this, QuestaoAmostraActivity.class);
             startActivity(it);
@@ -57,6 +59,5 @@ public class MsgPontoActivity extends ActivityGeneric {
 
     public void onBackPressed()  {
     }
-
 
 }

@@ -2,17 +2,14 @@ package br.com.usinasantafe.pia.view;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import br.com.usinasantafe.pia.PIAContext;
 import br.com.usinasantafe.pia.R;
 import br.com.usinasantafe.pia.model.dao.LogProcessoDAO;
-import br.com.usinasantafe.pia.util.ConnectNetwork;
 import br.com.usinasantafe.pia.util.EnvioDadosServ;
 
 public class EnvioDadosActivity extends ActivityGeneric {
@@ -48,23 +45,12 @@ public class EnvioDadosActivity extends ActivityGeneric {
             if (connectNetwork) {
 
                 LogProcessoDAO.getInstance().insertLogProcesso("if (connectNetwork) {\n" +
-                        "                    progressBar = new ProgressDialog(EnvioDadosActivity.this);\n" +
-                        "                    progressBar.setCancelable(true);\n" +
-                        "                    progressBar.setMessage(\"ENVIANDO DADOS...\");\n" +
-                        "                    progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);\n" +
-                        "                    progressBar.setProgress(0);\n" +
-                        "                    progressBar.setMax(100);\n" +
-                        "                    progressBar.show();\n" +
-                        "                    EnvioDadosServ.getInstance().envioBoletim(EnvioDadosActivity.this, progressBar, EnvioDadosActivity.class, getLocalClassName());", getLocalClassName());
-                progressBar = new ProgressDialog(EnvioDadosActivity.this);
-                progressBar.setCancelable(true);
-                progressBar.setMessage("ENVIANDO DADOS...");
-                progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                progressBar.setProgress(0);
-                progressBar.setMax(100);
-                progressBar.show();
-
-                EnvioDadosServ.getInstance().envioBoletim(EnvioDadosActivity.this, progressBar, EnvioDadosActivity.class, getLocalClassName());
+                        "                    EnvioDadosServ.getInstance().enviarAmostra(getLocalClassName());\n" +
+                        "                    Intent it = new Intent( ListaPontosActivity.this, MenuInicialActivity.class);", getLocalClassName());
+                EnvioDadosServ.getInstance().enviarAmostra(getLocalClassName());
+                Intent it = new Intent( EnvioDadosActivity.this, MenuInicialActivity.class);
+                startActivity(it);
+                finish();
 
             } else {
 

@@ -2,26 +2,20 @@ package br.com.usinasantafe.pia.view;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import br.com.usinasantafe.pia.PIAContext;
 import br.com.usinasantafe.pia.R;
 import br.com.usinasantafe.pia.model.bean.estaticas.AuditorBean;
 import br.com.usinasantafe.pia.model.bean.estaticas.SecaoBean;
 import br.com.usinasantafe.pia.model.bean.estaticas.TalhaoBean;
-import br.com.usinasantafe.pia.model.bean.variaveis.RespItemAmostraBean;
 import br.com.usinasantafe.pia.model.dao.LogProcessoDAO;
-import br.com.usinasantafe.pia.util.ConnectNetwork;
 import br.com.usinasantafe.pia.util.EnvioDadosServ;
 
 public class ListaPontosActivity extends ActivityGeneric {
@@ -71,7 +65,9 @@ public class ListaPontosActivity extends ActivityGeneric {
 
         ArrayList<String> itens = new ArrayList<>();
 
-        for (int i = 0; i < piaContext.getInfestacaoCTR().ultPonto(); i++) {
+        piaContext.getInfestacaoCTR().clearPontoIncompleto();
+
+        for (int i = 0; i < piaContext.getInfestacaoCTR().ponto(); i++) {
             int pos = i + 1;
             itens.add("PONTO " + pos);
         }
@@ -127,7 +123,7 @@ public class ListaPontosActivity extends ActivityGeneric {
                         "                    public void onClick(DialogInterface dialog, int which) {\n" +
                         "                        piaContext.getInfestacaoCTR().deleteCabecAbertoAll();\n" +
                         "                        Intent it = new Intent(ListaPontosActivity.this, MenuInicialActivity.class);", getLocalClassName());
-                piaContext.getInfestacaoCTR().deleteCabecAbertoAll();
+                piaContext.getInfestacaoCTR().deleteCabecAbertoApontAll();
                 Intent it = new Intent(ListaPontosActivity.this, MenuInicialActivity.class);
                 startActivity(it);
                 finish();
@@ -142,6 +138,7 @@ public class ListaPontosActivity extends ActivityGeneric {
         });
 
         buttonEnviarAnalise.setOnClickListener(v -> {
+
             LogProcessoDAO.getInstance().insertLogProcesso("buttonEnviarAnalise.setOnClickListener(new View.OnClickListener() {\n" +
                     "            @Override\n" +
                     "            public void onClick(View v) {", getLocalClassName());
@@ -171,23 +168,12 @@ public class ListaPontosActivity extends ActivityGeneric {
                 if (connectNetwork) {
 
                     LogProcessoDAO.getInstance().insertLogProcesso("if (connectNetwork) {\n" +
-                            "                        progressBar = new ProgressDialog(ListaPontosActivity.this);\n" +
-                            "                        progressBar.setCancelable(true);\n" +
-                            "                        progressBar.setMessage(\"ENVIANDO DADOS...\");\n" +
-                            "                        progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);\n" +
-                            "                        progressBar.setProgress(0);\n" +
-                            "                        progressBar.setMax(100);\n" +
-                            "                        progressBar.show();\n" +
-                            "                        EnvioDadosServ.getInstance().envioBoletim(ListaPontosActivity.this, progressBar, MenuInicialActivity.class, getLocalClassName());", getLocalClassName());
-                    progressBar = new ProgressDialog(ListaPontosActivity.this);
-                    progressBar.setCancelable(true);
-                    progressBar.setMessage("ENVIANDO DADOS...");
-                    progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                    progressBar.setProgress(0);
-                    progressBar.setMax(100);
-                    progressBar.show();
-
-                    EnvioDadosServ.getInstance().envioBoletim(ListaPontosActivity.this, progressBar, MenuInicialActivity.class, getLocalClassName());
+                            "                    EnvioDadosServ.getInstance().enviarAmostra(getLocalClassName());\n" +
+                            "                    Intent it = new Intent( ListaPontosActivity.this, MenuInicialActivity.class);", getLocalClassName());
+                    EnvioDadosServ.getInstance().enviarAmostra(getLocalClassName());
+                    Intent it = new Intent( ListaPontosActivity.this, MenuInicialActivity.class);
+                    startActivity(it);
+                    finish();
 
                 } else {
 

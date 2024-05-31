@@ -17,7 +17,7 @@ public class CabecAmostraDAO {
     }
 
     public boolean verCabecAberto(){
-        List<CabecAmostraBean> cabecList = cabecAbertoList();
+        List<CabecAmostraBean> cabecList = cabecAbertoApontList();
         boolean retorno = (cabecList.size() > 0);
         cabecList.clear();
         return retorno;
@@ -37,92 +37,101 @@ public class CabecAmostraDAO {
         return retorno;
     }
 
-    public CabecAmostraBean getCabecAberto(){
-        List<CabecAmostraBean> cabecList = cabecAbertoList();
+    public CabecAmostraBean getCabecAbertoId(Long idCabec){
+        List<CabecAmostraBean> cabecList = cabecListId(idCabec);
         CabecAmostraBean cabecAmostraBean = cabecList.get(0);
         cabecList.clear();
         return cabecAmostraBean;
     }
 
-    public List<CabecAmostraBean> cabecAbertoList(){
+    public CabecAmostraBean getCabecAberto(){
+        List<CabecAmostraBean> cabecList = cabecAbertoApontList();
+        CabecAmostraBean cabecAmostraBean = cabecList.get(0);
+        cabecList.clear();
+        return cabecAmostraBean;
+    }
+
+    public CabecAmostraBean getCabecAbertoApont(){
+        List<CabecAmostraBean> cabecList = cabecAbertoApontList();
+        CabecAmostraBean cabecAmostraBean = cabecList.get(0);
+        cabecList.clear();
+        return cabecAmostraBean;
+    }
+
+    public List<CabecAmostraBean> cabecListId(Long idCabec){
+        ArrayList pesqArrayList = new ArrayList();
+        pesqArrayList.add(getPesqIdCabec(idCabec));
         CabecAmostraBean cabecAmostraBean = new CabecAmostraBean();
-        return cabecAmostraBean.get("statusAmostra", 1L);
+        return cabecAmostraBean.get(pesqArrayList);
+    }
+
+    public List<CabecAmostraBean> cabecAbertoApontList(){
+        ArrayList pesqArrayList = new ArrayList();
+        pesqArrayList.add(getPesqCabecAberto());
+        pesqArrayList.add(getPesqCabecApont());
+        CabecAmostraBean cabecAmostraBean = new CabecAmostraBean();
+        return cabecAmostraBean.get(pesqArrayList);
     }
 
     public List<CabecAmostraBean> cabecFechadoList(){
+        ArrayList pesqArrayList = new ArrayList();
+        pesqArrayList.add(getPesqCabecFechado());
         CabecAmostraBean cabecAmostraBean = new CabecAmostraBean();
-        return cabecAmostraBean.getAndOrderBy("statusAmostra", 2L, "idCabec", true);
+        return cabecAmostraBean.get(pesqArrayList);
     }
 
     public List<CabecAmostraBean> cabecEnviadoList(){
+        ArrayList pesqArrayList = new ArrayList();
+        pesqArrayList.add(getPesqCabecEnviado());
         CabecAmostraBean cabecAmostraBean = new CabecAmostraBean();
-        return cabecAmostraBean.getAndOrderBy("statusAmostra", 3L, "idCabec", true);
+        return cabecAmostraBean.get(pesqArrayList);
     }
 
-
-    public String dadosEnvioCabecAmostraFechado(){
-        return dadosCabecAmostra(cabecFechadoList());
-    }
-
-    private String dadosCabecAmostra(List<CabecAmostraBean> cabecAmostraList){
-
-        JsonArray cabecAmostraJsonArray = new JsonArray();
-
-        for (CabecAmostraBean cabecAmostraBean : cabecAmostraList) {
-            Gson gsonCabec = new Gson();
-            cabecAmostraJsonArray.add(gsonCabec.toJsonTree(cabecAmostraBean, cabecAmostraBean.getClass()));
-        }
-
-        cabecAmostraList.clear();
-
-        JsonObject jsonBoletim = new JsonObject();
-        jsonBoletim.add("cabec", cabecAmostraJsonArray);
-
-        return jsonBoletim.toString();
-    }
-
-    public ArrayList<Long> idCabecAmostraArrayList(List<CabecAmostraBean> cabecAmostraList){
-        ArrayList<Long> idCabecAmostraList = new ArrayList<Long>();
-        for (CabecAmostraBean cabecAmostraBean : cabecAmostraList) {
-            idCabecAmostraList.add(cabecAmostraBean.getIdCabec());
-        }
-        cabecAmostraList.clear();
-        return idCabecAmostraList;
-    }
-
-    public void salvarCabecAberto(Long idAuditor, Long nroOS, Long idSecao, Long idTalhao, Long idOrg, Long idCaracOrg){
+    public void salvarCabecAberto(Long idAuditor, Long idOrg, Long idCaracOrg, Long idAmostraOrgan){
         CabecAmostraBean cabecAmostraBean = new CabecAmostraBean();
-        cabecAmostraBean.setDthrCabec(Tempo.getInstance().dthrAtualString());
-        cabecAmostraBean.setDthrLongCabec(Tempo.getInstance().dthrAtualLong());
-        cabecAmostraBean.setAuditorCabec(idAuditor);
-        cabecAmostraBean.setOsCabec(nroOS);
-        cabecAmostraBean.setSecaoCabec(idSecao);
-        cabecAmostraBean.setTalhaoCabec(idTalhao);
-        cabecAmostraBean.setIdOrganCabec(idOrg);
-        cabecAmostraBean.setIdCaracOrganCabec(idCaracOrg);
-        cabecAmostraBean.setStatusAmostra(1L);
+        cabecAmostraBean.setMatricAuditor(idAuditor);
+        cabecAmostraBean.setDthr(Tempo.getInstance().dthrAtualString());
+        cabecAmostraBean.setDthrLong(Tempo.getInstance().dthrAtualLong());
+        cabecAmostraBean.setIdOrgan(idOrg);
+        cabecAmostraBean.setIdCaracOrgan(idCaracOrg);
+        cabecAmostraBean.setIdAmostraOrgan(idAmostraOrgan);
+        cabecAmostraBean.setPonto(0L);
+        cabecAmostraBean.setStatusPonto(2L);
+        cabecAmostraBean.setStatusCabec(1L);
+        cabecAmostraBean.setStatusApont(1L);
         cabecAmostraBean.insert();
         cabecAmostraBean.commit();
     }
 
-    public void fecharCabec(){
-        CabecAmostraBean cabecAmostraBean = getCabecAberto();
-        cabecAmostraBean.setStatusAmostra(2L);
+    public void fecharCabecAbertoApont(){
+        CabecAmostraBean cabecAmostraBean = getCabecAbertoApont();
+        cabecAmostraBean.setStatusCabec(2L);
         cabecAmostraBean.update();
         cabecAmostraBean.commit();
     }
 
-    public void updateCabecEnviado(Long idCabec){
-
-        ArrayList pesqArrayList = new ArrayList();
-        pesqArrayList.add(getPesqIdCabec(idCabec));
-
-        CabecAmostraBean cabecAmostraBean = new CabecAmostraBean();
-        List<CabecAmostraBean> cabecAmostraList = cabecAmostraBean.get(pesqArrayList);
-        cabecAmostraBean = cabecAmostraList.get(0);
-        cabecAmostraBean.setStatusAmostra(3L);
+    public void fecharPonto(){
+        CabecAmostraBean cabecAmostraBean = getCabecAbertoApont();
+        cabecAmostraBean.setStatusPonto(2L);
         cabecAmostraBean.update();
         cabecAmostraBean.commit();
+    }
+
+    public void updatePonto(Long idCabec, Long ponto){
+        CabecAmostraBean cabecAmostraBean = getCabecAbertoId(idCabec);
+        cabecAmostraBean.setPonto(ponto);
+        cabecAmostraBean.setStatusPonto(1L);
+        cabecAmostraBean.update();
+        cabecAmostraBean.commit();
+    }
+
+    public void updateCabecEnviado(List<CabecAmostraBean> cabecAmostraList){
+
+        for(CabecAmostraBean cabecAmostraBean : cabecAmostraList){
+            cabecAmostraBean.setStatusCabec(3L);
+            cabecAmostraBean.update();
+            cabecAmostraBean.commit();
+        }
         cabecAmostraList.clear();
 
     }
@@ -145,7 +154,7 @@ public class CabecAmostraDAO {
         List<CabecAmostraBean> cabecAmostraList = cabecEnviadoList();
         ArrayList<CabecAmostraBean> cabecAmostraArrayList = new ArrayList<>();
         for (CabecAmostraBean cabecAmostraBeanBD : cabecAmostraList) {
-            if(cabecAmostraBeanBD.getDthrLongCabec() < Tempo.getInstance().dthrLongDiaMenos(15)) {
+            if(cabecAmostraBeanBD.getDthrLong() < Tempo.getInstance().dthrLongDiaMenos(15)) {
                 cabecAmostraArrayList.add(cabecAmostraBeanBD);
             }
         }
@@ -155,7 +164,7 @@ public class CabecAmostraDAO {
     }
 
     public void deleteCabecAberto(){
-        List<CabecAmostraBean> cabecList = cabecAbertoList();
+        List<CabecAmostraBean> cabecList = cabecAbertoApontList();
         for(CabecAmostraBean cabecAmostraBean : cabecList){
             cabecAmostraBean.delete();
         }
@@ -182,6 +191,46 @@ public class CabecAmostraDAO {
         EspecificaPesquisa pesquisa = new EspecificaPesquisa();
         pesquisa.setCampo("idCabec");
         pesquisa.setValor(idCabec);
+        pesquisa.setTipo(1);
+        return pesquisa;
+    }
+
+    private EspecificaPesquisa getPesqCabecAberto(){
+        EspecificaPesquisa pesquisa = new EspecificaPesquisa();
+        pesquisa.setCampo("statusCabec");
+        pesquisa.setValor(1L);
+        pesquisa.setTipo(1);
+        return pesquisa;
+    }
+
+    private EspecificaPesquisa getPesqCabecFechado(){
+        EspecificaPesquisa pesquisa = new EspecificaPesquisa();
+        pesquisa.setCampo("statusCabec");
+        pesquisa.setValor(2L);
+        pesquisa.setTipo(1);
+        return pesquisa;
+    }
+
+    private EspecificaPesquisa getPesqCabecEnviado(){
+        EspecificaPesquisa pesquisa = new EspecificaPesquisa();
+        pesquisa.setCampo("statusCabec");
+        pesquisa.setValor(3L);
+        pesquisa.setTipo(1);
+        return pesquisa;
+    }
+
+    private EspecificaPesquisa getPesqIdCaracOrgan(Long idCaracOrgan){
+        EspecificaPesquisa pesquisa = new EspecificaPesquisa();
+        pesquisa.setCampo("idCaracOrgan");
+        pesquisa.setValor(idCaracOrgan);
+        pesquisa.setTipo(1);
+        return pesquisa;
+    }
+
+    private EspecificaPesquisa getPesqCabecApont(){
+        EspecificaPesquisa pesquisa = new EspecificaPesquisa();
+        pesquisa.setCampo("statusApont");
+        pesquisa.setValor(1L);
         pesquisa.setTipo(1);
         return pesquisa;
     }

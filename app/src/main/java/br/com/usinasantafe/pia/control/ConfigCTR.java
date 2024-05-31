@@ -16,7 +16,6 @@ import br.com.usinasantafe.pia.model.bean.variaveis.LogProcessoBean;
 import br.com.usinasantafe.pia.model.dao.AtualAplicDAO;
 import br.com.usinasantafe.pia.model.dao.CabecAmostraDAO;
 import br.com.usinasantafe.pia.model.dao.ConfigDAO;
-import br.com.usinasantafe.pia.model.dao.ItemAmostraDAO;
 import br.com.usinasantafe.pia.model.dao.LogErroDAO;
 import br.com.usinasantafe.pia.model.dao.LogProcessoDAO;
 import br.com.usinasantafe.pia.model.dao.RespItemAmostraDAO;

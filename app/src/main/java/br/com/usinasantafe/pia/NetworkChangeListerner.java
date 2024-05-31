@@ -5,15 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.j256.ormlite.android.apptools.OpenHelperManager;
-
 import java.util.List;
 
 import br.com.usinasantafe.pia.model.bean.variaveis.CabecAmostraBean;
+import br.com.usinasantafe.pia.model.bean.variaveis.LocalAmostraBean;
 import br.com.usinasantafe.pia.model.bean.variaveis.RespItemAmostraBean;
 import br.com.usinasantafe.pia.util.ConnectNetwork;
-import br.com.usinasantafe.pia.util.Tempo;
-import br.com.usinasantafe.pia.model.pst.DatabaseHelper;
 import br.com.usinasantafe.pia.view.ActivityGeneric;
 
 
@@ -27,16 +24,10 @@ public class NetworkChangeListerner extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		if(ConnectNetwork.isConnected(context)){
-			ActivityGeneric.connectNetwork = true;
-		}
-		else{
-			ActivityGeneric.connectNetwork = false;
-		}
-
+		ActivityGeneric.connectNetwork = ConnectNetwork.isConnected(context);
 		cabec();
+		local();
 		resp();
-
 	}
 
 	public void cabec(){
@@ -45,17 +36,32 @@ public class NetworkChangeListerner extends BroadcastReceiver {
 		Log.i("PIA", "CABEC");
 		for(CabecAmostraBean cabecAmostraBeanBD : cabecAmostraBeanList){
 			Log.i("PIA", "idCabec = " + cabecAmostraBeanBD.getIdCabec());
-			Log.i("PIA", "auditorCabec = " + cabecAmostraBeanBD.getAuditorCabec());
-			Log.i("PIA", "dthrCabec = " + cabecAmostraBeanBD.getDthrCabec());
-			Log.i("PIA", "dthrLongCabec = " + cabecAmostraBeanBD.getDthrLongCabec());
-			Log.i("PIA", "osCabec = " + cabecAmostraBeanBD.getOsCabec());
-			Log.i("PIA", "secaoCabec = " + cabecAmostraBeanBD.getSecaoCabec());
-			Log.i("PIA", "talhaoCabec = " + cabecAmostraBeanBD.getTalhaoCabec());
-			Log.i("PIA", "idOrganCabec = " + cabecAmostraBeanBD.getIdOrganCabec());
-			Log.i("PIA", "idCaracOrganCabec = " + cabecAmostraBeanBD.getIdCaracOrganCabec());
-			Log.i("PIA", "statusAmostra = " + cabecAmostraBeanBD.getStatusAmostra());
+			Log.i("PIA", "matricAuditor = " + cabecAmostraBeanBD.getMatricAuditor());
+			Log.i("PIA", "dthr = " + cabecAmostraBeanBD.getDthr());
+			Log.i("PIA", "dthrLong = " + cabecAmostraBeanBD.getDthrLong());
+			Log.i("PIA", "idOrgan = " + cabecAmostraBeanBD.getIdOrgan());
+			Log.i("PIA", "idCaracOrgan = " + cabecAmostraBeanBD.getIdCaracOrgan());
+			Log.i("PIA", "statusCabec = " + cabecAmostraBeanBD.getStatusCabec());
+			Log.i("PIA", "statusApont = " + cabecAmostraBeanBD.getStatusApont());
 		}
 		cabecAmostraBeanList.clear();
+	}
+
+	public void local(){
+		LocalAmostraBean localAmostraBean = new LocalAmostraBean();
+		List<LocalAmostraBean> localAmostraBeaList = localAmostraBean.all();
+		Log.i("PIA", "LOCAL");
+		for(LocalAmostraBean localAmostraBeanBD : localAmostraBeaList){
+			Log.i("PIA", "idLocal = " + localAmostraBeanBD.getIdLocal());
+			Log.i("PIA", "idCabec = " + localAmostraBeanBD.getIdCabec());
+			Log.i("PIA", "dthr = " + localAmostraBeanBD.getDthr());
+			Log.i("PIA", "dthrLong = " + localAmostraBeanBD.getDthrLong());
+			Log.i("PIA", "nroOS = " + localAmostraBeanBD.getNroOS());
+			Log.i("PIA", "secao = " + localAmostraBeanBD.getIdSecao());
+			Log.i("PIA", "talhao = " + localAmostraBeanBD.getIdLocal());
+			Log.i("PIA", "statusLocal = " + localAmostraBeanBD.getStatusLocal());
+		}
+		localAmostraBeaList.clear();
 	}
 
 	public void resp(){
@@ -68,7 +74,6 @@ public class NetworkChangeListerner extends BroadcastReceiver {
 			Log.i("PIA", "idAmostraRespItem = " + respItemAmostraBeanBD.getIdAmostraRespItem());
 			Log.i("PIA", "pontoRespItem = " + respItemAmostraBeanBD.getPontoRespItem());
 			Log.i("PIA", "valorRespItem = " + respItemAmostraBeanBD.getValorRespItem());
-			Log.i("PIA", "statusRespItem = " + respItemAmostraBeanBD.getStatusRespItem());
 		}
 		respItemAmostraBeanList.clear();
 	}

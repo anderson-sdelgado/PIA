@@ -150,7 +150,7 @@ public class OSActivity extends ActivityGeneric {
     public void onBackPressed()  {
         LogProcessoDAO.getInstance().insertLogProcesso("public void onBackPressed()  {\n" +
                 "        Intent it = new Intent(OSActivity.this, AuditorActivity.class);", getLocalClassName());
-        Intent it = new Intent(OSActivity.this, AuditorActivity.class);
+        Intent it = new Intent(OSActivity.this, ListaOrganActivity.class);
         startActivity(it);
         finish();
     }

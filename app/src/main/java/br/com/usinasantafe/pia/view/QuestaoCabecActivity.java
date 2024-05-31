@@ -24,14 +24,12 @@ public class QuestaoCabecActivity extends ActivityGeneric {
 
         piaContext = (PIAContext) getApplication();
 
-        TextView textViewPadrao = (TextView) findViewById(R.id.textViewPadrao);
-        Button buttonOkQC = (Button) findViewById(R.id.buttonOkPadrao);
-        Button buttonCancQC = (Button) findViewById(R.id.buttonCancPadrao);
-        EditText editText = (EditText) findViewById(R.id.editTextPadrao);
+        TextView textViewPadrao = findViewById(R.id.textViewPadrao);
+        Button buttonOkQC = findViewById(R.id.buttonOkPadrao);
+        Button buttonCancQC = findViewById(R.id.buttonCancPadrao);
+        EditText editText = findViewById(R.id.editTextPadrao);
 
-        LogProcessoDAO.getInstance().insertLogProcesso("textViewPadrao.setText(piaContext.getInfestacaoCTR().getItemAmostraCabec().getDescrItem());\n" +
-                "        editText.setText(\"\");", getLocalClassName());
-        textViewPadrao.setText(piaContext.getInfestacaoCTR().getItemAmostraCabec().getDescrItem());
+
         editText.setText("");
 
         buttonOkQC.setOnClickListener(v -> {
@@ -45,7 +43,6 @@ public class QuestaoCabecActivity extends ActivityGeneric {
                         "                    piaContext.getInfestacaoCTR().updateItemAmostraCabec(Long.parseLong(editTextPadrao.getText().toString()));\n" +
                         "                    Intent it = new Intent(QuestaoCabecActivity.this, MsgPontoActivity.class);", getLocalClassName());
                 piaContext.setVerTelaQuestao(1);
-                piaContext.getInfestacaoCTR().updateItemAmostraCabec(Long.parseLong(editTextPadrao.getText().toString()));
 
                 Intent it = new Intent(QuestaoCabecActivity.this, MsgPontoActivity.class);
                 startActivity(it);

@@ -15,13 +15,13 @@ public class ConfigBean extends Entidade {
     @DatabaseField
     private String senhaConfig;
     @DatabaseField
-    private Long osConfig;
+    private Long nroOSConfig;
     @DatabaseField
-    private Long auditorConfig;
+    private Long matricAuditorConfig;
     @DatabaseField
-    private Long secaoConfig;
+    private Long idSecaoConfig;
     @DatabaseField
-    private Long talhaoConfig;
+    private Long idTalhaoConfig;
     @DatabaseField
     private Long idOrganConfig;
     @DatabaseField
@@ -46,36 +46,36 @@ public class ConfigBean extends Entidade {
         this.senhaConfig = senhaConfig;
     }
 
-    public Long getOSConfig() {
-        return osConfig;
+    public Long getNroOSConfig() {
+        return nroOSConfig;
     }
 
-    public void setOSConfig(Long osConfig) {
-        this.osConfig = osConfig;
+    public void setNroOSConfig(Long osConfig) {
+        this.nroOSConfig = osConfig;
     }
 
-    public Long getAuditorConfig() {
-        return auditorConfig;
+    public Long getMatricAuditorConfig() {
+        return matricAuditorConfig;
     }
 
-    public void setAuditorConfig(Long auditorConfig) {
-        this.auditorConfig = auditorConfig;
+    public void setMatricAuditorConfig(Long matricAuditorConfig) {
+        this.matricAuditorConfig = matricAuditorConfig;
     }
 
-    public Long getSecaoConfig() {
-        return secaoConfig;
+    public Long getIdSecaoConfig() {
+        return idSecaoConfig;
     }
 
-    public void setSecaoConfig(Long secaoConfig) {
-        this.secaoConfig = secaoConfig;
+    public void setIdSecaoConfig(Long idSecaoConfig) {
+        this.idSecaoConfig = idSecaoConfig;
     }
 
-    public Long getTalhaoConfig() {
-        return talhaoConfig;
+    public Long getIdTalhaoConfig() {
+        return idTalhaoConfig;
     }
 
-    public void setTalhaoConfig(Long talhaoConfig) {
-        this.talhaoConfig = talhaoConfig;
+    public void setIdTalhaoConfig(Long idTalhaoConfig) {
+        this.idTalhaoConfig = idTalhaoConfig;
     }
 
     public Long getIdOrganConfig() {
@@ -93,12 +93,5 @@ public class ConfigBean extends Entidade {
     public void setIdCaracOrganConfig(Long idCaracOrganConfig) {
         this.idCaracOrganConfig = idCaracOrganConfig;
     }
-//
-//    public Long getUltPonto() {
-//        return ultPonto;
-//    }
-//
-//    public void setUltPonto(Long ultPonto) {
-//        this.ultPonto = ultPonto;
-//    }
+
 }

@@ -115,7 +115,7 @@ public class AuditorActivity extends ActivityGeneric {
                             "                        piaContext.getConfigCTR().setAuditor(matricAuditor);\n" +
                             "                        Intent it = new Intent(AuditorActivity.this, SecaoActivity.class);", getLocalClassName());
                     piaContext.getConfigCTR().setAuditor(piaContext.getInfestacaoCTR().getAuditorMatric(matricAuditor).getIdAuditor());
-                    Intent it = new Intent(AuditorActivity.this, OSActivity.class);
+                    Intent it = new Intent(AuditorActivity.this, ListaOrganActivity.class);
                     startActivity(it);
                     finish();
 

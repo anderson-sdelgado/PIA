@@ -2,7 +2,6 @@ package br.com.usinasantafe.pia.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -39,7 +38,7 @@ public class SenhaActivity extends ActivityGeneric {
                 startActivity(it);
                 finish();
             } else {
-                if (piaContext.getTela() == 1) {
+                if (piaContext.getVertelaConfigORLogs() == 1) {
                     LogProcessoDAO.getInstance().insertLogProcesso("if (piaContext.getConfigCTR().getConfig().getPosicaoTela() == 11L){", getLocalClassName());
                     if (piaContext.getConfigCTR().verSenha(editTextSenha.getText().toString())) {
                         LogProcessoDAO.getInstance().insertLogProcesso("if (piaContext.getConfigCTR().verSenha(editTextSenha.getText().toString())) {\n" +

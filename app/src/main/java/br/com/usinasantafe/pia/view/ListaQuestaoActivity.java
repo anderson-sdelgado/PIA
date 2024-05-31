@@ -1,11 +1,8 @@
 package br.com.usinasantafe.pia.view;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -47,7 +44,7 @@ public class ListaQuestaoActivity extends ActivityGeneric {
                 "        AdapterList adapterList = new AdapterList(this, itens);\n" +
                 "        lista = (ListView) findViewById(R.id.listViewQuestao);\n" +
                 "        lista.setAdapter(adapterList);", getLocalClassName());
-        int pos = piaContext.getPosPonto() + 1;
+        int pos = piaContext.getPosPonto();
         textViewTituloPonto.setText("PONTO " + pos);
 
         ArrayList<String> itens = new ArrayList<>();
@@ -113,7 +110,7 @@ public class ListaQuestaoActivity extends ActivityGeneric {
                         "                    public void onClick(DialogInterface dialog, int which) {\n" +
                         "                        piaContext.getInfestacaoCTR().deleteRespItemAmostra((long) piaContext.getPosPonto());\n" +
                         "                        Intent it = new Intent(ListaQuestaoActivity.this, ListaPontosActivity.class);", getLocalClassName());
-                piaContext.getInfestacaoCTR().deleteRespItemAmostra((long) piaContext.getPosPonto());
+                piaContext.getInfestacaoCTR().deleteRespItemAmostraPonto((long) piaContext.getPosPonto());
                 Intent it = new Intent(ListaQuestaoActivity.this, ListaPontosActivity.class);
                 startActivity(it);
                 finish();

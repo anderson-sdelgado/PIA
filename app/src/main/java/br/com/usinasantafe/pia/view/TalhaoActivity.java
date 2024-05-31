@@ -7,8 +7,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.List;
+
 import br.com.usinasantafe.pia.PIAContext;
 import br.com.usinasantafe.pia.R;
+import br.com.usinasantafe.pia.model.bean.estaticas.AmostraBean;
 import br.com.usinasantafe.pia.model.dao.LogProcessoDAO;
 
 public class TalhaoActivity extends ActivityGeneric {
@@ -37,10 +40,14 @@ public class TalhaoActivity extends ActivityGeneric {
                 if(piaContext.getInfestacaoCTR().verTalhaCod(codTalhao)) {
 
                     LogProcessoDAO.getInstance().insertLogProcesso("if(piaContext.getInfestacaoCTR().verTalhaCod(codTalhao)) {\n" +
-                            "                        piaContext.getConfigCTR().setTalhao(piaContext.getInfestacaoCTR().getTalhaCod(codTalhao).getIdTalhao());\n" +
-                            "                        Intent it = new Intent(TalhaoActivity.this, ListaOrganActivity.class);", getLocalClassName());
+                            "                    piaContext.getConfigCTR().setTalhao(piaContext.getInfestacaoCTR().getTalhaCod(codTalhao).getIdTalhao());\n" +
+                            "                    piaContext.setVerTelaQuestao(1);\n" +
+                            "                    boolean retorno = piaContext.getInfestacaoCTR().salvarCabecAberto();", getLocalClassName());
                     piaContext.getConfigCTR().setTalhao(piaContext.getInfestacaoCTR().getTalhaCod(codTalhao).getIdTalhao());
-                    Intent it = new Intent(TalhaoActivity.this, ListaOrganActivity.class);
+                    piaContext.setVerTelaQuestao(1);
+                    piaContext.getInfestacaoCTR().salvarCabecAberto();
+
+                    Intent it = new Intent(TalhaoActivity.this, ListaPontosActivity.class);
                     startActivity(it);
                     finish();
 

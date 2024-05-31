@@ -75,7 +75,7 @@ public class ListaOrganActivity extends ActivityGeneric {
                     "            @Override\n" +
                     "            public void onClick(View v) {\n" +
                     "                Intent it = new Intent(ListaOrganActivity.this, TalhaoActivity.class);", getLocalClassName());
-            Intent it = new Intent(ListaOrganActivity.this, TalhaoActivity.class);
+            Intent it = new Intent(ListaOrganActivity.this, AuditorActivity.class);
             startActivity(it);
             finish();
         });

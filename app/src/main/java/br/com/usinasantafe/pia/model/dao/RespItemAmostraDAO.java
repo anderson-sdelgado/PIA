@@ -1,8 +1,6 @@
 package br.com.usinasantafe.pia.model.dao;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,13 +36,13 @@ public class RespItemAmostraDAO {
         return retorno;
     }
 
-    public void inserirRespItemAmostra(Long idCabec, Long idAmostra, Long valor, Long qtde){
+    public void inserirRespItemAmostra(Long idCabec, Long idLocal, Long idAmostra, Long valor, Long qtde){
         RespItemAmostraBean respItemAmostraBean = new RespItemAmostraBean();
         respItemAmostraBean.setIdCabec(idCabec);
+        respItemAmostraBean.setIdLocal(idLocal);
         respItemAmostraBean.setIdAmostraRespItem(idAmostra);
         respItemAmostraBean.setPontoRespItem(qtde);
         respItemAmostraBean.setValorRespItem(valor);
-        respItemAmostraBean.setStatusRespItem(1L);
         respItemAmostraBean.insert();
         respItemAmostraBean.commit();
     }
@@ -56,82 +54,27 @@ public class RespItemAmostraDAO {
         respItemAmostraBean.commit();
     }
 
-    public void updateRespItemAmostraFechado(Long idCabec){
+    public void deleteRespItemAmostra(Long idCabec, Long idAmostra, Long ponto){
 
         ArrayList pesqArrayList = new ArrayList();
         pesqArrayList.add(getPesqIdCabec(idCabec));
-        pesqArrayList.add(getPesqStatusAberto());
+        pesqArrayList.add(getPesqIdAmostra(idAmostra));
+        pesqArrayList.add(getPesqPonto(ponto));
 
         RespItemAmostraBean respItemAmostra = new RespItemAmostraBean();
-        List<RespItemAmostraBean> respItemList = respItemAmostra.get(pesqArrayList);
+        List<RespItemAmostraBean> respItemAmostraList = respItemAmostra.get(pesqArrayList);
+        respItemAmostra = respItemAmostraList.get(0);
+        respItemAmostra.delete();
+        respItemAmostra.commit();
 
-        for (RespItemAmostraBean respItemAmostraBean : respItemList) {
-            respItemAmostraBean.setStatusRespItem(2L);
-            respItemAmostraBean.update();
-            respItemAmostraBean.commit();
-        }
-
-        respItemList.clear();
+        respItemAmostraList.clear();
     }
 
-
-    public Long updateRespItemAmostraEnviado(Long idRespItem){
-
-        ArrayList pesqArrayList = new ArrayList();
-        pesqArrayList.add(getPesqId(idRespItem));
-
-        RespItemAmostraBean respItemAmostra = new RespItemAmostraBean();
-        List<RespItemAmostraBean> respItemList = respItemAmostra.get(pesqArrayList);
-        RespItemAmostraBean respItemAmostraBean = respItemList.get(0);
-        respItemAmostraBean.setStatusRespItem(3L);
-        respItemAmostraBean.update();
-        respItemAmostraBean.commit();
-        respItemList.clear();
-
-        return respItemAmostraBean.getIdCabec();
-
-    }
-
-    public void deleteRespItemAmostraAberto(Long idCabec, Long idAmostra){
+    public void deleteRespItemAmostra(Long idCabec, Long ponto){
 
         ArrayList pesqArrayList = new ArrayList();
         pesqArrayList.add(getPesqIdCabec(idCabec));
-        pesqArrayList.add(getPesqStatusAberto());
-        pesqArrayList.add(getPesqIdAmostraItem(idAmostra));
-
-        RespItemAmostraBean respItemAmostra = new RespItemAmostraBean();
-        List<RespItemAmostraBean> respItemList = respItemAmostra.get(pesqArrayList);
-
-        for (RespItemAmostraBean respItemAmostraBean : respItemList) {
-            respItemAmostraBean.delete();
-            respItemAmostraBean.commit();
-        }
-
-        respItemList.clear();
-    }
-
-    public void deleteRespItemAmostraAberto(Long idCabec){
-
-        ArrayList pesqArrayList = new ArrayList();
-        pesqArrayList.add(getPesqIdCabec(idCabec));
-        pesqArrayList.add(getPesqStatusAberto());
-
-        RespItemAmostraBean respItemAmostra = new RespItemAmostraBean();
-        List<RespItemAmostraBean> respItemList = respItemAmostra.get(pesqArrayList);
-
-        for (RespItemAmostraBean respItemAmostraBean : respItemList) {
-            respItemAmostraBean.delete();
-            respItemAmostraBean.commit();
-        }
-
-        respItemList.clear();
-    }
-
-    public void deleteRespItemAmostra(Long idCabec, Long ultPonto){
-
-        ArrayList pesqArrayList = new ArrayList();
-        pesqArrayList.add(getPesqIdCabec(idCabec));
-        pesqArrayList.add(getPesqUltPonto(ultPonto));
+        pesqArrayList.add(getPesqPonto(ponto));
 
         RespItemAmostraBean respItemAmostra = new RespItemAmostraBean();
         List<RespItemAmostraBean> respItemList = respItemAmostra.get(pesqArrayList);
@@ -207,34 +150,11 @@ public class RespItemAmostraDAO {
         return respItemAmostra.inAndGetAndOrderBy("idCabec", idCabec, pesqArrayList, "idRespItem", true);
     }
 
-    public String dadosEnvioRespItemAmostra(List<RespItemAmostraBean> respItemList){
-
-        JsonArray jsonArrayApont = new JsonArray();
-
-        int i = 0;
-        for (RespItemAmostraBean respItemAmostraBean : respItemList) {
-            Gson gsonItemImp = new Gson();
-            jsonArrayApont.add(gsonItemImp.toJsonTree(respItemAmostraBean, respItemAmostraBean.getClass()));
-            i++;
-            if(i==50){
-                break;
-            }
-        }
-
-        respItemList.clear();
-
-        JsonObject jsonApont = new JsonObject();
-        jsonApont.add("resp", jsonArrayApont);
-
-        return jsonApont.toString();
-
-    }
-
     public List<RespItemAmostraBean> respItemAmostraList(Long idCabec, Long ponto){
 
         ArrayList pesqArrayList = new ArrayList();
         pesqArrayList.add(getPesqIdCabec(idCabec));
-        pesqArrayList.add(getPesqUltPonto(ponto));
+        pesqArrayList.add(getPesqPonto(ponto));
 
         RespItemAmostraBean respItemAmostra = new RespItemAmostraBean();
         return respItemAmostra.get(pesqArrayList);
@@ -310,18 +230,18 @@ public class RespItemAmostraDAO {
         return pesquisa;
     }
 
-    private EspecificaPesquisa getPesqUltPonto(Long ultPonto){
+    private EspecificaPesquisa getPesqPonto(Long ponto){
         EspecificaPesquisa pesquisa = new EspecificaPesquisa();
         pesquisa.setCampo("pontoRespItem");
-        pesquisa.setValor(ultPonto + 1);
+        pesquisa.setValor(ponto);
         pesquisa.setTipo(1);
         return pesquisa;
     }
 
-    private EspecificaPesquisa getPesqIdAmostraItem(Long idAmostraItem){
+    private EspecificaPesquisa getPesqIdAmostra(Long idAmostra){
         EspecificaPesquisa pesquisa = new EspecificaPesquisa();
         pesquisa.setCampo("idAmostraRespItem");
-        pesquisa.setValor(idAmostraItem);
+        pesquisa.setValor(idAmostra);
         pesquisa.setTipo(1);
         return pesquisa;
     }

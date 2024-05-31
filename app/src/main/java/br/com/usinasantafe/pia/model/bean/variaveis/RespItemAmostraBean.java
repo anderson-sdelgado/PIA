@@ -19,13 +19,13 @@ public class RespItemAmostraBean extends Entidade {
     @DatabaseField
     private Long idCabec;
     @DatabaseField
+    private Long idLocal;
+    @DatabaseField
     private Long idAmostraRespItem;
     @DatabaseField
     private Long pontoRespItem;
     @DatabaseField
     private Long valorRespItem;
-    @DatabaseField
-    private Long statusRespItem; // 1 - Aberto; 2 - Fechado; 3 - Enviado
 
     public RespItemAmostraBean() {
     }
@@ -66,11 +66,11 @@ public class RespItemAmostraBean extends Entidade {
         this.valorRespItem = valorRespItem;
     }
 
-    public Long getStatusRespItem() {
-        return statusRespItem;
+    public Long getIdLocal() {
+        return idLocal;
     }
 
-    public void setStatusRespItem(Long statusRespItem) {
-        this.statusRespItem = statusRespItem;
+    public void setIdLocal(Long idLocal) {
+        this.idLocal = idLocal;
     }
 }
