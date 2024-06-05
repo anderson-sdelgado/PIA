@@ -18,6 +18,7 @@ public class UrlsConexaoHttp {
     public static String CaracOrganBean = url + "caracorgan.php";
     public static String OrganBean = url + "organ.php";
     public static String OSBean = url + "os.php";
+    public static String PergCabecBean = url + "pergcabec.php";
     public static String RCaracAmostraBean = url + "rcaracamostra.php";
     public static String ROrganCaracBean = url + "rorgancarac.php";
     public static String SecaoBean = url + "secao.php";

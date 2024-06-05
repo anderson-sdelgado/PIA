@@ -15,6 +15,7 @@ public class PIAContext extends Application {
     private Long idRespItem;
     private int verTelaQuestao; // 1 - MSG PONTO E QUESTAO AMOSTRA; 2 - ALTERAR AMOSTRA;
     private int vertelaConfigORLogs;
+    private int tipoFluxo; // 1 - Local; 2 - Resp Item
 
     public ConfigCTR getConfigCTR() {
         if(configCTR == null)
@@ -66,5 +67,13 @@ public class PIAContext extends Application {
 
     public void setVertelaConfigORLogs(int vertelaConfigORLogs) {
         this.vertelaConfigORLogs = vertelaConfigORLogs;
+    }
+
+    public int getTipoFluxo() {
+        return tipoFluxo;
+    }
+
+    public void setTipoFluxo(int tipoFluxo) {
+        this.tipoFluxo = tipoFluxo;
     }
 }

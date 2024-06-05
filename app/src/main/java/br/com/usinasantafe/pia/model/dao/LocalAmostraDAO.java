@@ -1,9 +1,5 @@
 package br.com.usinasantafe.pia.model.dao;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,28 +9,50 @@ import br.com.usinasantafe.pia.util.Tempo;
 
 public class LocalAmostraDAO {
 
-    public LocalAmostraBean getLocalAmostra(Long idCabec){
-        List<LocalAmostraBean> localAmostraList = localAmostraList(idCabec);
+    public LocalAmostraBean getLocalAmostraIdCabec(Long idCabec) {
+        List<LocalAmostraBean> localAmostraList = localAmostraIdCabecList(idCabec);
         LocalAmostraBean localAmostraBean = localAmostraList.get(0);
         localAmostraList.clear();
         return localAmostraBean;
     }
 
-    public int qtdeLocalCabec(Long idCabec){
-        List<LocalAmostraBean> localAmostraList = localAmostraList(idCabec);
-        int retorno = localAmostraList.size();
+    public LocalAmostraBean getLocalAmostraIdLocal(Long idLocal) {
+        List<LocalAmostraBean> localAmostraList = localAmostraIdList(idLocal);
+        LocalAmostraBean localAmostraBean = localAmostraList.get(0);
         localAmostraList.clear();
-        return retorno;
+        return localAmostraBean;
     }
 
-    public List<LocalAmostraBean> localAmostraList(Long idCabec){
+    public LocalAmostraBean getLocalAmostraApontIdCabec(Long idCabec) {
+        List<LocalAmostraBean> localAmostraList = localAmostraApontIdCabecList(idCabec);
+        LocalAmostraBean localAmostraBean = localAmostraList.get(0);
+        localAmostraList.clear();
+        return localAmostraBean;
+    }
+
+    public List<LocalAmostraBean> localAmostraIdCabecList(Long idCabec) {
         ArrayList pesqArrayList = new ArrayList();
         pesqArrayList.add(getPesqIdCabec(idCabec));
         LocalAmostraBean localAmostraBean = new LocalAmostraBean();
         return localAmostraBean.get(pesqArrayList);
     }
 
-    public void salvarLocal(Long idCabec, Long nroOS, Long idSecao, Long idTalhao){
+    public List<LocalAmostraBean> localAmostraApontIdCabecList(Long idCabec) {
+        ArrayList pesqArrayList = new ArrayList();
+        pesqArrayList.add(getPesqIdCabec(idCabec));
+        pesqArrayList.add(getPesqApont());
+        LocalAmostraBean localAmostraBean = new LocalAmostraBean();
+        return localAmostraBean.get(pesqArrayList);
+    }
+
+    public List<LocalAmostraBean> localAmostraIdList(Long idLocal) {
+        ArrayList pesqArrayList = new ArrayList();
+        pesqArrayList.add(getPesqIdLocal(idLocal));
+        LocalAmostraBean localAmostraBean = new LocalAmostraBean();
+        return localAmostraBean.get(pesqArrayList);
+    }
+
+    public void salvarLocal(Long idCabec, Long nroOS, Long idSecao, Long idTalhao, Double latitude, Double longitude, String obs, Long status) {
         LocalAmostraBean localAmostraBean = new LocalAmostraBean();
         localAmostraBean.setIdCabec(idCabec);
         localAmostraBean.setDthr(Tempo.getInstance().dthrAtualString());
@@ -42,26 +60,39 @@ public class LocalAmostraDAO {
         localAmostraBean.setNroOS(nroOS);
         localAmostraBean.setIdSecao(idSecao);
         localAmostraBean.setIdTalhao(idTalhao);
+        localAmostraBean.setLatitude(latitude);
+        localAmostraBean.setLongitude(longitude);
+        localAmostraBean.setStatusApont(status);
+        localAmostraBean.setObs(obs);
         localAmostraBean.insert();
         localAmostraBean.commit();
     }
 
-    public void updateLocalEnviado(Long idLocal){
-
-        ArrayList pesqArrayList = new ArrayList();
-        pesqArrayList.add(getPesqIdLocal(idLocal));
-
-        LocalAmostraBean localAmostraBean = new LocalAmostraBean();
-        List<LocalAmostraBean> localAmostraList = localAmostraBean.get(pesqArrayList);
-        localAmostraBean = localAmostraList.get(0);
-        localAmostraBean.setStatusLocal(3L);
+    public void fecharLocal(Long idCabec){
+        LocalAmostraBean localAmostraBean = getLocalAmostraApontIdCabec(idCabec);
+        localAmostraBean.setStatusApont(2L);
         localAmostraBean.update();
         localAmostraBean.commit();
-        localAmostraList.clear();
-
     }
 
-    public void deleteLocalAmostra(Long idCabec){
+    public void deleteLocalAmostraApont(Long idCabec) {
+
+        ArrayList pesqArrayList = new ArrayList();
+        pesqArrayList.add(getPesqIdCabec(idCabec));
+        pesqArrayList.add(getPesqApont());
+
+        LocalAmostraBean localAmostraBean = new LocalAmostraBean();
+        List<LocalAmostraBean> locaAmostraList = localAmostraBean.get(pesqArrayList);
+
+        for (LocalAmostraBean localAmostraBeanBD : locaAmostraList) {
+            localAmostraBeanBD.delete();
+            localAmostraBeanBD.commit();
+        }
+
+        locaAmostraList.clear();
+    }
+
+    public void deleteLocalAmostraIdCabec(Long idCabec) {
 
         ArrayList pesqArrayList = new ArrayList();
         pesqArrayList.add(getPesqIdCabec(idCabec));
@@ -77,9 +108,25 @@ public class LocalAmostraDAO {
         locaAmostraList.clear();
     }
 
-    public void deleteLocalAmostra(ArrayList<Long> idLocalAmostraArrayList){
+    public void deleteLocalAmostraId(Long idLocal) {
 
-        List<LocalAmostraBean> localAmostraList = localAmostraList(idLocalAmostraArrayList);
+        ArrayList pesqArrayList = new ArrayList();
+        pesqArrayList.add(getPesqIdLocal(idLocal));
+
+        LocalAmostraBean localAmostraBean = new LocalAmostraBean();
+        List<LocalAmostraBean> locaAmostraList = localAmostraBean.get(pesqArrayList);
+
+        for (LocalAmostraBean localAmostraBeanBD : locaAmostraList) {
+            localAmostraBeanBD.delete();
+            localAmostraBeanBD.commit();
+        }
+
+        locaAmostraList.clear();
+    }
+
+    public void deleteLocalAmostra(ArrayList<Long> idLocalAmostraArrayList) {
+
+        List<LocalAmostraBean> localAmostraList = localAmostraIdCabecList(idLocalAmostraArrayList);
 
         for (LocalAmostraBean localAmostraBean : localAmostraList) {
             localAmostraBean.delete();
@@ -90,23 +137,8 @@ public class LocalAmostraDAO {
 
     }
 
-    public void fecharLocal(Long idCabec){
 
-        ArrayList pesqArrayList = new ArrayList();
-        pesqArrayList.add(getPesqIdCabec(idCabec));
-
-        LocalAmostraBean localAmostraBean = new LocalAmostraBean();
-        List<LocalAmostraBean> locaAmostraList = localAmostraBean.get(pesqArrayList);
-
-        for (LocalAmostraBean localAmostraBeanBD : locaAmostraList) {
-            localAmostraBeanBD.setStatusLocal(2L);
-            localAmostraBeanBD.update();
-        }
-
-        locaAmostraList.clear();
-    }
-
-    public ArrayList<Long> idLocalAmostraArrayList(List<LocalAmostraBean> localAmostraList){
+    public ArrayList<Long> idLocalAmostraArrayList(List<LocalAmostraBean> localAmostraList) {
         ArrayList<Long> idLocalAmostraList = new ArrayList<>();
         for (LocalAmostraBean respItemAmostra : localAmostraList) {
             idLocalAmostraList.add(respItemAmostra.getIdLocal());
@@ -114,30 +146,13 @@ public class LocalAmostraDAO {
         return idLocalAmostraList;
     }
 
-    public List<LocalAmostraBean> localAmostraList(ArrayList<Long> idCabec){
+    public List<LocalAmostraBean> localAmostraIdCabecList(ArrayList<Long> idCabec) {
         LocalAmostraBean localAmostraBean = new LocalAmostraBean();
         ArrayList pesqArrayList = new ArrayList();
         return localAmostraBean.inAndGetAndOrderBy("idCabec", idCabec, pesqArrayList, "idLocal", true);
     }
 
-    public String dadosEnvioLocalAmostra(List<LocalAmostraBean> localAmostraList){
-
-        JsonArray localAmostraJsonArray = new JsonArray();
-
-        for (LocalAmostraBean localAmostraBean : localAmostraList) {
-            Gson gsonCabec = new Gson();
-            localAmostraJsonArray.add(gsonCabec.toJsonTree(localAmostraBean, localAmostraBean.getClass()));
-        }
-
-        localAmostraList.clear();
-
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.add("local", localAmostraJsonArray);
-
-        return jsonObject.toString();
-    }
-
-    private EspecificaPesquisa getPesqIdCabec(Long idCabec){
+    private EspecificaPesquisa getPesqIdCabec(Long idCabec) {
         EspecificaPesquisa pesquisa = new EspecificaPesquisa();
         pesquisa.setCampo("idCabec");
         pesquisa.setValor(idCabec);
@@ -145,10 +160,18 @@ public class LocalAmostraDAO {
         return pesquisa;
     }
 
-    private EspecificaPesquisa getPesqIdLocal(Long idLocal){
+    private EspecificaPesquisa getPesqIdLocal(Long idLocal) {
         EspecificaPesquisa pesquisa = new EspecificaPesquisa();
         pesquisa.setCampo("idLocal");
         pesquisa.setValor(idLocal);
+        pesquisa.setTipo(1);
+        return pesquisa;
+    }
+
+    private EspecificaPesquisa getPesqApont() {
+        EspecificaPesquisa pesquisa = new EspecificaPesquisa();
+        pesquisa.setCampo("statusApont");
+        pesquisa.setValor(1L);
         pesquisa.setTipo(1);
         return pesquisa;
     }

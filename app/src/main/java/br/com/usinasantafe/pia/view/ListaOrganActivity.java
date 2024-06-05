@@ -2,9 +2,6 @@ package br.com.usinasantafe.pia.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -75,7 +72,7 @@ public class ListaOrganActivity extends ActivityGeneric {
                     "            @Override\n" +
                     "            public void onClick(View v) {\n" +
                     "                Intent it = new Intent(ListaOrganActivity.this, TalhaoActivity.class);", getLocalClassName());
-            Intent it = new Intent(ListaOrganActivity.this, AuditorActivity.class);
+            Intent it = new Intent(ListaOrganActivity.this, TelaInicialActivity.class);
             startActivity(it);
             finish();
         });

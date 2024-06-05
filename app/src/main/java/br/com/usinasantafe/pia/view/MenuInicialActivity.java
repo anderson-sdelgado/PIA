@@ -1,16 +1,30 @@
 package br.com.usinasantafe.pia.view;
 
+import static com.google.android.gms.common.GooglePlayServicesUtil.isGooglePlayServicesAvailable;
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.util.Log;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 
@@ -25,11 +39,30 @@ public class MenuInicialActivity extends ActivityGeneric {
     private PIAContext piaContext;
     private TextView textViewProcesso;
     private Handler customHandler = new Handler();
+    private FusedLocationProviderClient fusedLocationClient;
+    private Double latitude = 0D;
+    private Double longitude = 0D;
+
+    private LocationCallback locationCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_inicial);
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        boolean result = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED;
+
+        if (!result) {
+            fusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(this, location -> {
+                        if (location != null) {
+                            latitude = location.getLatitude();
+                            longitude = location.getLongitude();
+                        }
+                    });
+        }
 
         TextView textViewPrincipal = findViewById(R.id.textViewPrincipal);
 
@@ -86,8 +119,8 @@ public class MenuInicialActivity extends ActivityGeneric {
                             && piaContext.getConfigCTR().hasElements()) {
                         LogProcessoDAO.getInstance().insertLogProcesso("if(piaContext.getInfestacaoCTR().hasElemAuditor()\n" +
                                 "                        && piaContext.getConfigCTR().hasElements()) {\n" +
-                                "                        Intent it = new Intent(MenuInicialActivity.this, AuditorActivity.class);", getLocalClassName());
-                        Intent it = new Intent(MenuInicialActivity.this, AuditorActivity.class);
+                                "                        Intent it = new Intent(MenuInicialActivity.this, ListaOrganActivity.class);", getLocalClassName());
+                        Intent it = new Intent(MenuInicialActivity.this, ListaOrganActivity.class);
                         startActivity(it);
                         finish();
                     }

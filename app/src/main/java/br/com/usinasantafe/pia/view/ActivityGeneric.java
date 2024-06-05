@@ -1,13 +1,31 @@
 package br.com.usinasantafe.pia.view;
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.net.ConnectivityManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.j256.ormlite.android.apptools.OrmLiteBaseActivity;
+
+import java.util.ArrayList;
 
 import br.com.usinasantafe.pia.NetworkChangeListerner;
 import br.com.usinasantafe.pia.R;
@@ -19,20 +37,48 @@ public class ActivityGeneric extends OrmLiteBaseActivity<DatabaseHelper> {
     public static boolean connectNetwork;
 
     NetworkChangeListerner networkChangeListerner = new NetworkChangeListerner();
+    private ArrayList<String> permissionsRejected = new ArrayList<>();
+    private ArrayList<String> permissions = new ArrayList<>();
+    private ArrayList<String> permissionsToRequest;
+    private static final int ALL_PERMISSIONS_RESULT = 1011;
 
     @Override
     protected void onStart() {
 
+        super.onStart();
+
         IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(networkChangeListerner, intentFilter);
 
-        super.onStart();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getHelper();
+
+        if (!this.getLocalClassName().contains("TelaInicialActivity")){
+
+            permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
+            permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+            permissions.add(Manifest.permission.CAMERA);
+
+            permissionsToRequest = permissionsToRequest(permissions);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (permissionsToRequest.size() > 0) {
+                    requestPermissions(permissionsToRequest.toArray(
+                            new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
+                }
+            }
+
+        }
     }
 
     @Override
@@ -137,6 +183,26 @@ public class ActivityGeneric extends OrmLiteBaseActivity<DatabaseHelper> {
 
         }
 
+    }
+
+    private ArrayList<String> permissionsToRequest(ArrayList<String> wantedPermissions) {
+        ArrayList<String> result = new ArrayList<>();
+
+        for (String perm : wantedPermissions) {
+            if (!hasPermission(perm)) {
+                result.add(perm);
+            }
+        }
+
+        return result;
+    }
+
+    private boolean hasPermission(String permission) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED;
+        }
+
+        return true;
     }
 
     public void onBackPressed()  {

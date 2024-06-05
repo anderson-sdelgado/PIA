@@ -5,14 +5,13 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 import br.com.usinasantafe.pia.PIAContext;
 import br.com.usinasantafe.pia.R;
 import br.com.usinasantafe.pia.model.dao.LogProcessoDAO;
 
-public class AuditorActivity extends ActivityGeneric {
+public class MatricAuditorActivity extends ActivityGeneric {
 
     private PIAContext piaContext;
     private ProgressDialog progressBar;
@@ -20,7 +19,7 @@ public class AuditorActivity extends ActivityGeneric {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_auditor);
+        setContentView(R.layout.activity_matric_auditor);
 
         piaContext = (PIAContext) getApplication();
 
@@ -33,7 +32,7 @@ public class AuditorActivity extends ActivityGeneric {
             LogProcessoDAO.getInstance().insertLogProcesso("AlertDialog.Builder alerta = new AlertDialog.Builder(AuditorActivity.this);\n" +
                     "                alerta.setTitle(\"ATENÇÃO\");\n" +
                     "                alerta.setMessage(\"DESEJA REALMENTE ATUALIZAR BASE DE DADOS?\");", getLocalClassName());
-            AlertDialog.Builder alerta = new AlertDialog.Builder(AuditorActivity.this);
+            AlertDialog.Builder alerta = new AlertDialog.Builder(MatricAuditorActivity.this);
             alerta.setTitle("ATENÇÃO");
             alerta.setMessage("DESEJA REALMENTE ATUALIZAR BASE DE DADOS?");
             alerta.setNegativeButton("SIM", new DialogInterface.OnClickListener() {
@@ -54,7 +53,7 @@ public class AuditorActivity extends ActivityGeneric {
                                 "                            progressBar.setProgress(0);\n" +
                                 "                            progressBar.setMax(100);\n" +
                                 "                            progressBar.show();", getLocalClassName());
-                        progressBar = new ProgressDialog(AuditorActivity.this);
+                        progressBar = new ProgressDialog(MatricAuditorActivity.this);
                         progressBar.setCancelable(true);
                         progressBar.setMessage("ATUALIZANDO ...");
                         progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
@@ -63,7 +62,7 @@ public class AuditorActivity extends ActivityGeneric {
                         progressBar.show();
 
                         LogProcessoDAO.getInstance().insertLogProcesso("pmmContext.getMotoMecFertCTR().atualDados(AuditorActivity.this, AuditorActivity.class, progressBar, \"Auditor\", 1, getLocalClassName());", getLocalClassName());
-                        piaContext.getInfestacaoCTR().atualDados(AuditorActivity.this, AuditorActivity.class, progressBar, "Auditor", 1, getLocalClassName());
+                        piaContext.getInfestacaoCTR().atualDados(MatricAuditorActivity.this, MatricAuditorActivity.class, progressBar, "Auditor", 1, getLocalClassName());
 
                     } else {
 
@@ -76,7 +75,7 @@ public class AuditorActivity extends ActivityGeneric {
                                 "                                }\n" +
                                 "                            });\n" +
                                 "                            alerta.show();", getLocalClassName());
-                        AlertDialog.Builder alerta = new AlertDialog.Builder(AuditorActivity.this);
+                        AlertDialog.Builder alerta = new AlertDialog.Builder(MatricAuditorActivity.this);
                         alerta.setTitle("ATENÇÃO");
                         alerta.setMessage("FALHA NA CONEXÃO DE DADOS. O CELULAR ESTA SEM SINAL. POR FAVOR, TENTE NOVAMENTE QUANDO O CELULAR ESTIVE COM SINAL.");
                         alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -113,11 +112,23 @@ public class AuditorActivity extends ActivityGeneric {
 
                     LogProcessoDAO.getInstance().insertLogProcesso("if(piaContext.getInfestacaoCTR().verAuditorCod(matricAuditor)){\n" +
                             "                        piaContext.getConfigCTR().setAuditor(matricAuditor);\n" +
-                            "                        Intent it = new Intent(AuditorActivity.this, SecaoActivity.class);", getLocalClassName());
+                            "                        Intent it = new Intent(MatricAuditorActivity.this, OSActivity.class);", getLocalClassName());
                     piaContext.getConfigCTR().setAuditor(piaContext.getInfestacaoCTR().getAuditorMatric(matricAuditor).getIdAuditor());
-                    Intent it = new Intent(AuditorActivity.this, ListaOrganActivity.class);
-                    startActivity(it);
-                    finish();
+
+                    if(piaContext.getConfigCTR().getIdAmostra() == 51L) {
+
+                        piaContext.getInfestacaoCTR().salvarCabecAbertoArmadilha();
+                        Intent it = new Intent(MatricAuditorActivity.this, ListaArmadilhaActivity.class);
+                        startActivity(it);
+                        finish();
+
+                    } else {
+
+                        Intent it = new Intent(MatricAuditorActivity.this, OSActivity.class);
+                        startActivity(it);
+                        finish();
+
+                    }
 
                 }
 
@@ -140,8 +151,8 @@ public class AuditorActivity extends ActivityGeneric {
 
     public void onBackPressed()  {
         LogProcessoDAO.getInstance().insertLogProcesso("public void onBackPressed()  {\n" +
-                "        Intent it = new Intent(AuditorActivity.this, MenuInicialActivity.class);", getLocalClassName());
-        Intent it = new Intent(AuditorActivity.this, MenuInicialActivity.class);
+                "        Intent it = new Intent(MatricAuditorActivity.this, ListaOrganActivity.class);", getLocalClassName());
+        Intent it = new Intent(MatricAuditorActivity.this, ListaOrganActivity.class);
         startActivity(it);
         finish();
     }

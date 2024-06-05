@@ -83,7 +83,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
 		TableUtils.dropTable(cs, CabecAmostraBean.class, true);
 		TableUtils.dropTable(cs, ConfigBean.class, true);
-		TableUtils.dropTable(cs, ItemAmostraBean.class, true);
 		TableUtils.dropTable(cs, LogErroBean.class, true);
 		TableUtils.dropTable(cs, LogProcessoBean.class, true);
 		TableUtils.dropTable(cs, RespItemAmostraBean.class, true);
@@ -95,6 +94,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 		TableUtils.createTable(cs, CaracOrganBean.class);
 		TableUtils.createTable(cs, OrganBean.class);
 		TableUtils.createTable(cs, OSBean.class);
+		TableUtils.createTable(cs, PergCabecBean.class);
 		TableUtils.createTable(cs, RCaracAmostraBean.class);
 		TableUtils.createTable(cs, ROrganCaracBean.class);
 		TableUtils.createTable(cs, SecaoBean.class);
@@ -103,10 +103,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 		TableUtils.createTable(cs, CabecAmostraBean.class);
 		TableUtils.createTable(cs, LocalAmostraBean.class);
 		TableUtils.createTable(cs, ConfigBean.class);
-		TableUtils.createTable(cs, ItemAmostraBean.class);
 		TableUtils.createTable(cs, LogErroBean.class);
 		TableUtils.createTable(cs, LogProcessoBean.class);
 		TableUtils.createTable(cs, RespItemAmostraBean.class);
+		TableUtils.createTable(cs, RespItemCabecBean.class);
 	}
 
 }

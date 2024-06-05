@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.usinasantafe.pia.model.bean.AtualAplicBean;
+import br.com.usinasantafe.pia.model.bean.estaticas.ROrganCaracBean;
 import br.com.usinasantafe.pia.model.bean.variaveis.ConfigBean;
 import br.com.usinasantafe.pia.model.bean.variaveis.LogErroBean;
 import br.com.usinasantafe.pia.model.bean.variaveis.LogProcessoBean;
@@ -18,6 +19,8 @@ import br.com.usinasantafe.pia.model.dao.CabecAmostraDAO;
 import br.com.usinasantafe.pia.model.dao.ConfigDAO;
 import br.com.usinasantafe.pia.model.dao.LogErroDAO;
 import br.com.usinasantafe.pia.model.dao.LogProcessoDAO;
+import br.com.usinasantafe.pia.model.dao.RCaracAmostraDAO;
+import br.com.usinasantafe.pia.model.dao.ROrganCaracDAO;
 import br.com.usinasantafe.pia.model.dao.RespItemAmostraDAO;
 import br.com.usinasantafe.pia.util.AtualDadosServ;
 import br.com.usinasantafe.pia.util.VerifDadosServ;
@@ -35,6 +38,14 @@ public class ConfigCTR {
     public ConfigBean getConfig(){
         ConfigDAO configDAO = new ConfigDAO();
         return configDAO.getConfig();
+    }
+
+    public Long getIdAmostra(){
+        ConfigBean configBean = getConfig();
+        ROrganCaracDAO rOrganCaracDAO = new ROrganCaracDAO();
+        RCaracAmostraDAO rCaracAmostraDAO = new RCaracAmostraDAO();
+        ROrganCaracBean rOrganCaracBean = rOrganCaracDAO.getROrganCarac(configBean.getIdOrganConfig(), configBean.getIdCaracOrganConfig());
+        return rCaracAmostraDAO.getRCaracAmostra(rOrganCaracBean.getIdROrganCarac()).getIdAmostraOrgan();
     }
 
     public boolean verSenha(String senha){
@@ -75,6 +86,11 @@ public class ConfigCTR {
     public void setIdCaracOrg(Long idCaracOrg){
         ConfigDAO configDAO = new ConfigDAO();
         configDAO.setIdCaracOrg(idCaracOrg);
+    }
+
+    public void setValorResp(Long valorResp){
+        ConfigDAO configDAO = new ConfigDAO();
+        configDAO.setValorResp(valorResp);
     }
 
     public List<LogProcessoBean> logProcessoList(){

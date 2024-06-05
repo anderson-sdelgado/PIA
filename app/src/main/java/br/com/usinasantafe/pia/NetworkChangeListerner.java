@@ -59,7 +59,7 @@ public class NetworkChangeListerner extends BroadcastReceiver {
 			Log.i("PIA", "nroOS = " + localAmostraBeanBD.getNroOS());
 			Log.i("PIA", "secao = " + localAmostraBeanBD.getIdSecao());
 			Log.i("PIA", "talhao = " + localAmostraBeanBD.getIdLocal());
-			Log.i("PIA", "statusLocal = " + localAmostraBeanBD.getStatusLocal());
+			Log.i("PIA", "statusLocal = " + localAmostraBeanBD.getStatusApont());
 		}
 		localAmostraBeaList.clear();
 	}
@@ -69,11 +69,11 @@ public class NetworkChangeListerner extends BroadcastReceiver {
 		List<RespItemAmostraBean> respItemAmostraBeanList = respItemAmostraBean.all();
 		Log.i("PIA", "RESP");
 		for(RespItemAmostraBean respItemAmostraBeanBD : respItemAmostraBeanList){
-			Log.i("PIA", "idRespItem = " + respItemAmostraBeanBD.getIdRespItem());
+			Log.i("PIA", "idRespItem = " + respItemAmostraBeanBD.getIdRespItemAmostra());
 			Log.i("PIA", "idCabec = " + respItemAmostraBeanBD.getIdCabec());
-			Log.i("PIA", "idAmostraRespItem = " + respItemAmostraBeanBD.getIdAmostraRespItem());
-			Log.i("PIA", "pontoRespItem = " + respItemAmostraBeanBD.getPontoRespItem());
-			Log.i("PIA", "valorRespItem = " + respItemAmostraBeanBD.getValorRespItem());
+			Log.i("PIA", "idAmostraRespItem = " + respItemAmostraBeanBD.getIdAmostra());
+			Log.i("PIA", "pontoRespItem = " + respItemAmostraBeanBD.getPonto());
+			Log.i("PIA", "valorRespItem = " + respItemAmostraBeanBD.getValor());
 		}
 		respItemAmostraBeanList.clear();
 	}

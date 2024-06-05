@@ -1,11 +1,21 @@
 package br.com.usinasantafe.pia.view;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.core.app.ActivityCompat;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.List;
 
@@ -17,6 +27,7 @@ import br.com.usinasantafe.pia.model.dao.LogProcessoDAO;
 public class TalhaoActivity extends ActivityGeneric {
 
     private PIAContext piaContext;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,24 +43,50 @@ public class TalhaoActivity extends ActivityGeneric {
             LogProcessoDAO.getInstance().insertLogProcesso("buttonOkTalhao.setOnClickListener(new View.OnClickListener() {\n" +
                     "            @Override\n" +
                     "            public void onClick(View v) {", getLocalClassName());
-            if(!editTextPadrao.getText().toString().equals("")){
+            if (!editTextPadrao.getText().toString().equals("")) {
 
                 LogProcessoDAO.getInstance().insertLogProcesso("if(!editTextPadrao.getText().toString().equals(\"\")){\n" +
                         "                    Long codTalhao = Long.parseLong(editTextPadrao.getText().toString());", getLocalClassName());
                 Long codTalhao = Long.parseLong(editTextPadrao.getText().toString());
-                if(piaContext.getInfestacaoCTR().verTalhaCod(codTalhao)) {
+                if (piaContext.getInfestacaoCTR().verTalhaCod(codTalhao)) {
 
                     LogProcessoDAO.getInstance().insertLogProcesso("if(piaContext.getInfestacaoCTR().verTalhaCod(codTalhao)) {\n" +
                             "                    piaContext.getConfigCTR().setTalhao(piaContext.getInfestacaoCTR().getTalhaCod(codTalhao).getIdTalhao());\n" +
-                            "                    piaContext.setVerTelaQuestao(1);\n" +
-                            "                    boolean retorno = piaContext.getInfestacaoCTR().salvarCabecAberto();", getLocalClassName());
+                            "                    piaContext.setVerTelaQuestao(1);", getLocalClassName());
                     piaContext.getConfigCTR().setTalhao(piaContext.getInfestacaoCTR().getTalhaCod(codTalhao).getIdTalhao());
                     piaContext.setVerTelaQuestao(1);
-                    piaContext.getInfestacaoCTR().salvarCabecAberto();
 
-                    Intent it = new Intent(TalhaoActivity.this, ListaPontosActivity.class);
-                    startActivity(it);
-                    finish();
+                    if(piaContext.getConfigCTR().getIdAmostra() == 51L) {
+
+                        LogProcessoDAO.getInstance().insertLogProcesso("if(piaContext.getConfigCTR().getIdAmostra() == 51L) {\n" +
+                                "                        piaContext.setTipoFluxo(1);\n" +
+                                "                        Intent it = new Intent(TalhaoActivity.this, ObservActivity.class);", getLocalClassName());
+                        piaContext.setTipoFluxo(1);
+                        Intent it = new Intent(TalhaoActivity.this, ObservActivity.class);
+                        startActivity(it);
+                        finish();
+
+                    } else {
+
+                        LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
+                                "                        piaContext.getInfestacaoCTR().salvarCabecAberto(0D, 0D);", getLocalClassName());
+                        piaContext.getInfestacaoCTR().salvarCabecAberto(0D, 0D);
+
+                        if(piaContext.getInfestacaoCTR().getIdAmostraOrgan() == 24L){
+                            LogProcessoDAO.getInstance().insertLogProcesso("if(piaContext.getInfestacaoCTR().getIdAmostraOrgan() == 24L){\n" +
+                                    "                            Intent it = new Intent(TalhaoActivity.this, QuestaoCabecPergActivity.class);", getLocalClassName());
+                            Intent it = new Intent(TalhaoActivity.this, QuestaoCabecPergActivity.class);
+                            startActivity(it);
+                            finish();
+                        } else {
+                            LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
+                                    "                            Intent it = new Intent(TalhaoActivity.this, ListaPontosActivity.class);", getLocalClassName());
+                            Intent it = new Intent(TalhaoActivity.this, ListaPontosActivity.class);
+                            startActivity(it);
+                            finish();
+                        }
+
+                    }
 
                 } else {
 

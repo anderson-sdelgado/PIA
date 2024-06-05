@@ -44,9 +44,9 @@ public class QuestaoAmostraActivity extends ActivityGeneric {
                     "            textViewPadrao.setText(itemAmostraBean.getDescrItem());\n" +
                     "            editText.setText(String.valueOf(respItemAmostraBean.getValorRespItem()));", getLocalClassName());
             RespItemAmostraBean respItemAmostraBean = piaContext.getInfestacaoCTR().getRespItemAmostra(piaContext.getIdRespItem());
-            amostraBean = piaContext.getInfestacaoCTR().getAmostraId(respItemAmostraBean.getIdAmostraRespItem());
+            amostraBean = piaContext.getInfestacaoCTR().getAmostraId(respItemAmostraBean.getIdAmostra());
             textViewPadrao.setText(amostraBean.getDescrAmostra());
-            editText.setText(String.valueOf(respItemAmostraBean.getValorRespItem()));
+            editText.setText(String.valueOf(respItemAmostraBean.getValor()));
         }
 
         buttonOkQA.setOnClickListener(v -> {
@@ -57,43 +57,48 @@ public class QuestaoAmostraActivity extends ActivityGeneric {
                     "                Long valor = (editTextPadrao.getText().toString().equals(\"\")) ? 0L : Long.parseLong(editTextPadrao.getText().toString());", getLocalClassName());
             Long valor = (editTextPadrao.getText().toString().equals("")) ? 0L : Long.parseLong(editTextPadrao.getText().toString());
 
-            if(piaContext.getVerTelaQuestao() == 1) {
-
-                LogProcessoDAO.getInstance().insertLogProcesso("if(piaContext.getVerTelaQuestao() == 1) {\n" +
-                        "                    piaContext.getInfestacaoCTR().inserirRespItemAmostra(itemAmostraBean.getIdAmostraItem(), valor);\n" +
-                        "                    piaContext.setPosQuestaoAmostra(piaContext.getPosQuestaoAmostra() + 1);", getLocalClassName());
-                piaContext.getInfestacaoCTR().inserirRespItemAmostra(amostraBean.getIdAmostra(), valor);
-                piaContext.setPosQuestaoAmostra(piaContext.getPosQuestaoAmostra() + 1);
-
-                if (piaContext.getPosQuestaoAmostra() < piaContext.getInfestacaoCTR().qtdeItemAmostra()) {
-
-                    LogProcessoDAO.getInstance().insertLogProcesso("if (piaContext.getPosQuestaoAmostra() < piaContext.getInfestacaoCTR().qtdeItemAmostra()) {\n" +
-                            "                        Intent it = new Intent(QuestaoAmostraActivity.this, QuestaoAmostraActivity.class);", getLocalClassName());
-                    Intent it = new Intent(QuestaoAmostraActivity.this, QuestaoAmostraActivity.class);
-                    startActivity(it);
+            Intent it;
+            if(piaContext.getConfigCTR().getIdAmostra() == 51L) {
+                LogProcessoDAO.getInstance().insertLogProcesso("if(piaContext.getConfigCTR().getIdAmostra() == 51L) {\n" +
+                        "                piaContext.setTipoFluxo(2);\n" +
+                        "                piaContext.getConfigCTR().setValorResp(valor);\n" +
+                        "                it = new Intent(QuestaoAmostraActivity.this, ObservActivity.class);", getLocalClassName());
+                piaContext.setTipoFluxo(2);
+                piaContext.getConfigCTR().setValorResp(valor);
+                it = new Intent(QuestaoAmostraActivity.this, ObservActivity.class);
+            } else {
+                LogProcessoDAO.getInstance().insertLogProcesso("} else {", getLocalClassName());
+                if(piaContext.getVerTelaQuestao() == 1) {
+                    LogProcessoDAO.getInstance().insertLogProcesso("if(piaContext.getVerTelaQuestao() == 1) {\n" +
+                            "                    piaContext.getInfestacaoCTR().inserirRespItemAmostra(itemAmostraBean.getIdAmostraItem(), valor);\n" +
+                            "                    piaContext.setPosQuestaoAmostra(piaContext.getPosQuestaoAmostra() + 1);", getLocalClassName());
+                    piaContext.getInfestacaoCTR().inserirRespItemAmostra(amostraBean.getIdAmostra(), valor);
+                    piaContext.setPosQuestaoAmostra(piaContext.getPosQuestaoAmostra() + 1);
+                    if (piaContext.getPosQuestaoAmostra() < piaContext.getInfestacaoCTR().qtdeItemAmostra()) {
+                        LogProcessoDAO.getInstance().insertLogProcesso("if (piaContext.getPosQuestaoAmostra() < piaContext.getInfestacaoCTR().qtdeItemAmostra()) {\n" +
+                                "                        Intent it = new Intent(QuestaoAmostraActivity.this, QuestaoAmostraActivity.class);", getLocalClassName());
+                        it = new Intent(QuestaoAmostraActivity.this, QuestaoAmostraActivity.class);
+                    } else {
+                        LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
+                                "                        piaContext.getInfestacaoCTR().fecharPonto();\n" +
+                                "                        Intent it = new Intent(QuestaoAmostraActivity.this, MsgPontoActivity.class);", getLocalClassName());
+                        piaContext.getInfestacaoCTR().fecharPonto();
+                        it = new Intent(QuestaoAmostraActivity.this, MsgPontoArmadilhaActivity.class);
+                    }
 
                 } else {
 
                     LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
-                            "                        piaContext.getInfestacaoCTR().fecharPonto();\n" +
-                            "                        Intent it = new Intent(QuestaoAmostraActivity.this, MsgPontoActivity.class);", getLocalClassName());
-                    piaContext.getInfestacaoCTR().fecharPonto();
-                    Intent it = new Intent(QuestaoAmostraActivity.this, MsgPontoActivity.class);
-                    startActivity(it);
+                            "                    piaContext.getInfestacaoCTR().updateRespItemAmostra(piaContext.getIdRespItem(), valor);\n" +
+                            "                    Intent it = new Intent(QuestaoAmostraActivity.this, ListaQuestaoActivity.class);", getLocalClassName());
+                    piaContext.getInfestacaoCTR().updateRespItemAmostra(piaContext.getIdRespItem(), valor);
+                    it = new Intent(QuestaoAmostraActivity.this, ListaQuestaoActivity.class);
 
                 }
-
-            } else {
-
-                LogProcessoDAO.getInstance().insertLogProcesso("} else if(piaContext.getVerTelaQuestao() == 2) {\n" +
-                        "                    piaContext.getInfestacaoCTR().updateRespItemAmostra(piaContext.getIdRespItem(), valor);\n" +
-                        "                    Intent it = new Intent(QuestaoAmostraActivity.this, ListaQuestaoActivity.class);", getLocalClassName());
-                piaContext.getInfestacaoCTR().updateRespItemAmostra(piaContext.getIdRespItem(), valor);
-                Intent it = new Intent(QuestaoAmostraActivity.this, ListaQuestaoActivity.class);
-                startActivity(it);
-
             }
+
             System.gc();
+            startActivity(it);
             finish();
 
         });
@@ -112,18 +117,18 @@ public class QuestaoAmostraActivity extends ActivityGeneric {
     public void onBackPressed()  {
 
         LogProcessoDAO.getInstance().insertLogProcesso("public void onBackPressed()  {", getLocalClassName());
+        Intent it;
         if(piaContext.getVerTelaQuestao() == 1) {
 
             LogProcessoDAO.getInstance().insertLogProcesso("if(piaContext.getVerTelaQuestao() == 1) {\n" +
                     "                        piaContext.getInfestacaoCTR().deleteRespItemAmostraAberto(itemAmostraBean.getIdAmostraItem());", getLocalClassName());
-            piaContext.getInfestacaoCTR().deleteRespItemAmostra(amostraBean.getIdAmostra());
+            piaContext.getInfestacaoCTR().deleteRespItemAmostraCabecApont(amostraBean.getIdAmostra());
             if (piaContext.getPosQuestaoAmostra() == 0) {
 
                 LogProcessoDAO.getInstance().insertLogProcesso("if (piaContext.getPosQuestaoAmostra() == 0) {\n" +
                         "                            piaContext.getInfestacaoCTR().deleteRespItemAmostra();\n" +
                         "                            Intent it = new Intent(QuestaoAmostraActivity.this, ListaPontosActivity.class);", getLocalClassName());
-                Intent it = new Intent(QuestaoAmostraActivity.this, ListaPontosActivity.class);
-                startActivity(it);
+                it = new Intent(QuestaoAmostraActivity.this, ListaPontosActivity.class);
 
             } else {
 
@@ -131,20 +136,21 @@ public class QuestaoAmostraActivity extends ActivityGeneric {
                         "                            piaContext.setPosQuestaoAmostra(piaContext.getPosQuestaoAmostra() - 1);\n" +
                         "                            Intent it = new Intent(QuestaoAmostraActivity.this, QuestaoAmostraActivity.class);", getLocalClassName());
                 piaContext.setPosQuestaoAmostra(piaContext.getPosQuestaoAmostra() - 1);
-                Intent it = new Intent(QuestaoAmostraActivity.this, QuestaoAmostraActivity.class);
-                startActivity(it);
+                it = new Intent(QuestaoAmostraActivity.this, QuestaoAmostraActivity.class);
             }
 
         } else {
 
             LogProcessoDAO.getInstance().insertLogProcesso("} else if(piaContext.getVerTelaQuestao() == 2) {\n" +
                     "                        Intent it = new Intent(QuestaoAmostraActivity.this, ListaQuestaoActivity.class);", getLocalClassName());
-            Intent it = new Intent(QuestaoAmostraActivity.this, ListaQuestaoActivity.class);
-            startActivity(it);
+            it = new Intent(QuestaoAmostraActivity.this, ListaQuestaoActivity.class);
 
         }
+
         System.gc();
+        startActivity(it);
         finish();
+
     }
 
 }

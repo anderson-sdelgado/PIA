@@ -28,15 +28,16 @@ public class TelaInicialActivity extends ActivityGeneric {
                 "        public void run() {\n" +
                 "            clearBD();\n" +
                 "            goMenuInicial();", getLocalClassName());
-        clearBD();
+        manutInicialBD();
         goMenuInicial();
     };
 
-    public void clearBD() {
+    public void manutInicialBD() {
         LogProcessoDAO.getInstance().insertLogProcesso("piaContext.getInfestacaoCTR().deleteCabecEnviado();\n" +
                 "        piaContext.getConfigCTR().deleteLogs();", getLocalClassName());
         piaContext.getInfestacaoCTR().deleteCabecEnviado();
         piaContext.getConfigCTR().deleteLogs();
+        piaContext.getInfestacaoCTR().updateCabecAbertoNApont();
     }
 
     public void goMenuInicial(){

@@ -74,7 +74,14 @@ public class ListaCaracOrganActivity extends ActivityGeneric {
                         "                finish();", getLocalClassName());
                 piaContext.getConfigCTR().setIdCaracOrg(caracOrganBean.getIdCaracOrgan());
                 caracOrganList.clear();
-                Intent it = new Intent(ListaCaracOrganActivity.this, OSActivity.class);
+
+                Intent it;
+                if(!piaContext.getInfestacaoCTR().verifCabecAbertoCarac(caracOrganBean.getIdCaracOrgan())){
+                    it = new Intent(ListaCaracOrganActivity.this, MatricAuditorActivity.class);
+                } else {
+                    piaContext.getInfestacaoCTR().updateCabecAbertoCarac(caracOrganBean.getIdCaracOrgan());
+                    it = new Intent(ListaCaracOrganActivity.this, ListaPontosActivity.class);
+                }
                 startActivity(it);
                 finish();
 

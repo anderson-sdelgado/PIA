@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_msg_ponto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -9,20 +9,15 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".view.QuestaoCabecPergActivity">
+    tools:context="br.com.usinasantafe.pia.view.MsgPontoArmadilhaActivity">
 
     <TextView
-        android:id="@+id/textViewPergCabec"
+        android:id="@+id/textViewMsgPontoArmadilha"
         style="@style/TextViewTituloLista"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/texto_titulo_questao_cabec" />
-
-    <ListView
-        android:id="@+id/listViewPergCabec"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:text="@string/texto_msg_ponto" />
 
     <LinearLayout
         android:id="@+id/rightRelativeLayout"
@@ -31,20 +26,20 @@
         android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/buttonPergCabecCanc"
+            android:id="@+id/buttonNaoPontoArmadilha"
             style="@style/BotaoAvulso"
             android:layout_weight="1"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/texto_padrao_cancelar" />
+            android:text="@string/texto_padrao_nao" />
 
         <Button
-            android:id="@+id/buttoPergCabecOk"
+            android:id="@+id/buttonSimPontoArmadilha"
             style="@style/BotaoAvulso"
             android:layout_weight="1"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/texto_padrao_ok" />
+            android:text="@string/texto_padrao_sim" />
 
     </LinearLayout>
 

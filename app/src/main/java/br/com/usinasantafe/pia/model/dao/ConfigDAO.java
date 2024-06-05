@@ -81,4 +81,11 @@ public class ConfigDAO {
         configBean.commit();
     }
 
+    public void setValorResp(Long valor){
+        ConfigBean configBean = getConfig();
+        configBean.setValorRespConfig(valor);
+        configBean.update();
+        configBean.commit();
+    }
+
 }

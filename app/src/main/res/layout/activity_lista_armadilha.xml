@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_msg_ponto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -9,37 +9,51 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="br.com.usinasantafe.pia.view.MsgPontoActivity">
+    tools:context=".view.ListaArmadilhaActivity">
 
     <TextView
-        android:id="@+id/textViewMsgPonto"
-        style="@style/TextViewTituloLista"
-        android:layout_width="wrap_content"
+        android:id="@+id/textViewTituloAuditor"
+        style="@style/TextViewMenuNegrito"
+        android:text="@string/texto_ponto_titulo_auditor" />
+
+    <TextView
+        android:id="@+id/textViewAuditor"
+        style="@style/TextViewMenuNormal"
+        android:text="@string/texto_ponto_auditor" />
+
+    <ListView
+        android:id="@+id/listViewArmadilha"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:text="@string/texto_msg_ponto" />
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/buttonInserirArmadilha"
+        style="@style/BotaoAvulso"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/texto_padrao_inserir" />
 
     <LinearLayout
         android:id="@+id/rightRelativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:layout_height="wrap_content" >
 
         <Button
-            android:id="@+id/buttonNaoPonto"
+            android:id="@+id/buttonExcluirAnalise"
             style="@style/BotaoAvulso"
             android:layout_weight="1"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/texto_padrao_nao" />
+            android:text="@string/texto_padrao_excluir" />
 
         <Button
-            android:id="@+id/buttonSimPonto"
+            android:id="@+id/buttonEnviarAnalise"
             style="@style/BotaoAvulso"
             android:layout_weight="1"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/texto_padrao_sim" />
+            android:text="@string/texto_padrao_enviar" />
 
     </LinearLayout>
 

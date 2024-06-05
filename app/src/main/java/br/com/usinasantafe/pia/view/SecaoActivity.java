@@ -2,10 +2,8 @@ package br.com.usinasantafe.pia.view;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 import br.com.usinasantafe.pia.PIAContext;
@@ -102,7 +100,15 @@ public class SecaoActivity extends ActivityGeneric {
                 LogProcessoDAO.getInstance().insertLogProcesso("if(!editTextPadrao.getText().toString().equals(\"\")){\n" +
                         "                    Long codSecao = Long.parseLong(editTextPadrao.getText().toString());", getLocalClassName());
                 Long codSecao = Long.parseLong(editTextPadrao.getText().toString());
-                if(piaContext.getInfestacaoCTR().verSecaoCod(codSecao)) {
+
+                boolean result;
+                if(piaContext.getConfigCTR().getIdAmostra() == 51L) {
+                    result = piaContext.getInfestacaoCTR().verSecaoArmadilhaCod(codSecao);
+                } else {
+                    result = piaContext.getInfestacaoCTR().verSecaoCod(codSecao);
+                }
+
+                if(result) {
 
                     LogProcessoDAO.getInstance().insertLogProcesso("if(piaContext.getInfestacaoCTR().verSecaoCod(codSecao)) {\n" +
                             "                        piaContext.getConfigCTR().setSecao(piaContext.getInfestacaoCTR().getSecaoCod(codSecao).getIdSecao());\n" +
@@ -146,11 +152,21 @@ public class SecaoActivity extends ActivityGeneric {
     }
 
     public void onBackPressed()  {
-        LogProcessoDAO.getInstance().insertLogProcesso("public void onBackPressed()  {\n" +
-                "        Intent it = new Intent(SecaoActivity.this, AuditorActivity.class);", getLocalClassName());
-        Intent it = new Intent(SecaoActivity.this, AuditorActivity.class);
-        startActivity(it);
-        finish();
+        LogProcessoDAO.getInstance().insertLogProcesso("public void onBackPressed()  {", getLocalClassName());
+        if(piaContext.getConfigCTR().getIdAmostra() == 51L) {
+            LogProcessoDAO.getInstance().insertLogProcesso("if(piaContext.getConfigCTR().getIdAmostra() == 51L) {\n" +
+                    "            Intent it = new Intent(SecaoActivity.this, ListaArmadilhaActivity.class);", getLocalClassName());
+            Intent it = new Intent(SecaoActivity.this, ListaArmadilhaActivity.class);
+            startActivity(it);
+            finish();
+        } else {
+            LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
+                    "            Intent it = new Intent(SecaoActivity.this, MatricAuditorActivity.class);", getLocalClassName());
+            Intent it = new Intent(SecaoActivity.this, MatricAuditorActivity.class);
+            startActivity(it);
+            finish();
+        }
+
     }
 
 }

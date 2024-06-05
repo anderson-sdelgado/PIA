@@ -37,10 +37,9 @@ public class CabecAmostraBean extends Entidade {
     private Long statusCabec; // 1 - Aberto; 2 - Encerrado; 3 - Enviado;
     @DatabaseField
     private Long statusApont; // 0 - Stand-by; 1 - Apontando;
-
     private List<LocalAmostraBean> localAmostraList;
-
     private List<RespItemAmostraBean> respItemAmostraList;
+    private List<RespItemCabecBean> respItemCabecList;
 
     public CabecAmostraBean() {
     }
@@ -147,5 +146,13 @@ public class CabecAmostraBean extends Entidade {
 
     public void setStatusPonto(Long statusPonto) {
         this.statusPonto = statusPonto;
+    }
+
+    public List<RespItemCabecBean> getRespItemCabecList() {
+        return respItemCabecList;
+    }
+
+    public void setRespItemCabecList(List<RespItemCabecBean> respItemCabecList) {
+        this.respItemCabecList = respItemCabecList;
     }
 }

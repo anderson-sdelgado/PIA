@@ -26,6 +26,8 @@ public class ConfigBean extends Entidade {
     private Long idOrganConfig;
     @DatabaseField
     private Long idCaracOrganConfig;
+    @DatabaseField
+    private Long valorRespConfig;
 
     public ConfigBean() {
     }
@@ -94,4 +96,11 @@ public class ConfigBean extends Entidade {
         this.idCaracOrganConfig = idCaracOrganConfig;
     }
 
+    public Long getValorRespConfig() {
+        return valorRespConfig;
+    }
+
+    public void setValorRespConfig(Long valorRespConfig) {
+        this.valorRespConfig = valorRespConfig;
+    }
 }

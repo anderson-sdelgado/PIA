@@ -15,23 +15,33 @@ public class RespItemAmostraBean extends Entidade {
     private static final long serialVersionUID = 1L;
 
     @DatabaseField(generatedId=true)
-    private Long idRespItem;
+    private Long idRespItemAmostra;
     @DatabaseField
     private Long idCabec;
     @DatabaseField
     private Long idLocal;
     @DatabaseField
-    private Long idAmostraRespItem;
+    private String dthr;
     @DatabaseField
-    private Long pontoRespItem;
+    private Long dthrLong;
     @DatabaseField
-    private Long valorRespItem;
+    private Long idAmostra;
+    @DatabaseField
+    private Long ponto;
+    @DatabaseField
+    private Long valor;
+    @DatabaseField
+    private String obs;
 
     public RespItemAmostraBean() {
     }
 
-    public Long getIdRespItem() {
-        return idRespItem;
+    public Long getIdRespItemAmostra() {
+        return idRespItemAmostra;
+    }
+
+    public void setIdRespItemAmostra(Long idRespItemAmostra) {
+        this.idRespItemAmostra = idRespItemAmostra;
     }
 
     public Long getIdCabec() {
@@ -42,28 +52,28 @@ public class RespItemAmostraBean extends Entidade {
         this.idCabec = idCabec;
     }
 
-    public Long getIdAmostraRespItem() {
-        return idAmostraRespItem;
+    public Long getIdAmostra() {
+        return idAmostra;
     }
 
-    public void setIdAmostraRespItem(Long idAmostraRespItem) {
-        this.idAmostraRespItem = idAmostraRespItem;
+    public void setIdAmostra(Long idAmostra) {
+        this.idAmostra = idAmostra;
     }
 
-    public Long getPontoRespItem() {
-        return pontoRespItem;
+    public Long getPonto() {
+        return ponto;
     }
 
-    public void setPontoRespItem(Long pontoRespItem) {
-        this.pontoRespItem = pontoRespItem;
+    public void setPonto(Long ponto) {
+        this.ponto = ponto;
     }
 
-    public Long getValorRespItem() {
-        return valorRespItem;
+    public Long getValor() {
+        return valor;
     }
 
-    public void setValorRespItem(Long valorRespItem) {
-        this.valorRespItem = valorRespItem;
+    public void setValor(Long valor) {
+        this.valor = valor;
     }
 
     public Long getIdLocal() {
@@ -72,5 +82,29 @@ public class RespItemAmostraBean extends Entidade {
 
     public void setIdLocal(Long idLocal) {
         this.idLocal = idLocal;
+    }
+
+    public String getDthr() {
+        return dthr;
+    }
+
+    public void setDthr(String dthr) {
+        this.dthr = dthr;
+    }
+
+    public Long getDthrLong() {
+        return dthrLong;
+    }
+
+    public void setDthrLong(Long dthrLong) {
+        this.dthrLong = dthrLong;
+    }
+
+    public String getObs() {
+        return obs;
+    }
+
+    public void setObs(String obs) {
+        this.obs = obs;
     }
 }

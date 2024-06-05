@@ -2,12 +2,9 @@ package br.com.usinasantafe.pia.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
-import java.util.List;
 
 import br.com.usinasantafe.pia.PIAContext;
 import br.com.usinasantafe.pia.R;
@@ -44,7 +41,7 @@ public class QuestaoCabecActivity extends ActivityGeneric {
                         "                    Intent it = new Intent(QuestaoCabecActivity.this, MsgPontoActivity.class);", getLocalClassName());
                 piaContext.setVerTelaQuestao(1);
 
-                Intent it = new Intent(QuestaoCabecActivity.this, MsgPontoActivity.class);
+                Intent it = new Intent(QuestaoCabecActivity.this, MsgPontoArmadilhaActivity.class);
                 startActivity(it);
                 finish();
 

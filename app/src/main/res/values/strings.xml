@@ -26,6 +26,7 @@
     <string name="texto_atualizar">ATUALIZAR</string>
     <string name="texto_padrao_retorna">RETORNAR</string>
     <string name="texto_msg_ponto">DESEJA INSERIR PONTO 1?</string>
+    <string name="texto_titulo_questao_cabec">QUESTÃO CABEÇALHO</string>
     <string name="texto_padrao_sim">SIM</string>
     <string name="texto_padrao_nao">NÃO</string>
     <string name="texto_questao_amostra">N. DE LEVANTAMENTO</string>
@@ -51,4 +52,5 @@
     <string name="texto_padrao_retornar">RETORNAR</string>
     <string name="texto_titulo_log_base_dado">LOG - BASE DADO</string>
     <string name="texto_titulo_log_erro">LOG - ERRO</string>
+    <string name="texto_titulo_observacao">OBSERVAÇÃO</string>
 </resources>

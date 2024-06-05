@@ -22,6 +22,8 @@ public class ListaQuestaoActivity extends ActivityGeneric {
     private ListView lista;
     private List<RespItemAmostraBean> respItemAmostraList;
 
+    private boolean tipoAmostra;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,14 +47,26 @@ public class ListaQuestaoActivity extends ActivityGeneric {
                 "        lista = (ListView) findViewById(R.id.listViewQuestao);\n" +
                 "        lista.setAdapter(adapterList);", getLocalClassName());
         int pos = piaContext.getPosPonto();
-        textViewTituloPonto.setText("PONTO " + pos);
+        String tipo;
+        tipoAmostra = piaContext.getConfigCTR().getIdAmostra() == 51L;
+
+        if(tipoAmostra) {
+            tipo = "AMOSTRA";
+        } else {
+            tipo = "PONTO";
+        }
+        textViewTituloPonto.setText(tipo + " " + pos);
 
         ArrayList<String> itens = new ArrayList<>();
-        respItemAmostraList = piaContext.getInfestacaoCTR().getRespItemAmostraList((long) piaContext.getPosPonto());
+        respItemAmostraList = piaContext.getInfestacaoCTR().getRespItemAmostraCabecApontList((long) piaContext.getPosPonto());
 
         for (RespItemAmostraBean respItemAmostraBean : respItemAmostraList) {
-            AmostraBean amostraBean = piaContext.getInfestacaoCTR().getAmostraIdAmostra(respItemAmostraBean.getIdAmostraRespItem());
-            itens.add(amostraBean.getDescrAmostra() + "\nVALOR: " + respItemAmostraBean.getValorRespItem());
+            AmostraBean amostraBean = piaContext.getInfestacaoCTR().getAmostraIdAmostra(respItemAmostraBean.getIdAmostra());
+            String obs = "";
+            if(tipoAmostra){
+                obs = "\nOBSERV: " + ((respItemAmostraBean.getObs() == null) ? "" : respItemAmostraBean.getObs());
+            }
+            itens.add(amostraBean.getDescrAmostra() + "\nVALOR: " + respItemAmostraBean.getValor() + obs);
         }
 
         AdapterList adapterList = new AdapterList(this, itens);
@@ -70,7 +84,7 @@ public class ListaQuestaoActivity extends ActivityGeneric {
                     "                respItemAmostraList.clear();\n" +
                     "                Intent it = new Intent(ListaQuestaoActivity.this, QuestaoAmostraActivity.class);", getLocalClassName());
             RespItemAmostraBean respItemAmostraTO = respItemAmostraList.get(position);
-            piaContext.setIdRespItem(respItemAmostraTO.getIdRespItem());
+            piaContext.setIdRespItem(respItemAmostraTO.getIdRespItemAmostra());
             piaContext.setVerTelaQuestao(2);
             respItemAmostraList.clear();
 
@@ -82,11 +96,18 @@ public class ListaQuestaoActivity extends ActivityGeneric {
 
         buttonListaQuestaoRetornar.setOnClickListener(v -> {
 
-            LogProcessoDAO.getInstance().insertLogProcesso("buttonListaQuestaoRetornar.setOnClickListener(new View.OnClickListener() {\n" +
-                    "            @Override\n" +
-                    "            public void onClick(View v) {\n" +
-                    "                Intent it = new Intent(ListaQuestaoActivity.this, ListaPontosActivity.class);", getLocalClassName());
-            Intent it = new Intent(ListaQuestaoActivity.this, ListaPontosActivity.class);
+            LogProcessoDAO.getInstance().insertLogProcesso("buttonListaQuestaoRetornar.setOnClickListener(v -> {", getLocalClassName());
+            Intent it;
+            if(tipoAmostra){
+                LogProcessoDAO.getInstance().insertLogProcesso("if(tipoAmostra){\n" +
+                        "                it = new Intent(ListaQuestaoActivity.this, ListaArmadilhaActivity.class);", getLocalClassName());
+                it = new Intent(ListaQuestaoActivity.this, ListaArmadilhaActivity.class);
+            } else {
+                LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
+                        "                it = new Intent(ListaQuestaoActivity.this, ListaPontosActivity.class);", getLocalClassName());
+                it = new Intent(ListaQuestaoActivity.this, ListaPontosActivity.class);
+            }
+
             startActivity(it);
             finish();
 

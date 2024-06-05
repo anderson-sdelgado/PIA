@@ -3,8 +3,10 @@ package br.com.usinasantafe.pia.model.bean.variaveis;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import br.com.usinasantafe.pia.model.pst.Entidade;
+
 @DatabaseTable(tableName="tbrespitemcabecvar")
-public class RespItemCabecBean {
+public class RespItemCabecBean extends Entidade {
 
     private static final long serialVersionUID = 1L;
 
@@ -15,7 +17,7 @@ public class RespItemCabecBean {
     @DatabaseField
     private Long idItemCabec;
     @DatabaseField
-    private Long idRespItem;
+    private Long flagRespItem; //0 - Desmarcado; 1 - Marcado;
 
     public Long getIdRespItemCabec() {
         return idRespItemCabec;
@@ -41,11 +43,11 @@ public class RespItemCabecBean {
         this.idItemCabec = idItemCabec;
     }
 
-    public Long getIdRespItem() {
-        return idRespItem;
+    public Long getFlagRespItem() {
+        return flagRespItem;
     }
 
-    public void setIdRespItem(Long idRespItem) {
-        this.idRespItem = idRespItem;
+    public void setFlagRespItem(Long flagRespItem) {
+        this.flagRespItem = flagRespItem;
     }
 }

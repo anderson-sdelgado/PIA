@@ -7,6 +7,7 @@ import java.util.List;
 
 import br.com.usinasantafe.pia.model.bean.variaveis.RespItemAmostraBean;
 import br.com.usinasantafe.pia.model.pst.EspecificaPesquisa;
+import br.com.usinasantafe.pia.util.Tempo;
 
 public class RespItemAmostraDAO {
 
@@ -24,35 +25,51 @@ public class RespItemAmostraDAO {
         return retorno;
     }
 
-    public boolean verRespItemAmostraFechado(Long idCabec){
-        ArrayList pesqArrayList = new ArrayList();
-        pesqArrayList.add(getPesqIdCabec(idCabec));
-        pesqArrayList.add(getPesqStatusFechado());
 
-        RespItemAmostraBean respItemAmostra = new RespItemAmostraBean();
-        List<RespItemAmostraBean> respItemList = respItemAmostra.get(pesqArrayList);
-        boolean retorno = respItemList.size() > 0;
-        respItemList.clear();
-        return retorno;
-    }
-
-    public void inserirRespItemAmostra(Long idCabec, Long idLocal, Long idAmostra, Long valor, Long qtde){
+    public void inserirRespItemAmostra(Long idCabec, Long idLocal, Long idAmostra, Long valor, Long qtde, String obs){
         RespItemAmostraBean respItemAmostraBean = new RespItemAmostraBean();
+        respItemAmostraBean.setDthr(Tempo.getInstance().dthrAtualString());
+        respItemAmostraBean.setDthrLong(Tempo.getInstance().dthrAtualLong());
         respItemAmostraBean.setIdCabec(idCabec);
         respItemAmostraBean.setIdLocal(idLocal);
-        respItemAmostraBean.setIdAmostraRespItem(idAmostra);
-        respItemAmostraBean.setPontoRespItem(qtde);
-        respItemAmostraBean.setValorRespItem(valor);
+        respItemAmostraBean.setIdAmostra(idAmostra);
+        respItemAmostraBean.setPonto(qtde);
+        respItemAmostraBean.setValor(valor);
+        respItemAmostraBean.setObs(obs);
         respItemAmostraBean.insert();
         respItemAmostraBean.commit();
     }
 
-    public void updateRespItemAmostra(Long idRespItem, Long valor){
+    public void updateRespItemAmostra(Long idRespItem, Long valor, String obs){
         RespItemAmostraBean respItemAmostraBean = getRespItemAmostra(idRespItem);
-        respItemAmostraBean.setValorRespItem(valor);
+        respItemAmostraBean.setValor(valor);
+        respItemAmostraBean.setDthr(Tempo.getInstance().dthrAtualString());
+        respItemAmostraBean.setDthrLong(Tempo.getInstance().dthrAtualLong());
+        respItemAmostraBean.setObs(obs);
         respItemAmostraBean.update();
         respItemAmostraBean.commit();
     }
+
+    public void updateRespItemPonto(Long idCabec, Long ponto){
+
+        ArrayList pesqArrayList = new ArrayList();
+        pesqArrayList.add(getPesqIdCabec(idCabec));
+
+        RespItemAmostraBean respItemAmostra = new RespItemAmostraBean();
+        List<RespItemAmostraBean> respItemList = respItemAmostra.get(pesqArrayList);
+
+        for (RespItemAmostraBean respItemAmostraBean : respItemList) {
+            Long pontoBD = respItemAmostraBean.getPonto();
+            if(pontoBD > ponto) {
+                respItemAmostraBean.setPonto(pontoBD - 1L);
+                respItemAmostraBean.update();
+                respItemAmostraBean.commit();
+            }
+        }
+
+        respItemList.clear();
+    }
+
 
     public void deleteRespItemAmostra(Long idCabec, Long idAmostra, Long ponto){
 
@@ -116,38 +133,14 @@ public class RespItemAmostraDAO {
 
     }
 
-    public RespItemAmostraBean getUltRespItemAmostra(Long idCabec){
-        List<RespItemAmostraBean> respItemList = respItemAmostraFechadoList(idCabec);
-        RespItemAmostraBean respItemAmostra = respItemList.get(0);
-        respItemList.clear();
-        return respItemAmostra;
-    }
-
-    public List<RespItemAmostraBean> respItemAmostraFechadoList(Long idCabec){
-
-        ArrayList pesqArrayList = new ArrayList();
-        pesqArrayList.add(getPesqIdCabec(idCabec));
-        pesqArrayList.add(getPesqStatusFechado());
-
-        RespItemAmostraBean respItemAmostra = new RespItemAmostraBean();
-        return respItemAmostra.getAndOrderBy(pesqArrayList, "idRespItem", false);
-    }
-
     public List<RespItemAmostraBean> respItemAmostraList(Long idCabec){
         RespItemAmostraBean respItemAmostra = new RespItemAmostraBean();
-        return respItemAmostra.getAndOrderBy("idCabec", idCabec, "idRespItem", false);
+        return respItemAmostra.getAndOrderBy("idCabec", idCabec, "idRespItemAmostra", true);
     }
 
     public List<RespItemAmostraBean> respItemAmostraList(ArrayList<Long> idRespItemAmostraArrayList){
         RespItemAmostraBean respItemAmostraBean = new RespItemAmostraBean();
         return respItemAmostraBean.in("idRespItem", idRespItemAmostraArrayList);
-    }
-
-    public List<RespItemAmostraBean> respRespItemAmostraList(ArrayList<Long> idCabec){
-        RespItemAmostraBean respItemAmostra = new RespItemAmostraBean();
-        ArrayList pesqArrayList = new ArrayList();
-        pesqArrayList.add(getPesqStatusFechado());
-        return respItemAmostra.inAndGetAndOrderBy("idCabec", idCabec, pesqArrayList, "idRespItem", true);
     }
 
     public List<RespItemAmostraBean> respItemAmostraList(Long idCabec, Long ponto){
@@ -158,6 +151,15 @@ public class RespItemAmostraDAO {
 
         RespItemAmostraBean respItemAmostra = new RespItemAmostraBean();
         return respItemAmostra.get(pesqArrayList);
+
+    }
+
+    public RespItemAmostraBean getRespItemAmostraIdCabecPonto(Long idCabec, Long ponto){
+
+        List<RespItemAmostraBean> respItemList = respItemAmostraList(idCabec, ponto);
+        RespItemAmostraBean respItemAmostraBean = respItemList.get(0);
+        respItemList.clear();
+        return respItemAmostraBean;
 
     }
 
@@ -177,7 +179,7 @@ public class RespItemAmostraDAO {
     public ArrayList<Long> idRespItemAmostraArrayList(List<RespItemAmostraBean> respItemAmostraList){
         ArrayList<Long> idRespItemAmostraList = new ArrayList<Long>();
         for (RespItemAmostraBean respItemAmostra : respItemAmostraList) {
-            idRespItemAmostraList.add(respItemAmostra.getIdRespItem());
+            idRespItemAmostraList.add(respItemAmostra.getIdRespItemAmostra());
         }
         return idRespItemAmostraList;
     }
@@ -200,7 +202,7 @@ public class RespItemAmostraDAO {
 
     private EspecificaPesquisa getPesqId(Long idRespItem){
         EspecificaPesquisa pesquisa = new EspecificaPesquisa();
-        pesquisa.setCampo("idRespItem");
+        pesquisa.setCampo("idRespItemAmostra");
         pesquisa.setValor(idRespItem);
         pesquisa.setTipo(1);
         return pesquisa;
@@ -214,25 +216,9 @@ public class RespItemAmostraDAO {
         return pesquisa;
     }
 
-    private EspecificaPesquisa getPesqStatusAberto(){
-        EspecificaPesquisa pesquisa = new EspecificaPesquisa();
-        pesquisa.setCampo("statusRespItem");
-        pesquisa.setValor(1L);
-        pesquisa.setTipo(1);
-        return pesquisa;
-    }
-
-    private EspecificaPesquisa getPesqStatusFechado(){
-        EspecificaPesquisa pesquisa = new EspecificaPesquisa();
-        pesquisa.setCampo("statusRespItem");
-        pesquisa.setValor(2L);
-        pesquisa.setTipo(1);
-        return pesquisa;
-    }
-
     private EspecificaPesquisa getPesqPonto(Long ponto){
         EspecificaPesquisa pesquisa = new EspecificaPesquisa();
-        pesquisa.setCampo("pontoRespItem");
+        pesquisa.setCampo("ponto");
         pesquisa.setValor(ponto);
         pesquisa.setTipo(1);
         return pesquisa;
@@ -240,7 +226,7 @@ public class RespItemAmostraDAO {
 
     private EspecificaPesquisa getPesqIdAmostra(Long idAmostra){
         EspecificaPesquisa pesquisa = new EspecificaPesquisa();
-        pesquisa.setCampo("idAmostraRespItem");
+        pesquisa.setCampo("idAmostra");
         pesquisa.setValor(idAmostra);
         pesquisa.setTipo(1);
         return pesquisa;

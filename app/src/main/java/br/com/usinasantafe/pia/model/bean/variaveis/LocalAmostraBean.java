@@ -25,7 +25,13 @@ public class LocalAmostraBean extends Entidade {
     @DatabaseField
     private Long idTalhao;
     @DatabaseField
-    private Long statusLocal; // 1 - Aberto; 2 - Encerrado; 3 - Enviado;
+    private Double latitude;
+    @DatabaseField
+    private Double longitude;
+    @DatabaseField
+    private String obs;
+    @DatabaseField
+    private Long statusApont; // 1 - Apontando; 2 - Fechado;
 
     public LocalAmostraBean() {
     }
@@ -86,11 +92,35 @@ public class LocalAmostraBean extends Entidade {
         this.idTalhao = idTalhao;
     }
 
-    public Long getStatusLocal() {
-        return statusLocal;
+    public Long getStatusApont() {
+        return statusApont;
     }
 
-    public void setStatusLocal(Long statusLocal) {
-        this.statusLocal = statusLocal;
+    public void setStatusApont(Long statusApont) {
+        this.statusApont = statusApont;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getObs() {
+        return obs;
+    }
+
+    public void setObs(String obs) {
+        this.obs = obs;
     }
 }
