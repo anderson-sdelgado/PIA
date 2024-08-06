@@ -1,12 +1,8 @@
 package br.com.usinasantafe.pia.view;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -15,13 +11,12 @@ import java.util.List;
 
 import br.com.usinasantafe.pia.PIAContext;
 import br.com.usinasantafe.pia.R;
-import br.com.usinasantafe.pia.model.bean.estaticas.AmostraBean;
 import br.com.usinasantafe.pia.model.bean.estaticas.CaracOrganBean;
 import br.com.usinasantafe.pia.model.dao.LogProcessoDAO;
 
 public class ListaCaracOrganActivity extends ActivityGeneric {
 
-    private ListView lista;
+    private ListView listView;
     private PIAContext piaContext;
     private List<CaracOrganBean> caracOrganList;
 
@@ -52,10 +47,10 @@ public class ListaCaracOrganActivity extends ActivityGeneric {
         }
 
         AdapterList adapterList = new AdapterList(this, itens);
-        lista = findViewById(R.id.listCaracOrgan);
-        lista.setAdapter(adapterList);
+        listView = findViewById(R.id.listCaracOrgan);
+        listView.setAdapter(adapterList);
 
-        lista.setOnItemClickListener((l, v, position, id) -> {
+        listView.setOnItemClickListener((l, v, position, id) -> {
 
             LogProcessoDAO.getInstance().insertLogProcesso("lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {\n" +
                     "            @Override\n" +
@@ -76,11 +71,15 @@ public class ListaCaracOrganActivity extends ActivityGeneric {
                 caracOrganList.clear();
 
                 Intent it;
-                if(!piaContext.getInfestacaoCTR().verifCabecAbertoCarac(caracOrganBean.getIdCaracOrgan())){
+                if(!piaContext.getInfestacaoCTR().verifCabecAmostra()){
                     it = new Intent(ListaCaracOrganActivity.this, MatricAuditorActivity.class);
                 } else {
-                    piaContext.getInfestacaoCTR().updateCabecAbertoCarac(caracOrganBean.getIdCaracOrgan());
-                    it = new Intent(ListaCaracOrganActivity.this, ListaPontosActivity.class);
+                    piaContext.getInfestacaoCTR().updateCabecApont();
+                    if(piaContext.getConfigCTR().getIdAmostra() == 51L) {
+                        it = new Intent(ListaCaracOrganActivity.this, ListaArmadilhaActivity.class);
+                    } else {
+                        it = new Intent(ListaCaracOrganActivity.this, ListaPontosActivity.class);
+                    }
                 }
                 startActivity(it);
                 finish();

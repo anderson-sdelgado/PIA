@@ -3,6 +3,7 @@ package br.com.usinasantafe.pia.model.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.usinasantafe.pia.model.bean.variaveis.CabecAmostraBean;
 import br.com.usinasantafe.pia.model.bean.variaveis.LocalAmostraBean;
 import br.com.usinasantafe.pia.model.pst.EspecificaPesquisa;
 import br.com.usinasantafe.pia.util.Tempo;
@@ -11,13 +12,6 @@ public class LocalAmostraDAO {
 
     public LocalAmostraBean getLocalAmostraIdCabec(Long idCabec) {
         List<LocalAmostraBean> localAmostraList = localAmostraIdCabecList(idCabec);
-        LocalAmostraBean localAmostraBean = localAmostraList.get(0);
-        localAmostraList.clear();
-        return localAmostraBean;
-    }
-
-    public LocalAmostraBean getLocalAmostraIdLocal(Long idLocal) {
-        List<LocalAmostraBean> localAmostraList = localAmostraIdList(idLocal);
         LocalAmostraBean localAmostraBean = localAmostraList.get(0);
         localAmostraList.clear();
         return localAmostraBean;
@@ -45,13 +39,6 @@ public class LocalAmostraDAO {
         return localAmostraBean.get(pesqArrayList);
     }
 
-    public List<LocalAmostraBean> localAmostraIdList(Long idLocal) {
-        ArrayList pesqArrayList = new ArrayList();
-        pesqArrayList.add(getPesqIdLocal(idLocal));
-        LocalAmostraBean localAmostraBean = new LocalAmostraBean();
-        return localAmostraBean.get(pesqArrayList);
-    }
-
     public void salvarLocal(Long idCabec, Long nroOS, Long idSecao, Long idTalhao, Double latitude, Double longitude, String obs, Long status) {
         LocalAmostraBean localAmostraBean = new LocalAmostraBean();
         localAmostraBean.setIdCabec(idCabec);
@@ -68,9 +55,8 @@ public class LocalAmostraDAO {
         localAmostraBean.commit();
     }
 
-    public void fecharLocal(Long idCabec){
-        LocalAmostraBean localAmostraBean = getLocalAmostraApontIdCabec(idCabec);
-        localAmostraBean.setStatusApont(2L);
+    public void updateLocalApont(LocalAmostraBean localAmostraBean){
+        localAmostraBean.setStatusApont(1L);
         localAmostraBean.update();
         localAmostraBean.commit();
     }

@@ -17,8 +17,6 @@ public class RespItemAmostraBean extends Entidade {
     @DatabaseField(generatedId=true)
     private Long idRespItemAmostra;
     @DatabaseField
-    private Long idCabec;
-    @DatabaseField
     private Long idLocal;
     @DatabaseField
     private String dthr;
@@ -42,14 +40,6 @@ public class RespItemAmostraBean extends Entidade {
 
     public void setIdRespItemAmostra(Long idRespItemAmostra) {
         this.idRespItemAmostra = idRespItemAmostra;
-    }
-
-    public Long getIdCabec() {
-        return idCabec;
-    }
-
-    public void setIdCabec(Long idCabec) {
-        this.idCabec = idCabec;
     }
 
     public Long getIdAmostra() {

@@ -37,6 +37,7 @@ public class ListaPontosActivity extends ActivityGeneric {
         Button buttonInserirPonto = findViewById(R.id.buttonInserirPonto);
         Button buttonExcluirAnalise = findViewById(R.id.buttonExcluirAnalise);
         Button buttonEnviarAnalise = findViewById(R.id.buttonEnviarAnalise);
+        Button buttonRetornarPonto = findViewById(R.id.buttonRetornarPonto);
 
         LogProcessoDAO.getInstance().insertLogProcesso("AuditorBean auditorBean = piaContext.getInfestacaoCTR().getAuditor();\n" +
                 "        textViewAuditor.setText(auditorBean.getMatricAuditor() + \" - \" + auditorBean.getNomeAuditor());\n" +
@@ -142,7 +143,7 @@ public class ListaPontosActivity extends ActivityGeneric {
             LogProcessoDAO.getInstance().insertLogProcesso("buttonEnviarAnalise.setOnClickListener(new View.OnClickListener() {\n" +
                     "            @Override\n" +
                     "            public void onClick(View v) {", getLocalClassName());
-            if(!piaContext.getInfestacaoCTR().verRespItemAmostraCabecAbertoApontList()){
+            if(piaContext.getInfestacaoCTR().verRespItemAmostraCabecAbertoApontList()){
 
                 LogProcessoDAO.getInstance().insertLogProcesso("if(!piaContext.getInfestacaoCTR().verRespItemAmostraList()){\n" +
                         "                    String mensagem = \"POR FAVOR, INSIRA PONTOS ANTES DE ENVIAR OS DADOS.\";\n" +
@@ -150,7 +151,6 @@ public class ListaPontosActivity extends ActivityGeneric {
                         "                    alerta.setTitle(\"ATENÇÃO\");\n" +
                         "                    alerta.setMessage(mensagem);", getLocalClassName());
                 String mensagem = "POR FAVOR, INSIRA PONTOS ANTES DE ENVIAR OS DADOS.";
-
                 AlertDialog.Builder alerta = new AlertDialog.Builder( ListaPontosActivity.this);
                 alerta.setTitle("ATENÇÃO");
                 alerta.setMessage(mensagem);
@@ -168,12 +168,23 @@ public class ListaPontosActivity extends ActivityGeneric {
                 if (connectNetwork) {
 
                     LogProcessoDAO.getInstance().insertLogProcesso("if (connectNetwork) {\n" +
-                            "                    EnvioDadosServ.getInstance().enviarAmostra(getLocalClassName());\n" +
-                            "                    Intent it = new Intent( ListaPontosActivity.this, MenuInicialActivity.class);", getLocalClassName());
-                    EnvioDadosServ.getInstance().enviarAmostra(getLocalClassName());
-                    Intent it = new Intent( ListaPontosActivity.this, TelaInicialActivity.class);
-                    startActivity(it);
-                    finish();
+                            "                    progressBar = new ProgressDialog(ListaPontosActivity.this);\n" +
+                            "                    progressBar.setCancelable(true);\n" +
+                            "                    progressBar.setMessage(\"ENVIANDO DADOS...\");\n" +
+                            "                    progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);\n" +
+                            "                    progressBar.setProgress(0);\n" +
+                            "                    progressBar.setMax(100);\n" +
+                            "                    progressBar.show();\n" +
+                            "                    EnvioDadosServ.getInstance().enviarAmostra(ListaPontosActivity.this, progressBar, TelaInicialActivity.class, getLocalClassName());", getLocalClassName());
+                    progressBar = new ProgressDialog(ListaPontosActivity.this);
+                    progressBar.setCancelable(true);
+                    progressBar.setMessage("ENVIANDO DADOS...");
+                    progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                    progressBar.setProgress(0);
+                    progressBar.setMax(100);
+                    progressBar.show();
+
+                    EnvioDadosServ.getInstance().enviarAmostra(ListaPontosActivity.this, progressBar, TelaInicialActivity.class, getLocalClassName());
 
                 } else {
 
@@ -201,6 +212,17 @@ public class ListaPontosActivity extends ActivityGeneric {
             }
 
         });
+
+        buttonRetornarPonto.setOnClickListener(v -> {
+
+            LogProcessoDAO.getInstance().insertLogProcesso("buttonRetornarPonto.setOnClickListener(v -> {\n" +
+                    "            Intent it = new Intent(ListaPontosActivity.this, TelaInicialActivity.class);", getLocalClassName());
+            Intent it = new Intent(ListaPontosActivity.this, TelaInicialActivity.class);
+            startActivity(it);
+            finish();
+
+        });
+
 
     }
 

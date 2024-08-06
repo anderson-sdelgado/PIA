@@ -1,6 +1,5 @@
 package br.com.usinasantafe.pia.view;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
@@ -16,7 +15,6 @@ import com.google.android.gms.location.LocationServices;
 import br.com.usinasantafe.pia.PIAContext;
 import br.com.usinasantafe.pia.R;
 import br.com.usinasantafe.pia.model.bean.estaticas.AmostraBean;
-import br.com.usinasantafe.pia.model.bean.variaveis.RespItemAmostraBean;
 import br.com.usinasantafe.pia.model.dao.LogProcessoDAO;
 
 public class ObservActivity extends ActivityGeneric {
@@ -54,38 +52,37 @@ public class ObservActivity extends ActivityGeneric {
 
         buttonOkObserv.setOnClickListener(v -> {
             LogProcessoDAO.getInstance().insertLogProcesso("buttonOkObserv.setOnClickListener(v -> {", getLocalClassName());
-            String observacao = null;
-            if(!editTextObserv.getText().toString().equals("")) {
+            String obs = "";
+            if(!editTextObserv.getText().toString().isEmpty()) {
                 LogProcessoDAO.getInstance().insertLogProcesso("if(!editTextObservacao.getText().toString().equals(\"\")) {\n" +
-                        "                    observacao = editTextObservacao.getText().toString();", getLocalClassName());
-                observacao = editTextObserv.getText().toString();
+                        "                    obs = editTextObservacao.getText().toString();", getLocalClassName());
+                obs = editTextObserv.getText().toString();
             }
 
             Intent it;
             if(piaContext.getTipoFluxo() == 1){
                 LogProcessoDAO.getInstance().insertLogProcesso("if(piaContext.getTipoFluxo() == 1){\n" +
-                        "                piaContext.getInfestacaoCTR().salvarLocalAbertoArmadilha(observacao, latitude, longitude);\n" +
+                        "                piaContext.getInfestacaoCTR().salvarLocalAbertoArmadilha(obs, latitude, longitude);\n" +
                         "                it = new Intent(ObservActivity.this, QuestaoAmostraActivity.class);", getLocalClassName());
-                piaContext.getInfestacaoCTR().salvarLocalAbertoArmadilha(observacao, latitude, longitude);
-                it = new Intent(ObservActivity.this, QuestaoAmostraActivity.class);
+                piaContext.getInfestacaoCTR().salvarLocalArmadilha(obs, latitude, longitude);
             } else {
                 LogProcessoDAO.getInstance().insertLogProcesso("} else {", getLocalClassName());
                 AmostraBean amostraBean;
                 if(piaContext.getVerTelaQuestao() == 1){
                     LogProcessoDAO.getInstance().insertLogProcesso("amostraBean = piaContext.getInfestacaoCTR().getItemAmostra(piaContext.getPosQuestaoAmostra());\n" +
-                            "                    piaContext.getInfestacaoCTR().inserirRespItemAmostra(amostraBean.getIdAmostra(), observacao);\n" +
+                            "                    piaContext.getInfestacaoCTR().inserirRespItemAmostra(amostraBean.getIdAmostra(), obs);\n" +
                             "                    piaContext.getInfestacaoCTR().fecharPonto();", getLocalClassName());
                     amostraBean = piaContext.getInfestacaoCTR().getItemAmostra(piaContext.getPosQuestaoAmostra());
-                    piaContext.getInfestacaoCTR().inserirRespItemAmostra(amostraBean.getIdAmostra(), observacao);
+                    piaContext.getInfestacaoCTR().inserirRespItemAmostra(amostraBean.getIdAmostra(), (long) piaContext.getPosPonto(), obs);
                     piaContext.getInfestacaoCTR().fecharPonto();
                 } else {
                     LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
-                            "                    piaContext.getInfestacaoCTR().updateRespItemAmostra(piaContext.getIdRespItem(), observacao);", getLocalClassName());
-                    piaContext.getInfestacaoCTR().updateRespItemAmostra(piaContext.getIdRespItem(), observacao);
+                            "                    piaContext.getInfestacaoCTR().updateRespItemAmostra(piaContext.getIdRespItem(), obs);", getLocalClassName());
+                    piaContext.getInfestacaoCTR().updateRespItemAmostra(piaContext.getIdRespItem(), obs);
                 }
                 LogProcessoDAO.getInstance().insertLogProcesso("it = new Intent(ObservActivity.this, ListaArmadilhaActivity.class);", getLocalClassName());
-                it = new Intent(ObservActivity.this, ListaArmadilhaActivity.class);
             }
+            it = new Intent(ObservActivity.this, ListaArmadilhaActivity.class);
             startActivity(it);
             finish();
 

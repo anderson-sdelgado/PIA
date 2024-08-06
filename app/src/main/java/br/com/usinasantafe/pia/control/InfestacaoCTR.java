@@ -36,6 +36,7 @@ import br.com.usinasantafe.pia.model.dao.RespItemCabecDAO;
 import br.com.usinasantafe.pia.model.dao.SecaoDAO;
 import br.com.usinasantafe.pia.model.dao.TalhaoDAO;
 import br.com.usinasantafe.pia.util.AtualDadosServ;
+import br.com.usinasantafe.pia.util.EnvioDadosServ;
 
 public class InfestacaoCTR {
 
@@ -91,11 +92,28 @@ public class InfestacaoCTR {
         return talhaoDAO.verTalhaCod(configCTR.getConfig().getIdSecaoConfig(), codTalhao);
     }
 
+    public boolean verLocalAmostraCabecApontEmptyList(){
+        CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
+        RespItemAmostraDAO respItemAmostraDAO = new RespItemAmostraDAO();
+        LocalAmostraDAO localAmostraDAO = new LocalAmostraDAO();
+        return localAmostraDAO.localAmostraIdCabecList(cabecAmostraDAO.getCabecAbertoApont().getIdCabec()).isEmpty();
+    }
+
     public boolean verRespItemAmostraCabecAbertoApontList(){
         CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
         RespItemAmostraDAO respItemAmostraDAO = new RespItemAmostraDAO();
-        return respItemAmostraDAO.verRespItemAmostraList(cabecAmostraDAO.getCabecAbertoApont().getIdCabec());
+        LocalAmostraDAO localAmostraDAO = new LocalAmostraDAO();
+        List<LocalAmostraBean> localAmostraBeans = localAmostraDAO.localAmostraIdCabecList(cabecAmostraDAO.getCabecAbertoApont().getIdCabec());
+        boolean retorno = false;
+        for (LocalAmostraBean localAmostraBean : localAmostraBeans) {
+            if(respItemAmostraDAO.verRespItemAmostraList(localAmostraBean.getIdLocal())){
+                retorno = true;
+            }
+        }
+        return retorno;
     }
+
+
 
     public boolean verAmostraCarac(Long idCaracOrganismo){
         ROrganCaracDAO rOrganCaracDAO = new ROrganCaracDAO();
@@ -140,12 +158,7 @@ public class InfestacaoCTR {
     public AuditorBean getAuditor(){
         CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
         AuditorDAO auditorDAO = new AuditorDAO();
-        return auditorDAO.getAuditorId(cabecAmostraDAO.getCabecAbertoApont().getMatricAuditor());
-    }
-
-    public Long getIdAmostraOrgan(){
-        CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
-        return cabecAmostraDAO.getCabecAbertoApont().getIdAmostraOrgan();
+        return auditorDAO.getAuditorId(cabecAmostraDAO.getCabecAbertoApont().getIdFunc());
     }
 
     public SecaoBean getSecao(){
@@ -174,10 +187,11 @@ public class InfestacaoCTR {
         return talhaoDAO.getTalhaId(idTalhao);
     }
 
-    public List<RespItemAmostraBean> getRespItemAmostraCabecApontList(Long ponto){
+    public List<RespItemAmostraBean> getRespItemAmostraLocalApontList(Long ponto){
         CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
         RespItemAmostraDAO respItemAmostraDAO = new RespItemAmostraDAO();
-        return respItemAmostraDAO.respItemAmostraList(cabecAmostraDAO.getCabecAbertoApont().getIdCabec(), ponto);
+        LocalAmostraDAO localAmostraDAO = new LocalAmostraDAO();
+        return respItemAmostraDAO.respItemAmostraList(localAmostraDAO.getLocalAmostraApontIdCabec(cabecAmostraDAO.getCabecAbertoApont().getIdCabec()).getIdLocal(), ponto);
     }
 
     public AmostraBean getAmostraIdAmostra(Long idAmostra){
@@ -223,12 +237,14 @@ public class InfestacaoCTR {
 
         List<CabecAmostraBean> cabecAmostraList = cabecAmostraDAO.cabecFechadoList();
         for (int i = 0; i < cabecAmostraList.size(); i++) {
-            List<LocalAmostraBean> localAmostraList = localAmostraDAO.localAmostraIdCabecList(cabecAmostraList.get(i).getIdCabec());
-            cabecAmostraList.get(i).setLocalAmostraList(localAmostraList);
-            List<RespItemAmostraBean> respItemAmostraList = respItemAmostraDAO.respItemAmostraList(cabecAmostraList.get(i).getIdCabec());
-            cabecAmostraList.get(i).setRespItemAmostraList(respItemAmostraList);
             List<RespItemCabecBean> respItemCabecList = respItemCabecDAO.respItemCabecList(cabecAmostraList.get(i).getIdCabec());
             cabecAmostraList.get(i).setRespItemCabecList(respItemCabecList);
+            List<LocalAmostraBean> localAmostraList = localAmostraDAO.localAmostraIdCabecList(cabecAmostraList.get(i).getIdCabec());
+            for (int j = 0; j < localAmostraList.size(); j++) {
+                List<RespItemAmostraBean> respItemAmostraList = respItemAmostraDAO.respItemAmostraList(localAmostraList.get(j).getIdLocal());
+                localAmostraList.get(j).setRespItemAmostraList(respItemAmostraList);
+            }
+            cabecAmostraList.get(i).setLocalAmostraList(localAmostraList);
         }
         return cabecAmostraList;
 
@@ -243,8 +259,8 @@ public class InfestacaoCTR {
         RCaracAmostraDAO rCaracAmostraDAO = new RCaracAmostraDAO();
         ROrganCaracBean rOrganCaracBean = rOrganCaracDAO.getROrganCarac(configBean.getIdOrganConfig(), configBean.getIdCaracOrganConfig());
         Long idAmostraOrgan = rCaracAmostraDAO.getRCaracAmostra(rOrganCaracBean.getIdROrganCarac()).getIdAmostraOrgan();
-        cabecAmostraDAO.salvarCabecAberto(configBean.getMatricAuditorConfig(), configBean.getIdOrganConfig(), configBean.getIdCaracOrganConfig(), idAmostraOrgan);
-        localAmostraDAO.salvarLocal(cabecAmostraDAO.getCabecAbertoApont().getIdCabec(), configBean.getNroOSConfig(), configBean.getIdSecaoConfig(), configBean.getIdTalhaoConfig(), latitude, longitude, null, 2L);
+        cabecAmostraDAO.salvarCabecAberto(configBean.getIdAuditorConfig(), configBean.getIdOrganConfig(), configBean.getIdCaracOrganConfig(), idAmostraOrgan);
+        localAmostraDAO.salvarLocal(cabecAmostraDAO.getCabecAbertoApont().getIdCabec(), configBean.getNroOSConfig(), configBean.getIdSecaoConfig(), configBean.getIdTalhaoConfig(), latitude, longitude, "", 1L);
     }
 
     public void salvarCabecAbertoArmadilha(){
@@ -255,15 +271,15 @@ public class InfestacaoCTR {
         RCaracAmostraDAO rCaracAmostraDAO = new RCaracAmostraDAO();
         ROrganCaracBean rOrganCaracBean = rOrganCaracDAO.getROrganCarac(configBean.getIdOrganConfig(), configBean.getIdCaracOrganConfig());
         Long idAmostraOrgan = rCaracAmostraDAO.getRCaracAmostra(rOrganCaracBean.getIdROrganCarac()).getIdAmostraOrgan();
-        cabecAmostraDAO.salvarCabecAberto(configBean.getMatricAuditorConfig(), configBean.getIdOrganConfig(), configBean.getIdCaracOrganConfig(), idAmostraOrgan);
+        cabecAmostraDAO.salvarCabecAberto(configBean.getIdAuditorConfig(), configBean.getIdOrganConfig(), configBean.getIdCaracOrganConfig(), idAmostraOrgan);
     }
 
-    public void salvarLocalAbertoArmadilha(String obs, Double latitude, Double longitude){
+    public void salvarLocalArmadilha(String obs, Double latitude, Double longitude){
         CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
         LocalAmostraDAO localAmostraDAO = new LocalAmostraDAO();
         ConfigCTR configCTR = new ConfigCTR();
         ConfigBean configBean = configCTR.getConfig();
-        localAmostraDAO.salvarLocal(cabecAmostraDAO.getCabecAbertoApont().getIdCabec(), configBean.getNroOSConfig(), configBean.getIdSecaoConfig(), configBean.getIdTalhaoConfig(), latitude, longitude, obs, 1L);
+        localAmostraDAO.salvarLocal(cabecAmostraDAO.getCabecAbertoApont().getIdCabec(), configBean.getNroOSConfig(), configBean.getIdSecaoConfig(), configBean.getIdTalhaoConfig(), latitude, longitude, obs, 0L);
     }
 
     public void inserirRespItemAmostra(Long idAmostra, Long valor){
@@ -272,18 +288,17 @@ public class InfestacaoCTR {
         CabecAmostraBean cabecAmostraBean = cabecAmostraDAO.getCabecAbertoApont();
         Long idLocal = localAmostraDAO.getLocalAmostraIdCabec(cabecAmostraBean.getIdCabec()).getIdLocal();
         RespItemAmostraDAO respItemAmostraDAO = new RespItemAmostraDAO();
-        respItemAmostraDAO.inserirRespItemAmostra(cabecAmostraBean.getIdCabec(), idLocal, idAmostra, valor, cabecAmostraBean.getPonto(), null);
+        respItemAmostraDAO.inserirRespItemAmostra(idLocal, idAmostra, valor, cabecAmostraBean.getPonto(), "");
     }
 
-    public void inserirRespItemAmostra(Long idAmostra, String obs){
+    public void inserirRespItemAmostra(Long idAmostra, Long ponto, String obs){
         CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
         LocalAmostraDAO localAmostraDAO = new LocalAmostraDAO();
         ConfigCTR configCTR = new ConfigCTR();
         CabecAmostraBean cabecAmostraBean = cabecAmostraDAO.getCabecAbertoApont();
         Long idLocal = localAmostraDAO.getLocalAmostraApontIdCabec(cabecAmostraBean.getIdCabec()).getIdLocal();
         RespItemAmostraDAO respItemAmostraDAO = new RespItemAmostraDAO();
-        respItemAmostraDAO.inserirRespItemAmostra(cabecAmostraBean.getIdCabec(), idLocal, idAmostra, configCTR.getConfig().getValorRespConfig(), cabecAmostraBean.getPonto(), obs);
-        localAmostraDAO.fecharLocal(cabecAmostraBean.getIdCabec());
+        respItemAmostraDAO.inserirRespItemAmostra(idLocal, idAmostra, configCTR.getConfig().getValorRespConfig(), ponto, obs);
     }
 
     public void updateRespItemAmostra(Long idRespItem, Long valor){
@@ -313,9 +328,10 @@ public class InfestacaoCTR {
         RespItemCabecDAO respItemCabecDAO = new RespItemCabecDAO();
         RespItemAmostraDAO respItemAmostraDAO = new RespItemAmostraDAO();
         CabecAmostraBean cabecAmostraBean = cabecAmostraDAO.getCabecAbertoApont();
+        Long idLocal = localAmostraDAO.getLocalAmostraIdCabec(cabecAmostraBean.getIdCabec()).getIdLocal();
         localAmostraDAO.deleteLocalAmostraIdCabec(cabecAmostraBean.getIdCabec());
         respItemCabecDAO.deleteRespItemCabec(cabecAmostraBean.getIdCabec());
-        respItemAmostraDAO.deleteRespItemAmostra(cabecAmostraBean.getIdCabec());
+        respItemAmostraDAO.deleteRespItemAmostra(idLocal);
         cabecAmostraDAO.deleteCabecAberto();
     }
 
@@ -328,21 +344,22 @@ public class InfestacaoCTR {
         CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
         CabecAmostraBean cabecAmostraBean = cabecAmostraDAO.getCabecAbertoApont();
         RespItemAmostraDAO respItemAmostraDAO = new RespItemAmostraDAO();
-        respItemAmostraDAO.deleteRespItemAmostra(cabecAmostraBean.getIdCabec(), idAmostra, cabecAmostraBean.getPonto());
+        LocalAmostraDAO localAmostraDAO = new LocalAmostraDAO();
+        respItemAmostraDAO.deleteRespItemAmostra(localAmostraDAO.getLocalAmostraIdCabec(cabecAmostraBean.getIdCabec()).getIdLocal(), idAmostra, cabecAmostraBean.getPonto());
     }
 
     public void deleteRespItemAmostraPonto(Long ponto){
         CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
         CabecAmostraBean cabecAmostraBean = cabecAmostraDAO.getCabecAbertoApont();
+        LocalAmostraDAO localAmostraDAO = new LocalAmostraDAO();
         RespItemAmostraDAO respItemAmostraDAO = new RespItemAmostraDAO();
         ConfigCTR configCTR = new ConfigCTR();
-        if(configCTR.getIdAmostra() == 51L){
-            LocalAmostraDAO localAmostraDAO = new LocalAmostraDAO();
-            Long idLocal = respItemAmostraDAO.getRespItemAmostraIdCabecPonto(cabecAmostraBean.getIdCabec(), ponto).getIdLocal();
+        Long idLocal = localAmostraDAO.getLocalAmostraApontIdCabec(cabecAmostraBean.getIdCabec()).getIdLocal();
+        if(configCTR.getIdAmostra() == 51L) {
             localAmostraDAO.deleteLocalAmostraId(idLocal);
         }
-        respItemAmostraDAO.deleteRespItemAmostra(cabecAmostraBean.getIdCabec(), ponto);
-        respItemAmostraDAO.updateRespItemPonto(cabecAmostraBean.getIdCabec(), ponto);
+        respItemAmostraDAO.deleteRespItemAmostra(idLocal, ponto);
+        respItemAmostraDAO.updateRespItemPonto(idLocal, ponto);
         cabecAmostraDAO.updateDeletePonto(cabecAmostraBean.getIdCabec());
     }
 
@@ -359,8 +376,11 @@ public class InfestacaoCTR {
             CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
             cabecAmostraDAO.updateCabecEnviado(cabecAmostraList);
 
+            EnvioDadosServ.getInstance().respostaEnvio(true, activity);
+
         } catch (Exception e){
             LogErroDAO.getInstance().insertLogErro(e);
+            EnvioDadosServ.getInstance().respostaEnvio(false, activity);
         }
 
     }
@@ -430,14 +450,16 @@ public class InfestacaoCTR {
         cabecAmostraDAO.updatePonto(cabecAmostraBean.getIdCabec(), cabecAmostraBean.getPonto() + 1);
     }
 
-    public boolean verifCabecAbertoCarac(Long idCaracOrgan) {
+    public boolean verifCabecAmostra() {
         CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
-        return cabecAmostraDAO.verCabecAbertoIdCaracOrgan(idCaracOrgan);
+        ConfigCTR configCTR = new ConfigCTR();
+        return cabecAmostraDAO.verCabecAbertoIdAmostraOrgan(configCTR.getIdAmostra());
     }
 
-    public void updateCabecAbertoCarac(Long idCaracOrgan) {
+    public void updateCabecApont() {
         CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
-        cabecAmostraDAO.updateCabecApont(cabecAmostraDAO.getCabecAbertoIdCaracOrgan(idCaracOrgan));
+        ConfigCTR configCTR = new ConfigCTR();
+        cabecAmostraDAO.updateCabecApont(cabecAmostraDAO.getCabecAbertoIdAmostraOrgan(configCTR.getIdAmostra()));
     }
 
     public void updateCabecAbertoNApont(){
@@ -456,8 +478,14 @@ public class InfestacaoCTR {
         respItemCabecDAO.salvarRespItemCabec(respItemCabecSelectedList, cabecAmostraDAO.getCabecAbertoApont().getIdCabec());
     }
 
-    public LocalAmostraBean getLocalAmostraId(Long idLocal) {
+    public List<LocalAmostraBean> localAmostraArmadilhaList() {
+        CabecAmostraDAO cabecAmostraDAO = new CabecAmostraDAO();
         LocalAmostraDAO localAmostraDAO = new LocalAmostraDAO();
-        return localAmostraDAO.getLocalAmostraIdLocal(idLocal);
+        return localAmostraDAO.localAmostraIdCabecList(cabecAmostraDAO.getCabecAbertoApont().getIdCabec());
+    }
+
+    public void updateLocalApont(LocalAmostraBean localAmostraBean) {
+        LocalAmostraDAO localAmostraDAO = new LocalAmostraDAO();
+        localAmostraDAO.updateLocalApont(localAmostraBean);
     }
 }

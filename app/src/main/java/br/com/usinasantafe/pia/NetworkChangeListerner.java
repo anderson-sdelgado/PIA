@@ -36,7 +36,7 @@ public class NetworkChangeListerner extends BroadcastReceiver {
 		Log.i("PIA", "CABEC");
 		for(CabecAmostraBean cabecAmostraBeanBD : cabecAmostraBeanList){
 			Log.i("PIA", "idCabec = " + cabecAmostraBeanBD.getIdCabec());
-			Log.i("PIA", "matricAuditor = " + cabecAmostraBeanBD.getMatricAuditor());
+			Log.i("PIA", "idFunc = " + cabecAmostraBeanBD.getIdFunc());
 			Log.i("PIA", "dthr = " + cabecAmostraBeanBD.getDthr());
 			Log.i("PIA", "dthrLong = " + cabecAmostraBeanBD.getDthrLong());
 			Log.i("PIA", "idOrgan = " + cabecAmostraBeanBD.getIdOrgan());
@@ -70,7 +70,7 @@ public class NetworkChangeListerner extends BroadcastReceiver {
 		Log.i("PIA", "RESP");
 		for(RespItemAmostraBean respItemAmostraBeanBD : respItemAmostraBeanList){
 			Log.i("PIA", "idRespItem = " + respItemAmostraBeanBD.getIdRespItemAmostra());
-			Log.i("PIA", "idCabec = " + respItemAmostraBeanBD.getIdCabec());
+			Log.i("PIA", "idLocal = " + respItemAmostraBeanBD.getIdLocal());
 			Log.i("PIA", "idAmostraRespItem = " + respItemAmostraBeanBD.getIdAmostra());
 			Log.i("PIA", "pontoRespItem = " + respItemAmostraBeanBD.getPonto());
 			Log.i("PIA", "valorRespItem = " + respItemAmostraBeanBD.getValor());

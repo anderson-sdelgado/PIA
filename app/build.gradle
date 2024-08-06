@@ -28,7 +28,9 @@ android {
         targetCompatibility JavaVersion.VERSION_11
     }
     namespace 'br.com.usinasantafe.pia'
-
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {

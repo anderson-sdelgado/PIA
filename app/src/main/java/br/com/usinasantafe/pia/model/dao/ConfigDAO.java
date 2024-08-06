@@ -48,7 +48,7 @@ public class ConfigDAO {
 
     public void setAuditor(Long auditor){
         ConfigBean configBean = getConfig();
-        configBean.setMatricAuditorConfig(auditor);
+        configBean.setIdAuditorConfig(auditor);
         configBean.update();
         configBean.commit();
     }

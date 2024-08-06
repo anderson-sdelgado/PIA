@@ -17,7 +17,7 @@ public class RespItemCabecBean extends Entidade {
     @DatabaseField
     private Long idItemCabec;
     @DatabaseField
-    private Long flagRespItem; //0 - Desmarcado; 1 - Marcado;
+    private Long flag; //0 - Desmarcado; 1 - Marcado;
 
     public Long getIdRespItemCabec() {
         return idRespItemCabec;
@@ -43,11 +43,11 @@ public class RespItemCabecBean extends Entidade {
         this.idItemCabec = idItemCabec;
     }
 
-    public Long getFlagRespItem() {
-        return flagRespItem;
+    public Long getFlag() {
+        return flag;
     }
 
-    public void setFlagRespItem(Long flagRespItem) {
-        this.flagRespItem = flagRespItem;
+    public void setFlag(Long flag) {
+        this.flag = flag;
     }
 }

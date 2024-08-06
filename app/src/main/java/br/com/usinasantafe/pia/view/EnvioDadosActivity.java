@@ -45,12 +45,23 @@ public class EnvioDadosActivity extends ActivityGeneric {
             if (connectNetwork) {
 
                 LogProcessoDAO.getInstance().insertLogProcesso("if (connectNetwork) {\n" +
-                        "                    EnvioDadosServ.getInstance().enviarAmostra(getLocalClassName());\n" +
-                        "                    Intent it = new Intent( ListaPontosActivity.this, MenuInicialActivity.class);", getLocalClassName());
-                EnvioDadosServ.getInstance().enviarAmostra(getLocalClassName());
-                Intent it = new Intent( EnvioDadosActivity.this, MenuInicialActivity.class);
-                startActivity(it);
-                finish();
+                        "                progressBar = new ProgressDialog(EnvioDadosActivity.this);\n" +
+                        "                progressBar.setCancelable(true);\n" +
+                        "                progressBar.setMessage(\"ENVIANDO DADOS...\");\n" +
+                        "                progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);\n" +
+                        "                progressBar.setProgress(0);\n" +
+                        "                progressBar.setMax(100);\n" +
+                        "                progressBar.show();\n" +
+                        "                EnvioDadosServ.getInstance().enviarAmostra(EnvioDadosActivity.this, progressBar, EnvioDadosActivity.class, getLocalClassName());", getLocalClassName());
+                progressBar = new ProgressDialog(EnvioDadosActivity.this);
+                progressBar.setCancelable(true);
+                progressBar.setMessage("ENVIANDO DADOS...");
+                progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                progressBar.setProgress(0);
+                progressBar.setMax(100);
+                progressBar.show();
+
+                EnvioDadosServ.getInstance().enviarAmostra(EnvioDadosActivity.this, progressBar, EnvioDadosActivity.class, getLocalClassName());
 
             } else {
 

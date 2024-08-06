@@ -63,11 +63,16 @@ public class EnvioDadosServ {
 
     }
 
-    public void enviarAmostra(String activity) {
+    public void enviarAmostra(Context telaAtual, ProgressDialog progressDialog, Class telaProx, String activity) {
         LogProcessoDAO.getInstance().insertLogProcesso("public void enviarAmostra(String activity) {\n" +
                 "        InfestacaoCTR infestacaoCTR = new InfestacaoCTR();\n" +
                 "        AmostraEnvio amostraEnvio = new AmostraEnvio();\n" +
                 "        amostraEnvio.envioDadosAmostra(infestacaoCTR.dadosEnvioAmostra(), activity);", activity);
+
+        this.telaAtual = telaAtual;
+        this.progressDialog = progressDialog;
+        this.telaProx = telaProx;
+
         InfestacaoCTR infestacaoCTR = new InfestacaoCTR();
         AmostraEnvio amostraEnvio = new AmostraEnvio();
         amostraEnvio.envioDadosAmostra(infestacaoCTR.dadosEnvioAmostra(), activity);

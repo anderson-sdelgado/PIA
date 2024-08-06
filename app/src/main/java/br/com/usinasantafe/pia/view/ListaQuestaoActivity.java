@@ -58,15 +58,17 @@ public class ListaQuestaoActivity extends ActivityGeneric {
         textViewTituloPonto.setText(tipo + " " + pos);
 
         ArrayList<String> itens = new ArrayList<>();
-        respItemAmostraList = piaContext.getInfestacaoCTR().getRespItemAmostraCabecApontList((long) piaContext.getPosPonto());
+        respItemAmostraList = piaContext.getInfestacaoCTR().getRespItemAmostraLocalApontList((long) piaContext.getPosPonto());
 
         for (RespItemAmostraBean respItemAmostraBean : respItemAmostraList) {
             AmostraBean amostraBean = piaContext.getInfestacaoCTR().getAmostraIdAmostra(respItemAmostraBean.getIdAmostra());
             String obs = "";
+            String valor = String.valueOf(respItemAmostraBean.getValor());
             if(tipoAmostra){
                 obs = "\nOBSERV: " + ((respItemAmostraBean.getObs() == null) ? "" : respItemAmostraBean.getObs());
+                valor = (respItemAmostraBean.getValor() == null) ? "" : String.valueOf(respItemAmostraBean.getValor());
             }
-            itens.add(amostraBean.getDescrAmostra() + "\nVALOR: " + respItemAmostraBean.getValor() + obs);
+            itens.add(amostraBean.getDescrAmostra() + "\nVALOR: " + valor + obs);
         }
 
         AdapterList adapterList = new AdapterList(this, itens);

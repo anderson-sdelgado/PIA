@@ -1,6 +1,7 @@
 package br.com.usinasantafe.pia.view;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -8,19 +9,21 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import br.com.usinasantafe.pia.PIAContext;
 import br.com.usinasantafe.pia.R;
 import br.com.usinasantafe.pia.model.bean.estaticas.AuditorBean;
 import br.com.usinasantafe.pia.model.bean.variaveis.LocalAmostraBean;
-import br.com.usinasantafe.pia.model.bean.variaveis.RespItemAmostraBean;
 import br.com.usinasantafe.pia.model.dao.LogProcessoDAO;
 import br.com.usinasantafe.pia.util.EnvioDadosServ;
 
 public class ListaArmadilhaActivity extends ActivityGeneric {
 
+    private ProgressDialog progressBar;
     private ListView listView;
     private PIAContext piaContext;
+    private List<LocalAmostraBean> localAmostraBeans;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,7 @@ public class ListaArmadilhaActivity extends ActivityGeneric {
         Button buttonInserirArmadilha = findViewById(R.id.buttonInserirArmadilha);
         Button buttonExcluirAnalise = findViewById(R.id.buttonExcluirAnalise);
         Button buttonEnviarAnalise = findViewById(R.id.buttonEnviarAnalise);
+        Button buttonRetornarArmadilha = findViewById(R.id.buttonRetornarArmadilha);
 
         LogProcessoDAO.getInstance().insertLogProcesso("AuditorBean auditorBean = piaContext.getInfestacaoCTR().getAuditor();\n" +
                 "        textViewAuditor.setText(auditorBean.getMatricAuditor() + \" - \" + auditorBean.getNomeAuditor());\n" +
@@ -43,18 +47,16 @@ public class ListaArmadilhaActivity extends ActivityGeneric {
 
         ArrayList<String> itens = new ArrayList<>();
 
-        piaContext.getInfestacaoCTR().clearPontoIncompleto();
+        localAmostraBeans = piaContext.getInfestacaoCTR().localAmostraArmadilhaList();
 
-        for (int i = 0; i < piaContext.getInfestacaoCTR().ponto(); i++) {
-            Long ponto = i + 1L;
-            RespItemAmostraBean respItemAmostraBean =  piaContext.getInfestacaoCTR().getRespItemAmostraCabecApontList(ponto).get(0);
-            LocalAmostraBean localAmostraBean = piaContext.getInfestacaoCTR().getLocalAmostraId(respItemAmostraBean.getIdLocal());
-            String obs = localAmostraBean.getObs() == null ? "" : localAmostraBean.getObs();
+        int ponto = 0;
+        for (LocalAmostraBean localAmostraBean: localAmostraBeans) {
+            ponto++;
             itens.add("ARMADILHA " + ponto + "\n" +
                     "DATA/HORA: " + localAmostraBean.getDthr() + "\n" +
                     "SECAO: " + piaContext.getInfestacaoCTR().getSecaoId(localAmostraBean.getIdSecao()).getCodSecao() + "\n" +
                     "TALHÃO: " + piaContext.getInfestacaoCTR().getTalhaoId(localAmostraBean.getIdTalhao()).getCodTalhao() + "\n" +
-                    "OBS.:  " + obs);
+                    "OBS.:  " + localAmostraBean.getObs());
         }
 
         AdapterList adapterList = new AdapterList(this, itens);
@@ -69,10 +71,25 @@ public class ListaArmadilhaActivity extends ActivityGeneric {
                     "                                    long id) {\n" +
                     "                piaContext.setPosPonto(position);\n" +
                     "                Intent it = new Intent(ListaArmadilhaActivity.this, ListaQuestaoActivity.class);", getLocalClassName());
+
             piaContext.setPosPonto(position + 1);
-            Intent it = new Intent(ListaArmadilhaActivity.this, ListaQuestaoActivity.class);
-            startActivity(it);
-            finish();
+
+            LocalAmostraBean localAmostraBean = localAmostraBeans.get(position);
+            piaContext.getInfestacaoCTR().updateLocalApont(localAmostraBean);
+
+            int qtde = piaContext.getInfestacaoCTR().getRespItemAmostraLocalApontList((long) piaContext.getPosPonto()).size();
+
+            if(qtde == 0){
+                piaContext.setVerTelaQuestao(1);
+                Intent it = new Intent(ListaArmadilhaActivity.this, QuestaoAmostraActivity.class);
+                startActivity(it);
+                finish();
+            } else {
+                Intent it = new Intent(ListaArmadilhaActivity.this, ListaQuestaoActivity.class);
+                startActivity(it);
+                finish();
+            }
+
 
         });
 
@@ -127,14 +144,14 @@ public class ListaArmadilhaActivity extends ActivityGeneric {
             LogProcessoDAO.getInstance().insertLogProcesso("buttonEnviarAnalise.setOnClickListener(new View.OnClickListener() {\n" +
                     "            @Override\n" +
                     "            public void onClick(View v) {", getLocalClassName());
-            if(!piaContext.getInfestacaoCTR().verRespItemAmostraCabecAbertoApontList()){
+            if(piaContext.getInfestacaoCTR().verLocalAmostraCabecApontEmptyList()){
 
                 LogProcessoDAO.getInstance().insertLogProcesso("if(!piaContext.getInfestacaoCTR().verRespItemAmostraList()){\n" +
                         "                    String mensagem = \"POR FAVOR, INSIRA PONTOS ANTES DE ENVIAR OS DADOS.\";\n" +
                         "                    AlertDialog.Builder alerta = new AlertDialog.Builder( ListaArmadilhaActivity.this);\n" +
                         "                    alerta.setTitle(\"ATENÇÃO\");\n" +
                         "                    alerta.setMessage(mensagem);", getLocalClassName());
-                String mensagem = "POR FAVOR, INSIRA PONTOS ANTES DE ENVIAR OS DADOS.";
+                String mensagem = "POR FAVOR, INSIRA ARMADILHA(S) ANTES DE ENVIAR OS DADOS.";
                 AlertDialog.Builder alerta = new AlertDialog.Builder( ListaArmadilhaActivity.this);
                 alerta.setTitle("ATENÇÃO");
                 alerta.setMessage(mensagem);
@@ -145,45 +162,88 @@ public class ListaArmadilhaActivity extends ActivityGeneric {
 
             } else {
 
-                LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
-                        "                    piaContext.getInfestacaoCTR().fecharCabec();", getLocalClassName());
-                piaContext.getInfestacaoCTR().fecharCabec();
+                if(piaContext.getInfestacaoCTR().verRespItemAmostraCabecAbertoApontList()){
 
-                if (connectNetwork) {
-
-                    LogProcessoDAO.getInstance().insertLogProcesso("if (connectNetwork) {\n" +
-                            "                    EnvioDadosServ.getInstance().enviarAmostra(getLocalClassName());\n" +
-                            "                    Intent it = new Intent( ListaArmadilhaActivity.this, TelaInicialActivity.class);", getLocalClassName());
-                    EnvioDadosServ.getInstance().enviarAmostra(getLocalClassName());
-                    Intent it = new Intent( ListaArmadilhaActivity.this, TelaInicialActivity.class);
-                    startActivity(it);
-                    finish();
+                    LogProcessoDAO.getInstance().insertLogProcesso("if(!piaContext.getInfestacaoCTR().verRespItemAmostraList()){\n" +
+                            "                    String mensagem = \"POR FAVOR, INSIRA PONTOS ANTES DE ENVIAR OS DADOS.\";\n" +
+                            "                    AlertDialog.Builder alerta = new AlertDialog.Builder( ListaArmadilhaActivity.this);\n" +
+                            "                    alerta.setTitle(\"ATENÇÃO\");\n" +
+                            "                    alerta.setMessage(mensagem);", getLocalClassName());
+                    AlertDialog.Builder alerta = new AlertDialog.Builder( ListaArmadilhaActivity.this);
+                    alerta.setTitle("ATENÇÃO");
+                    alerta.setMessage("POR FAVOR, PREENCHA OS DADOS DE TODAS AS ARMADILHAS APONTADA NA ANALISE.");
+                    alerta.setPositiveButton("OK", (dialog, which) -> LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"OK\", new DialogInterface.OnClickListener() {\n" +
+                            "                        @Override\n" +
+                            "                        public void onClick(DialogInterface dialog, int which) {", getLocalClassName()));
+                    alerta.show();
 
                 } else {
 
                     LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
-                            "                        AlertDialog.Builder alerta = new AlertDialog.Builder(ListaPontosActivity.this);\n" +
-                            "                        alerta.setTitle(\"ATENÇÃO\");\n" +
-                            "                        alerta.setMessage(\"FALHA NA CONEXÃO DE DADOS. O CELULAR ESTA SEM SINAL. POR FAVOR, TENTE NOVAMENTE QUANDO O CELULAR ESTIVE COM SINAL.\");", getLocalClassName());
-                    AlertDialog.Builder alerta = new AlertDialog.Builder(ListaArmadilhaActivity.this);
-                    alerta.setTitle("ATENÇÃO");
-                    alerta.setMessage("FALHA NA CONEXÃO DE DADOS. O CELULAR ESTA SEM SINAL. POR FAVOR, TENTE NOVAMENTE QUANDO O CELULAR ESTIVE COM SINAL.");
-                    alerta.setPositiveButton("OK", (dialog, which) -> {
-                        LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"OK\", new DialogInterface.OnClickListener() {\n" +
-                                "                            @Override\n" +
-                                "                            public void onClick(DialogInterface dialog, int which) {\n" +
-                                "                                Intent it = new Intent( ListaArmadilhaActivity.this, TelaInicialActivity.class);", getLocalClassName());
-                        Intent it = new Intent( ListaArmadilhaActivity.this, TelaInicialActivity.class);
-                        startActivity(it);
-                        finish();
-                    });
+                            "                    piaContext.getInfestacaoCTR().fecharCabec();", getLocalClassName());
+                    piaContext.getInfestacaoCTR().fecharCabec();
 
-                    alerta.show();
+                    if (connectNetwork) {
+
+                        LogProcessoDAO.getInstance().insertLogProcesso("if (connectNetwork) {\n" +
+                                "                    progressBar = new ProgressDialog(ListaArmadilhaActivity.this);\n" +
+                                "                    progressBar.setCancelable(true);\n" +
+                                "                    progressBar.setMessage(\"ENVIANDO DADOS...\");\n" +
+                                "                    progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);\n" +
+                                "                    progressBar.setProgress(0);\n" +
+                                "                    progressBar.setMax(100);\n" +
+                                "                    progressBar.show();\n" +
+                                "                    EnvioDadosServ.getInstance().enviarAmostra(ListaArmadilhaActivity.this, progressBar, TelaInicialActivity.class, getLocalClassName());", getLocalClassName());
+                        progressBar = new ProgressDialog(ListaArmadilhaActivity.this);
+                        progressBar.setCancelable(true);
+                        progressBar.setMessage("ENVIANDO DADOS...");
+                        progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                        progressBar.setProgress(0);
+                        progressBar.setMax(100);
+                        progressBar.show();
+
+                        EnvioDadosServ.getInstance().enviarAmostra(ListaArmadilhaActivity.this, progressBar, TelaInicialActivity.class, getLocalClassName());
+
+                    } else {
+
+                        LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
+                                "                        AlertDialog.Builder alerta = new AlertDialog.Builder(ListaPontosActivity.this);\n" +
+                                "                        alerta.setTitle(\"ATENÇÃO\");\n" +
+                                "                        alerta.setMessage(\"FALHA NA CONEXÃO DE DADOS. O CELULAR ESTA SEM SINAL. POR FAVOR, TENTE NOVAMENTE QUANDO O CELULAR ESTIVE COM SINAL.\");", getLocalClassName());
+                        AlertDialog.Builder alerta = new AlertDialog.Builder(ListaArmadilhaActivity.this);
+                        alerta.setTitle("ATENÇÃO");
+                        alerta.setMessage("FALHA NA CONEXÃO DE DADOS. O CELULAR ESTA SEM SINAL. POR FAVOR, TENTE NOVAMENTE QUANDO O CELULAR ESTIVE COM SINAL.");
+                        alerta.setPositiveButton("OK", (dialog, which) -> {
+                            LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"OK\", new DialogInterface.OnClickListener() {\n" +
+                                    "                            @Override\n" +
+                                    "                            public void onClick(DialogInterface dialog, int which) {\n" +
+                                    "                                Intent it = new Intent( ListaArmadilhaActivity.this, TelaInicialActivity.class);", getLocalClassName());
+                            Intent it = new Intent( ListaArmadilhaActivity.this, TelaInicialActivity.class);
+                            startActivity(it);
+                            finish();
+                        });
+
+                        alerta.show();
+                    }
+
                 }
+
+
 
 
             }
 
         });
+
+        buttonRetornarArmadilha.setOnClickListener(v -> {
+
+            LogProcessoDAO.getInstance().insertLogProcesso("buttonRetornarArmadilha.setOnClickListener(v -> {\n" +
+                    "            Intent it = new Intent(ListaArmadilhaActivity.this, TelaInicialActivity.class);", getLocalClassName());
+            Intent it = new Intent(ListaArmadilhaActivity.this, TelaInicialActivity.class);
+            startActivity(it);
+            finish();
+
+        });
+
     }
 }

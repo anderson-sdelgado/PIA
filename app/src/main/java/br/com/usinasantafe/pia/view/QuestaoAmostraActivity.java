@@ -38,15 +38,22 @@ public class QuestaoAmostraActivity extends ActivityGeneric {
             textViewPadrao.setText(amostraBean.getDescrAmostra());
             editText.setText("");
         } else {
-            LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
-                    "            RespItemAmostraBean respItemAmostraBean = piaContext.getInfestacaoCTR().getRespItemAmostra(piaContext.getIdRespItem());\n" +
-                    "            itemAmostraBean = piaContext.getInfestacaoCTR().getItemAmostraId(respItemAmostraBean.getIdAmostraRespItem());\n" +
-                    "            textViewPadrao.setText(itemAmostraBean.getDescrItem());\n" +
-                    "            editText.setText(String.valueOf(respItemAmostraBean.getValorRespItem()));", getLocalClassName());
+            LogProcessoDAO.getInstance().insertLogProcesso("RespItemAmostraBean respItemAmostraBean = piaContext.getInfestacaoCTR().getRespItemAmostra(piaContext.getIdRespItem());\n" +
+                    "            amostraBean = piaContext.getInfestacaoCTR().getAmostraId(respItemAmostraBean.getIdAmostra());\n" +
+                    "            textViewPadrao.setText(amostraBean.getDescrAmostra());\n" +
+                    "            String valor = String.valueOf(respItemAmostraBean.getValor());\n" +
+                    "            if(piaContext.getConfigCTR().getIdAmostra() == 51L){\n" +
+                    "                valor = (respItemAmostraBean.getValor() == 0) ? \"\" : String.valueOf(respItemAmostraBean.getValor());\n" +
+                    "            }\n" +
+                    "            editText.setText(valor);", getLocalClassName());
             RespItemAmostraBean respItemAmostraBean = piaContext.getInfestacaoCTR().getRespItemAmostra(piaContext.getIdRespItem());
             amostraBean = piaContext.getInfestacaoCTR().getAmostraId(respItemAmostraBean.getIdAmostra());
             textViewPadrao.setText(amostraBean.getDescrAmostra());
-            editText.setText(String.valueOf(respItemAmostraBean.getValor()));
+            String valor = String.valueOf(respItemAmostraBean.getValor());
+            if(piaContext.getConfigCTR().getIdAmostra() == 51L){
+                valor = (respItemAmostraBean.getValor() == null) ? "" : String.valueOf(respItemAmostraBean.getValor());
+            }
+            editText.setText(valor);
         }
 
         buttonOkQA.setOnClickListener(v -> {
@@ -55,10 +62,13 @@ public class QuestaoAmostraActivity extends ActivityGeneric {
                     "            @Override\n" +
                     "            public void onClick(View v) {\n" +
                     "                Long valor = (editTextPadrao.getText().toString().equals(\"\")) ? 0L : Long.parseLong(editTextPadrao.getText().toString());", getLocalClassName());
-            Long valor = (editTextPadrao.getText().toString().equals("")) ? 0L : Long.parseLong(editTextPadrao.getText().toString());
+
 
             Intent it;
             if(piaContext.getConfigCTR().getIdAmostra() == 51L) {
+
+                Long valor = (editTextPadrao.getText().toString().equals("")) ? null : Long.parseLong(editTextPadrao.getText().toString());
+
                 LogProcessoDAO.getInstance().insertLogProcesso("if(piaContext.getConfigCTR().getIdAmostra() == 51L) {\n" +
                         "                piaContext.setTipoFluxo(2);\n" +
                         "                piaContext.getConfigCTR().setValorResp(valor);\n" +
@@ -66,7 +76,11 @@ public class QuestaoAmostraActivity extends ActivityGeneric {
                 piaContext.setTipoFluxo(2);
                 piaContext.getConfigCTR().setValorResp(valor);
                 it = new Intent(QuestaoAmostraActivity.this, ObservActivity.class);
+
             } else {
+
+                Long valor = (editTextPadrao.getText().toString().equals("")) ? 0 : Long.parseLong(editTextPadrao.getText().toString());
+
                 LogProcessoDAO.getInstance().insertLogProcesso("} else {", getLocalClassName());
                 if(piaContext.getVerTelaQuestao() == 1) {
                     LogProcessoDAO.getInstance().insertLogProcesso("if(piaContext.getVerTelaQuestao() == 1) {\n" +
@@ -125,10 +139,19 @@ public class QuestaoAmostraActivity extends ActivityGeneric {
             piaContext.getInfestacaoCTR().deleteRespItemAmostraCabecApont(amostraBean.getIdAmostra());
             if (piaContext.getPosQuestaoAmostra() == 0) {
 
-                LogProcessoDAO.getInstance().insertLogProcesso("if (piaContext.getPosQuestaoAmostra() == 0) {\n" +
-                        "                            piaContext.getInfestacaoCTR().deleteRespItemAmostra();\n" +
-                        "                            Intent it = new Intent(QuestaoAmostraActivity.this, ListaPontosActivity.class);", getLocalClassName());
-                it = new Intent(QuestaoAmostraActivity.this, ListaPontosActivity.class);
+                LogProcessoDAO.getInstance().insertLogProcesso("if (piaContext.getPosQuestaoAmostra() == 0) {", getLocalClassName());
+                if(piaContext.getConfigCTR().getIdAmostra() == 51L){
+
+                    LogProcessoDAO.getInstance().insertLogProcesso("if(piaContext.getConfigCTR().getIdAmostra() == 51L){\n" +
+                            "                    it = new Intent(QuestaoAmostraActivity.this, ListaArmadilhaActivity.class);", getLocalClassName());
+                    it = new Intent(QuestaoAmostraActivity.this, ListaArmadilhaActivity.class);
+                } else {
+
+                    LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
+                            "                    it = new Intent(QuestaoAmostraActivity.this, ListaPontosActivity.class);", getLocalClassName());
+                    it = new Intent(QuestaoAmostraActivity.this, ListaPontosActivity.class);
+
+                }
 
             } else {
 

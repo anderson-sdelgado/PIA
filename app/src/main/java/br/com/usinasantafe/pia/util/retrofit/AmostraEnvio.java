@@ -10,6 +10,7 @@ import br.com.usinasantafe.pia.control.InfestacaoCTR;
 import br.com.usinasantafe.pia.model.bean.variaveis.CabecAmostraBean;
 import br.com.usinasantafe.pia.model.dao.AtualAplicDAO;
 import br.com.usinasantafe.pia.model.dao.LogErroDAO;
+import br.com.usinasantafe.pia.util.EnvioDadosServ;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,12 +38,14 @@ public class AmostraEnvio {
                 @Override
                 public void onFailure(Call<List<CabecAmostraBean>> call, Throwable t) {
                     LogErroDAO.getInstance().insertLogErro(t);
+                    EnvioDadosServ.getInstance().respostaEnvio(false, activity);
                 }
 
             });
 
         } catch (Exception e) {
             LogErroDAO.getInstance().insertLogErro(e);
+            EnvioDadosServ.getInstance().respostaEnvio(false, activity);
         }
 
     }

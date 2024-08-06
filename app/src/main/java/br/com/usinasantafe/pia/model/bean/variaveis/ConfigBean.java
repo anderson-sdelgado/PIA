@@ -17,7 +17,7 @@ public class ConfigBean extends Entidade {
     @DatabaseField
     private Long nroOSConfig;
     @DatabaseField
-    private Long matricAuditorConfig;
+    private Long idAuditorConfig;
     @DatabaseField
     private Long idSecaoConfig;
     @DatabaseField
@@ -48,20 +48,20 @@ public class ConfigBean extends Entidade {
         this.senhaConfig = senhaConfig;
     }
 
+    public Long getIdAuditorConfig() {
+        return idAuditorConfig;
+    }
+
+    public void setIdAuditorConfig(Long idAuditorConfig) {
+        this.idAuditorConfig = idAuditorConfig;
+    }
+
     public Long getNroOSConfig() {
         return nroOSConfig;
     }
 
     public void setNroOSConfig(Long osConfig) {
         this.nroOSConfig = osConfig;
-    }
-
-    public Long getMatricAuditorConfig() {
-        return matricAuditorConfig;
-    }
-
-    public void setMatricAuditorConfig(Long matricAuditorConfig) {
-        this.matricAuditorConfig = matricAuditorConfig;
     }
 
     public Long getIdSecaoConfig() {

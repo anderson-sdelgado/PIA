@@ -3,6 +3,8 @@ package br.com.usinasantafe.pia.model.bean.variaveis;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.util.List;
+
 import br.com.usinasantafe.pia.model.pst.Entidade;
 
 @DatabaseTable(tableName="tblocalamostravar")
@@ -31,7 +33,8 @@ public class LocalAmostraBean extends Entidade {
     @DatabaseField
     private String obs;
     @DatabaseField
-    private Long statusApont; // 1 - Apontando; 2 - Fechado;
+    private Long statusApont; // 0 - Stand-by; 1 - Apontando;
+    private List<RespItemAmostraBean> respItemAmostraList;
 
     public LocalAmostraBean() {
     }
@@ -122,5 +125,13 @@ public class LocalAmostraBean extends Entidade {
 
     public void setObs(String obs) {
         this.obs = obs;
+    }
+
+    public List<RespItemAmostraBean> getRespItemAmostraList() {
+        return respItemAmostraList;
+    }
+
+    public void setRespItemAmostraList(List<RespItemAmostraBean> respItemAmostraList) {
+        this.respItemAmostraList = respItemAmostraList;
     }
 }

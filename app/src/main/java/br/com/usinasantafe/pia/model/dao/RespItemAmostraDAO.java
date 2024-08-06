@@ -14,23 +14,20 @@ public class RespItemAmostraDAO {
     public RespItemAmostraDAO() {
     }
 
-    public boolean verRespItemAmostraList(Long idCabec){
+    public boolean verRespItemAmostraList(Long idLocal){
         ArrayList pesqArrayList = new ArrayList();
-        pesqArrayList.add(getPesqIdCabec(idCabec));
-
+        pesqArrayList.add(getPesqIdLocal(idLocal));
         RespItemAmostraBean respItemAmostra = new RespItemAmostraBean();
         List<RespItemAmostraBean> respItemList = respItemAmostra.get(pesqArrayList);
-        boolean retorno = respItemList.size() > 0;
+        boolean retorno = respItemList.size() == 0;
         respItemList.clear();
         return retorno;
     }
 
-
-    public void inserirRespItemAmostra(Long idCabec, Long idLocal, Long idAmostra, Long valor, Long qtde, String obs){
+    public void inserirRespItemAmostra(Long idLocal, Long idAmostra, Long valor, Long qtde, String obs){
         RespItemAmostraBean respItemAmostraBean = new RespItemAmostraBean();
         respItemAmostraBean.setDthr(Tempo.getInstance().dthrAtualString());
         respItemAmostraBean.setDthrLong(Tempo.getInstance().dthrAtualLong());
-        respItemAmostraBean.setIdCabec(idCabec);
         respItemAmostraBean.setIdLocal(idLocal);
         respItemAmostraBean.setIdAmostra(idAmostra);
         respItemAmostraBean.setPonto(qtde);
@@ -50,10 +47,10 @@ public class RespItemAmostraDAO {
         respItemAmostraBean.commit();
     }
 
-    public void updateRespItemPonto(Long idCabec, Long ponto){
+    public void updateRespItemPonto(Long idLocal, Long ponto){
 
         ArrayList pesqArrayList = new ArrayList();
-        pesqArrayList.add(getPesqIdCabec(idCabec));
+        pesqArrayList.add(getPesqIdLocal(idLocal));
 
         RespItemAmostraBean respItemAmostra = new RespItemAmostraBean();
         List<RespItemAmostraBean> respItemList = respItemAmostra.get(pesqArrayList);
@@ -71,10 +68,10 @@ public class RespItemAmostraDAO {
     }
 
 
-    public void deleteRespItemAmostra(Long idCabec, Long idAmostra, Long ponto){
+    public void deleteRespItemAmostra(Long idLocal, Long idAmostra, Long ponto){
 
         ArrayList pesqArrayList = new ArrayList();
-        pesqArrayList.add(getPesqIdCabec(idCabec));
+        pesqArrayList.add(getPesqIdLocal(idLocal));
         pesqArrayList.add(getPesqIdAmostra(idAmostra));
         pesqArrayList.add(getPesqPonto(ponto));
 
@@ -87,10 +84,10 @@ public class RespItemAmostraDAO {
         respItemAmostraList.clear();
     }
 
-    public void deleteRespItemAmostra(Long idCabec, Long ponto){
+    public void deleteRespItemAmostra(Long idLocal, Long ponto){
 
         ArrayList pesqArrayList = new ArrayList();
-        pesqArrayList.add(getPesqIdCabec(idCabec));
+        pesqArrayList.add(getPesqIdLocal(idLocal));
         pesqArrayList.add(getPesqPonto(ponto));
 
         RespItemAmostraBean respItemAmostra = new RespItemAmostraBean();
@@ -104,10 +101,10 @@ public class RespItemAmostraDAO {
         respItemList.clear();
     }
 
-    public void deleteRespItemAmostra(Long idCabec){
+    public void deleteRespItemAmostra(Long idLocal){
 
         ArrayList pesqArrayList = new ArrayList();
-        pesqArrayList.add(getPesqIdCabec(idCabec));
+        pesqArrayList.add(getPesqIdLocal(idLocal));
 
         RespItemAmostraBean respItemAmostra = new RespItemAmostraBean();
         List<RespItemAmostraBean> respItemList = respItemAmostra.get(pesqArrayList);
@@ -133,9 +130,9 @@ public class RespItemAmostraDAO {
 
     }
 
-    public List<RespItemAmostraBean> respItemAmostraList(Long idCabec){
+    public List<RespItemAmostraBean> respItemAmostraList(Long idLocal){
         RespItemAmostraBean respItemAmostra = new RespItemAmostraBean();
-        return respItemAmostra.getAndOrderBy("idCabec", idCabec, "idRespItemAmostra", true);
+        return respItemAmostra.getAndOrderBy("idLocal", idLocal, "idRespItemAmostra", true);
     }
 
     public List<RespItemAmostraBean> respItemAmostraList(ArrayList<Long> idRespItemAmostraArrayList){
@@ -143,23 +140,14 @@ public class RespItemAmostraDAO {
         return respItemAmostraBean.in("idRespItem", idRespItemAmostraArrayList);
     }
 
-    public List<RespItemAmostraBean> respItemAmostraList(Long idCabec, Long ponto){
+    public List<RespItemAmostraBean> respItemAmostraList(Long idLocal, Long ponto){
 
         ArrayList pesqArrayList = new ArrayList();
-        pesqArrayList.add(getPesqIdCabec(idCabec));
+        pesqArrayList.add(getPesqIdLocal(idLocal));
         pesqArrayList.add(getPesqPonto(ponto));
 
         RespItemAmostraBean respItemAmostra = new RespItemAmostraBean();
         return respItemAmostra.get(pesqArrayList);
-
-    }
-
-    public RespItemAmostraBean getRespItemAmostraIdCabecPonto(Long idCabec, Long ponto){
-
-        List<RespItemAmostraBean> respItemList = respItemAmostraList(idCabec, ponto);
-        RespItemAmostraBean respItemAmostraBean = respItemList.get(0);
-        respItemList.clear();
-        return respItemAmostraBean;
 
     }
 
@@ -208,10 +196,10 @@ public class RespItemAmostraDAO {
         return pesquisa;
     }
 
-    private EspecificaPesquisa getPesqIdCabec(Long idCabec){
+    private EspecificaPesquisa getPesqIdLocal(Long idLocal){
         EspecificaPesquisa pesquisa = new EspecificaPesquisa();
-        pesquisa.setCampo("idCabec");
-        pesquisa.setValor(idCabec);
+        pesquisa.setCampo("idLocal");
+        pesquisa.setValor(idLocal);
         pesquisa.setTipo(1);
         return pesquisa;
     }

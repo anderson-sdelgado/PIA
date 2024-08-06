@@ -57,9 +57,9 @@ public class QuestaoCabecPergActivity extends ActivityGeneric  {
                 RespItemCabecBean respItemCabecBean = new RespItemCabecBean();
                 respItemCabecBean.setIdItemCabec(pergCabecBean.getIdPergCabec());
                 if(viewHolderChoice.isSelected()){
-                    respItemCabecBean.setFlagRespItem(1L);
+                    respItemCabecBean.setFlag(1L);
                 } else {
-                    respItemCabecBean.setFlagRespItem(0L);
+                    respItemCabecBean.setFlag(0L);
                 }
                 respItemCabecSelectedList.add(respItemCabecBean);
             }

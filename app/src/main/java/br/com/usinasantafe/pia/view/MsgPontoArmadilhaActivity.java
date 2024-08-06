@@ -39,16 +39,20 @@ public class MsgPontoArmadilhaActivity extends ActivityGeneric {
             LogProcessoDAO.getInstance().insertLogProcesso("buttonSimPonto.setOnClickListener(new View.OnClickListener() {\n" +
                     "            @Override\n" +
                     "            public void onClick(View v) {\n" +
-                    "                piaContext.setPosQuestaoAmostra(0);\n" +
-                    "                Intent it = new Intent(MsgPontoActivity.this, QuestaoAmostraActivity.class);", getLocalClassName());
+                    "                piaContext.setPosQuestaoAmostra(0);", getLocalClassName());
             piaContext.getInfestacaoCTR().addPonto();
             piaContext.setPosQuestaoAmostra(0);
             if(piaContext.getConfigCTR().getIdAmostra() == 51L) {
+                LogProcessoDAO.getInstance().insertLogProcesso("if(piaContext.getConfigCTR().getIdAmostra() == 51L) {\n" +
+                        "                piaContext.getConfigCTR().setOS(0L);\n" +
+                        "                Intent it = new Intent(MsgPontoArmadilhaActivity.this, SecaoActivity.class);", getLocalClassName());
                 piaContext.getConfigCTR().setOS(0L);
                 Intent it = new Intent(MsgPontoArmadilhaActivity.this, SecaoActivity.class);
                 startActivity(it);
                 finish();
             } else {
+                LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
+                        "                Intent it = new Intent(MsgPontoArmadilhaActivity.this, QuestaoAmostraActivity.class);", getLocalClassName());
                 Intent it = new Intent(MsgPontoArmadilhaActivity.this, QuestaoAmostraActivity.class);
                 startActivity(it);
                 finish();
@@ -57,14 +61,20 @@ public class MsgPontoArmadilhaActivity extends ActivityGeneric {
         });
 
         buttonNaoPontoArmadilha.setOnClickListener(v -> {
-
-            LogProcessoDAO.getInstance().insertLogProcesso("buttonNaoPonto.setOnClickListener(new View.OnClickListener() {\n" +
-                    "            @Override\n" +
-                    "            public void onClick(View v) {\n" +
-                    "                Intent it = new Intent(MsgPontoActivity.this, ListaPontosActivity.class);", getLocalClassName());
-            Intent it = new Intent(MsgPontoArmadilhaActivity.this, ListaPontosActivity.class);
-            startActivity(it);
-            finish();
+            LogProcessoDAO.getInstance().insertLogProcesso("buttonNaoPontoArmadilha.setOnClickListener(v -> {", getLocalClassName());
+            if(piaContext.getConfigCTR().getIdAmostra() == 51L) {
+                LogProcessoDAO.getInstance().insertLogProcesso("if(piaContext.getConfigCTR().getIdAmostra() == 51L) {\n" +
+                        "                Intent it = new Intent(MsgPontoArmadilhaActivity.this, ListaArmadilhaActivity.class);", getLocalClassName());
+                Intent it = new Intent(MsgPontoArmadilhaActivity.this, ListaArmadilhaActivity.class);
+                startActivity(it);
+                finish();
+            } else {
+                LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
+                        "                Intent it = new Intent(MsgPontoArmadilhaActivity.this, ListaPontosActivity.class);", getLocalClassName());
+                Intent it = new Intent(MsgPontoArmadilhaActivity.this, ListaPontosActivity.class);
+                startActivity(it);
+                finish();
+            }
 
         });
 

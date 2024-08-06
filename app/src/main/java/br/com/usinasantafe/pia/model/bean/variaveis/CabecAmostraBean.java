@@ -18,7 +18,7 @@ public class CabecAmostraBean extends Entidade {
     @DatabaseField(generatedId=true)
     private Long idCabec;
     @DatabaseField
-    private Long matricAuditor;
+    private Long idFunc;
     @DatabaseField
     private String dthr;
     @DatabaseField
@@ -38,7 +38,6 @@ public class CabecAmostraBean extends Entidade {
     @DatabaseField
     private Long statusApont; // 0 - Stand-by; 1 - Apontando;
     private List<LocalAmostraBean> localAmostraList;
-    private List<RespItemAmostraBean> respItemAmostraList;
     private List<RespItemCabecBean> respItemCabecList;
 
     public CabecAmostraBean() {
@@ -47,13 +46,13 @@ public class CabecAmostraBean extends Entidade {
     public Long getIdCabec() {
         return idCabec;
     }
-
-    public Long getMatricAuditor() {
-        return matricAuditor;
+    
+    public Long getIdFunc() {
+        return idFunc;
     }
 
-    public void setMatricAuditor(Long matricAuditor) {
-        this.matricAuditor = matricAuditor;
+    public void setIdFunc(Long idFunc) {
+        this.idFunc = idFunc;
     }
 
     public Long getIdOrgan() {
@@ -114,14 +113,6 @@ public class CabecAmostraBean extends Entidade {
 
     public void setLocalAmostraList(List<LocalAmostraBean> localAmostraList) {
         this.localAmostraList = localAmostraList;
-    }
-
-    public List<RespItemAmostraBean> getRespItemAmostraList() {
-        return respItemAmostraList;
-    }
-
-    public void setRespItemAmostraList(List<RespItemAmostraBean> respItemAmostraList) {
-        this.respItemAmostraList = respItemAmostraList;
     }
 
     public Long getIdAmostraOrgan() {
